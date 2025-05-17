@@ -1,22 +1,18 @@
-@php
-    $currentRoute = RouteCurrentName();
 
-    $current = explode('.', $currentRoute);
-@endphp
 
 @if($button == 'novo')
-<a href="{{route($current.'.create')}}" type="button" class="btn btn-sm btn-primary btn-icon d-flex align-items-center mb-0 me-2">
+<a href="{{route(currentRoute()[0].'.create')}}" type="button" class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0 me-2">
   <span class="btn-inner--icon">
     <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="d-block me-2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
     </svg>
   </span>
-  <span class="btn-inner--text">Novo Registro</span>
-</button>
+  <span class="btn-inner--text">Novo</span>
+</a>
 @endif
 
 @if($button == 'cadastrar')
-<button type="submit" class="btn btn-sm btn-success btn-icon d-flex align-items-center mb-0 me-2">
+<button type="submit" class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0 me-2">
   <span class="btn-inner--icon">
     <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="d-block me-2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />

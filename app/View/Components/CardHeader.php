@@ -8,17 +8,17 @@ use Illuminate\View\Component;
 
 class CardHeader extends Component
 {
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public $title;
+    public $count;
+    public $action;
 
-    /**
-     * Get the view / contents that represent the component.
-     */
+    public function __construct($title, $count, $action)    
+    {
+        $this->title = $title;
+        $this->count = $count;
+        $this->action = $action;
+    }
+    
     public function render(): View|Closure|string
     {
         return view('components.card-header');
