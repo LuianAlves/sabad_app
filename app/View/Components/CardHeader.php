@@ -12,7 +12,7 @@ class CardHeader extends Component
     public $count;
     public $action;
 
-    public function __construct($title, $count, $action)    
+    public function __construct($title, $action, $count = null)    
     {
         $this->title = $title;
         $this->count = $count;

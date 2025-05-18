@@ -12,9 +12,9 @@ class CompanyController extends Controller
    
     public function index()
     {
-        $company = Company::get();
+        $companies = Company::get();
 
-        return view('app.business.company.company_index', compact('company'));
+        return view('app.business.company.company_index', compact('companies'));
     }
 
     
@@ -46,9 +46,7 @@ class CompanyController extends Controller
         return view('app.business.company.company_show', compact('company'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    
     public function edit($id)
     {
         $company = Company::where('id', $id)->first();

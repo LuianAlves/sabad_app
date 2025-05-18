@@ -1,27 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Business\Domain;
 
-use App\Models\Domain;
-use App\Http\Requests\StoreDomainRequest;
-use App\Http\Requests\UpdateDomainRequest;
+use App\Models\Business\Domain\Domain;
+use App\Models\Business\Company\Company;
+use App\Http\Requests\Business\Domain\StoreDomainRequest;
+use App\Http\Requests\Business\Domain\UpdateDomainRequest;
+use App\Http\Controllers\Controller;
 
 class DomainController extends Controller
 {
     
     public function index()
     {
-        $domain = Domain::get();
+        $domains = Domain::get();
+        $company = Company::get();
 
-        return view('app.business.domain.domain_index', compact('domain'));
+        return view('app.business.domain.domain_index', compact('domains', 'company'));
     }
 
     
     public function create()
     {
-        $domains = Domain::get();
+    
+        $companies = Company::get();
 
-        return view('app.business.domain.domain.create', compact('domains'));
+        return view('app.business.domain.domain_create', compact('companies'));
     }
 
     
@@ -65,7 +69,7 @@ class DomainController extends Controller
 
         $domain = Domain::find($id);
 
-        $domain = Domain::create([
+        $domain = Domain::update([
             'company_id' => $request->company_id,
             'name' => $request->name,
             'plan_validity' => $request->plan_validity,

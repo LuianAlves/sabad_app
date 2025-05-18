@@ -20,7 +20,7 @@ class StoreDomainRequest extends FormRequest
             'name'           => 'required|string|max:70',
             'plan_validity'  => 'required|date',
             'last_payment'   => 'nullable|date',
-            'next_payment'   => 'nullable|date|after_or_equal:last_payment',
+            'next_payment'   => 'nullable|date',
             'is_active'      => 'required|boolean',
         ];
     }

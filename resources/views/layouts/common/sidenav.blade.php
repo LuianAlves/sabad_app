@@ -200,19 +200,13 @@
         
         <li class="nav-item border-start my-0 pt-2">
           <a class="nav-link position-relative ms-0 ps-2 py-2 " href="../pages/profile.html">
-            <span class="nav-link-text ms-1">Profile</span>
+            <span class="nav-link-text ms-1">Minha conta</span>
           </a>
         </li>
         
         <li class="nav-item border-start my-0 pt-2">
-          <a class="nav-link position-relative ms-0 ps-2 py-2 " href="../pages/sign-in.html">
-            <span class="nav-link-text ms-1">Sign In</span>
-          </a>
-        </li>
-        
-        <li class="nav-item border-start my-0 pt-2">
-          <a class="nav-link position-relative ms-0 ps-2 py-2 " href="../pages/sign-up.html">
-            <span class="nav-link-text ms-1">Sign Up</span>
+          <a class="nav-link position-relative ms-0 ps-2 py-2 " href="{{route('logout')}}">
+            <span class="nav-link-text ms-1">Deslogar</span>
           </a>
         </li>
 

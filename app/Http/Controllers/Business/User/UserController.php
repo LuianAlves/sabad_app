@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Business\User;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\Business\User\StoreUserRequest;
+use App\Http\Requests\Business\User\UpdateUserRequest;
 
 use App\Models\User;  
 
@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::get();        
+        $users = User::with('roles', 'permissions')->get();
 
         return view('app.business.user.user_index', compact('users'));
     }
@@ -26,9 +26,13 @@ class UserController extends Controller
     }
 
     
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $request->validated();
+
+        User::create($request->all());
+
+        return redirect()->route('user.index');
     }
 
 
@@ -42,7 +46,7 @@ class UserController extends Controller
         return view('app.business.user.user_edit');
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         //
     }

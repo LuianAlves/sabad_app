@@ -2,7 +2,7 @@
 
 namespace App\Models\Business\Domain;
 
-use App\Models\Business\Company;
+use App\Models\Business\Company\Company;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
