@@ -24,13 +24,26 @@ class UserController extends Controller
     {
         return view('app.business.user.user_create');
     }
-
     
     public function store(StoreUserRequest $request)
     {
         $request->validated();
 
-        User::create($request->all());
+        if((bool) $request->is_admin) {
+            $permission = 'admin';
+        } else {
+            $permission = 'user';
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'is_active' => (bool) $request->is_active,
+            'created_at' => Carbon::now()
+        ]);
+
+        $user->assignRole($permission);
 
         return redirect()->route('user.index');
     }
@@ -43,7 +56,9 @@ class UserController extends Controller
 
     public function edit(string $id)
     {
-        return view('app.business.user.user_edit');
+        $user = User::findOrFail($id);
+
+        return view('app.business.user.user_edit', compact('user'));
     }
 
     public function update(UpdateUserRequest $request, $id)

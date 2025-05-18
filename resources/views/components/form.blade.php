@@ -8,9 +8,9 @@
 
 <div class="card-header d-flex justify-content-between align-items-center">
     @if ($route == 'store')
-        <span class="fw-bold" style="font-size: 12px;">
-            <span class="text-muted">Após o cadastro será redirecionado para a tela anterior.</span>
-        </span>
+        <blockquote class="blockquote border-warning">
+            <p class="text-muted mb-0 ps-2">Após o cadastro será redirecionado para a tela anterior.</p>
+        </blockquote>
     @endif
     <x-card-button button="cadastrar"></x-card-button>
 </div>

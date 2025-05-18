@@ -14,6 +14,9 @@ use App\Http\Controllers\Business\Company\CompanyController;
 //Domain
 use App\Http\Controllers\Business\Domain\DomainController;
 
+//Department
+use App\Http\Controllers\Business\Department\DepartmentController;
+
 //Employee
 use App\Http\Controllers\Business\Employee\EmployeeController;
 
@@ -49,7 +52,7 @@ Route::any('/logout', [AuthController::class, 'destroy'])->name('logout');
     
     Route::resource('domain', DomainController::class);
     
-    Route::resource('departament', UserController::class);
+    Route::resource('departament', DepartmentController::class);
     
     Route::resource('employee', EmployeeController::class);
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Business\Company;
+namespace App\Http\Controllers\Business\Department;
 
 use App\Http\Controllers\Controller;
 
@@ -13,9 +13,10 @@ class DepartmentController extends Controller
 {
     public function index()
     {
-        $department = Department::get();
+        $departments = Department::get();
+        $companies = Company::get();
 
-        return view('app.business.department.department_index', compact('department'));
+        return view('app.business.department.department_index', compact('departments', 'companies'));
     }
 
     

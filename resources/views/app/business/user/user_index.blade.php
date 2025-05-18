@@ -83,7 +83,10 @@
                                         <span class="text-muted">Sem permissão</span>
                                     @endif
                                 </td>
-
+                                
+                                
+                               
+                                {{-- esse componente aqui direciona pras views: show, edit ... --}}
                                 <td>
                                     <x-table-button route="user" :id="$user->id"></x-table-button>
                                 </td>
