@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Business\Department;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Http\Requests\Business\Department\StoreDepartmentRequest;
@@ -23,7 +22,7 @@ class DepartmentController extends Controller
     public function create()
     {
         $companies = Company::get();
-
+        
         return view('app.business.department.department_create', compact('companies'));
     }
 
@@ -45,15 +44,16 @@ class DepartmentController extends Controller
     {
         $department = Department::find($id);
 
-        return view('app.business.department.department_show');
+        return view('app.business.department.department_show', compact('department'));
     }
 
     
     public function edit($id)
     {
         $department = Department::where('id', $id)->first();
+        $companies = Company::get();
 
-        return view('app.business.department.department_edit');
+        return view('app.business.department.department_edit', compact('department', 'companies'));
     }
 
     
@@ -63,7 +63,7 @@ class DepartmentController extends Controller
 
         $department = Department::find($id);
 
-        $department = Department::update([
+        $department->update([
             'company_id' => $request->company_id,
             'name' => $request->name
         ]);

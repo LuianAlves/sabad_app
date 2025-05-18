@@ -61,7 +61,7 @@ class CompanyController extends Controller
 
         $company = Company::find($id);
 
-        $company = Company::update([
+        $company->update([
             'name' => $request->name,
             'cnpj' => $request->cnpj
         ]);

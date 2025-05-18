@@ -16,11 +16,11 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'department_id' => 'required|exists:departments_id',
+            'department_id' => 'required',
             'name' => 'required|string|max:70',
             'hierarchical_level' => 'required|string',
             'hired_in' => 'required|date',
-            'fired_in' => 'required|date',
+            'fired_in' => 'nullable|date',
             'status' => 'required|boolean'
         ];
     }

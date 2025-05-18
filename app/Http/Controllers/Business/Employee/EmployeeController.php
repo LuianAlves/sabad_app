@@ -13,7 +13,8 @@ class EmployeeController extends Controller
     
     public function index()
     {
-        $employees = Employee::get();
+        $employees = Employee::with('department.company')->get();
+        // $department = Department::get();
 
         return view('app.business.employee.employee_index', compact('employees'));
     }
@@ -45,18 +46,20 @@ class EmployeeController extends Controller
 
     
     public function show($id)
-    {
-        $employee = Employee::find($id);
+{
+    // Carrega employee com departamento e empresa relacionados
+    $employee = Employee::with('department.company')->findOrFail($id);
 
-        return view('app.business.employee.employee_show');
-    }
+    return view('app.business.employee.employee_show', compact('employee'));
+}
 
     
     public function edit($id)
     {
-        $employee = Employee::where('id', $id)->first();
+        $employee = Employee::with('department.company')->findOrFail($id);
+        $departments = Department::with('company')->get();
 
-        return view('app.business.employee.employee_edit');
+        return view('app.business.employee.employee_edit', compact('employee', 'departments'));
     }
 
     
@@ -66,7 +69,7 @@ class EmployeeController extends Controller
 
         $employee = Employee::find($id);
 
-        $employee = Employee::update([
+        $employee->update([
             'department_id' => $request->department_id,
             'name' => $request->name,
             'hierarchical_level' => $request->hierarchical_level,
@@ -76,6 +79,8 @@ class EmployeeController extends Controller
         ]);
 
         return redirect()->route('employee.index');
+        
+
     }
 
     

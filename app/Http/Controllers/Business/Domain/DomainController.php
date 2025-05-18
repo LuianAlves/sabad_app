@@ -58,8 +58,9 @@ class DomainController extends Controller
     public function edit($id)
     {
         $domain = Domain::where('id', $id)->first();
+        $companies = Company::get();
 
-        return view('app.business.domain.domain_edit');
+        return view('app.business.domain.domain_edit', compact('domain', 'companies'));
     }
 
     
@@ -69,7 +70,7 @@ class DomainController extends Controller
 
         $domain = Domain::find($id);
 
-        $domain = Domain::update([
+        $domain->update([
             'company_id' => $request->company_id,
             'name' => $request->name,
             'plan_validity' => $request->plan_validity,

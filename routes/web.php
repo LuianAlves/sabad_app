@@ -52,7 +52,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     
     Route::resource('domain', DomainController::class);
     
-    Route::resource('departament', DepartmentController::class);
+    Route::resource('department', DepartmentController::class);
     
     Route::resource('employee', EmployeeController::class);
     

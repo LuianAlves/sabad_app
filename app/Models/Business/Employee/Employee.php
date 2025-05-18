@@ -20,7 +20,7 @@ class Employee extends Model
         'status'
     ];
 
-    public function company()
+    public function department()
     {
         return $this->belongsTo(Department::class);
     }

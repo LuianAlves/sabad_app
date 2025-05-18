@@ -54,7 +54,7 @@
 </li>
 
 <li class="nav-item">
-  <a class="nav-link" href="{{ route('departament.index') }}">
+  <a class="nav-link" href="{{ route('department.index') }}">
     <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
       <i class="fas fa-sitemap text-white fs-5"></i>
     </div>

@@ -6,11 +6,29 @@
 
                 <x-card-header title="Editar Empresa" action="Atualizar"></x-card-header>
 
-                <x-form route="edit">
-                  <div class="row">
-                      <x-input col="6" set="" type="text" title="Nome da empresa" id="name" name="name" value="{{ $company->name }}" placeholder="" disabled=""></x-input>
-                      <x-input col="6" set="" type="text" title="CNPJ" id="cnpj" name="cnpj" value="{{ $company->cnpj }}" placeholder="" disabled=""></x-input>
-                  </div>
+                 <x-form route="update" :id="$department->id">
+
+                    <div class="row">
+                        {{-- Empresa --}}
+                        <div class="col-md-6 mb-3">
+                            <label for="company_id" class="form-label">Empresa</label>
+                            <select name="company_id" id="company_id" class="form-control" required>
+                                <option value="">Selecione uma empresa</option>
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->id }}" {{ $company->id == $department->company_id ? 'selected' : '' }}>
+                                        {{ $company->name }}
+                                    </option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
+
+                        {{-- Nome do Departamento --}}
+                        <x-input col="6" set="" type="text" title="Nome do Departamento" id="name"
+                            name="name" value="{{ old($department->name ) }}" placeholder="Ex: RH" />
+                    </div>                    
+                              
                 </x-form>
 
             </div>
