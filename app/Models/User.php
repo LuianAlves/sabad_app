@@ -71,15 +71,15 @@ class User extends Authenticatable
 
     public function canAuthenticate()
     {
-        if ($this->userHasRole('admin')) {
-            return true;
-        } else {
-            if (!$this->is_active) {
-                session()->flash('error', 'Sua conta não está ativa.');
-                return false;
-            }
-
+        if ($this->hasRole('admin')) {
             return true;
         }
+
+        if (!$this->is_active) {
+            session()->flash('error', 'Sua conta não está ativa.');
+            return false;
+        }
+
+        return true;
     }
 }

@@ -80,7 +80,8 @@
             </div>
         </section>
     </main>
-    <!--   Core JS Files   -->
+
+    
     <script src="../js/core/popper.min.js"></script>
     <script src="../js/core/bootstrap.min.js"></script>
     <script src="../js/plugins/perfect-scrollbar.min.js"></script>

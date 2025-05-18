@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
+use Illuminate\Support\Facades\Hash;
+
 class UserSeeder extends Seeder
 {
     public function run()
@@ -12,7 +14,7 @@ class UserSeeder extends Seeder
         $user = User::firstOrCreate([
             'name' => 'Teste admin',
             'email' => 'teste@teste.com',
-            'password' => bcrypt('teste123'),
+            'password' => Hash::make('teste123'),
             'is_active' => true,
         ])->assignRole('admin');
     }

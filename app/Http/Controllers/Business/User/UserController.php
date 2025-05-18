@@ -49,13 +49,13 @@ class UserController extends Controller
     }
 
 
-    public function show(string $id)
+    public function show($id)
     {
         return view('app.business.user.user_show');
     }
 
-    public function edit(string $id)
-    {
+    public function edit($id)
+    { 
         $user = User::findOrFail($id);
 
         return view('app.business.user.user_edit', compact('user'));
@@ -66,8 +66,11 @@ class UserController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index');
     }
 }

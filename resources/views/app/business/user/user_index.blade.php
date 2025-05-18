@@ -86,7 +86,7 @@
                                 
                                 
                                
-                                {{-- esse componente aqui direciona pras views: show, edit ... --}}
+                                {{-- esse componente aqui direciona pras views: show, edit, delete ... --}}
                                 <td>
                                     <x-table-button route="user" :id="$user->id"></x-table-button>
                                 </td>

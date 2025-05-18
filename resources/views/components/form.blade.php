@@ -1,8 +1,8 @@
 @if ($route == 'store')
     <form method="post" action="{{ route(currentRoute()[0] . '.store') }}">
-    @elseif($route == 'update')
-        <form method="post" action="{{ route(currentRoute()[0] . '.update', $id) }}">
-            @method('PATCH')
+@elseif($route == 'update')
+    <form method="post" action="{{ route(currentRoute()[0] . '.update', $id) }}">
+    @method('PATCH')
 @endif
 @csrf
 
@@ -11,13 +11,17 @@
         <blockquote class="blockquote border-warning">
             <p class="text-muted mb-0 ps-2">Após o cadastro será redirecionado para a tela anterior.</p>
         </blockquote>
+        <x-card-button button="cadastrar"></x-card-button>
+    @else
+        <blockquote class="blockquote border-warning">
+                <p class="text-muted mb-0 ps-2">Após a atualização será redirecionado para a tela anterior.</p>
+            </blockquote>
+        <x-card-button button="atualizar"></x-card-button>
     @endif
-    <x-card-button button="cadastrar"></x-card-button>
 </div>
 
 <div class="card-body">
     {{ $slot }}
-
 </div>
 
 

@@ -24,23 +24,32 @@
                 --}}
                 <x-card-header title="Novo usuário" action="cadastrar"></x-card-header>
 
+                <!-- como a route é STORE, não precisa do id -->
+                <!-- Se a route for update, precisa enviar o :id junto -->
+                <!-- view create: não precisa do id -->
+                <!-- view edit:  precisa do id -->
                 <x-form route="store">
-                  <div class="row">
-                      <x-input col="6" set="" type="text" title="Nome do usuário" id="name" name="name" value="" placeholder="John Doe" disabled=""></x-input>
-                      <x-input col="6" set="" type="email" title="E-mail" id="email" name="email" value="" placeholder="john@email.com" disabled=""></x-input>
-                  </div>
-                  <div class="row">
-                      <x-input col="6" set="" type="password" title="Senha" id="password" name="password" value="" placeholder="*******" disabled=""></x-input>
-                      <x-input col="6" set="" type="password" title="Confirmar senha" id="password" name="password" value="" placeholder="*******" disabled=""></x-input>
-                  </div>
-                  <div class="row">
-                      <x-input-check col="6" set="" title="Usuário é administrador?" id="is_admin" name="is_admin" checked="" disabled=""></x-input>
-                      <x-input-check col="6" set="" title="Iniciar ativo?" id="is_active" name="is_active" checked="" disabled=""></x-input>
-                  </div>
+                    <div class="row">
+                        <x-input col="6" set="" type="text" title="Nome do usuário" id="name"
+                            name="name" value="" placeholder="John Doe" disabled=""></x-input>
+                        <x-input col="6" set="" type="email" title="E-mail" id="email" name="email"
+                            value="" placeholder="john@email.com" disabled=""></x-input>
+                    </div>
+                    <div class="row">
+                        <x-input col="6" set="" type="password" title="Senha" id="password" name="password"
+                            value="" placeholder="*******" disabled=""></x-input>
+                        <x-input col="6" set="" type="password" title="Confirmar senha" id="password"
+                            name="password" value="" placeholder="*******" disabled=""></x-input>
+                    </div>
+                    <div class="row">
+                        <x-input-check col="6" set="" title="Usuário é administrador?" id="is_admin"
+                            name="is_admin" checked="" disabled=""></x-input>
+                            <x-input-check col="6" set="" title="Iniciar ativo?" id="is_active"
+                                name="is_active" checked="" disabled=""></x-input>
+                    </div>
                 </x-form>
 
             </div>
         </div>
     </div>
 @endsection
-

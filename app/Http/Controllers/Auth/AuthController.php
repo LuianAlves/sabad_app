@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Http\Requests\Business\Login\LoginUserRequest;
 use App\Http\Requests\Business\Login\RegisterUserRequest;
 
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 class AuthController extends Controller
@@ -36,6 +36,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
+            /** @var \App\Models\User $user */
             if ($user->canAuthenticate()) {
 
                 if ($request->hasSession()) {
@@ -60,17 +61,17 @@ class AuthController extends Controller
         ]);
     }
 
-     public function register(RegisterUserRequest $request)
+    public function register(RegisterUserRequest $request)
     {
         $request->validated();
 
         $user = $this->user->create([
             'name' => ucwords($request->name),
             'email' => $request->email,
-            'password' => Crypt::encrypt($request->password),
+            'password' => Hash::make($request->password),
             'is_active' => 1,
             'created_at' => Carbon::now()
-        ])->assignRole($request->role);
+        ])->assignRole('user');
 
         $credentials = [
             'email' => $request->email,
@@ -79,6 +80,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
+
+            /** @var \App\Models\User $user */
             if ($user->canAuthenticate()) {
 
                 if ($request->hasSession()) {

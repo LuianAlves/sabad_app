@@ -6,13 +6,16 @@
 
                 <x-card-header title="Editar usuário" action="atualizar"></x-card-header>
 
-                <x-form route="update">
+                <!-- como a route é UPDATE, precisa enviar o :id junto -->
+                <!-- Se a route for store, não precisa do id -->
+                <x-form route="update" :id="$user->id">
                   <div class="row">
                       <x-input col="6" set="" type="text" title="Nome do usuário" id="name" name="name" value="{{$user->name}}" placeholder="John Doe" disabled=""></x-input>
                       <x-input col="6" set="" type="email" title="E-mail" id="email" name="email" value="{{$user->email}}" placeholder="john@email.com" disabled=""></x-input>
                   </div>
                   <div class="row">
-                      <x-input col="6" set="" type="password" title="Senha" id="password" name="password" value="{{ \Crypt::decrypt($user->password) }}" placeholder="*******" disabled=""></x-input>
+                      <x-input col="6" set="" type="password" title="Senha" id="password" name="password" value="" placeholder="*******" disabled=""></x-input>
+                      <x-input col="6" set="" type="password" title="Senha" id="password_confirmation" name="password_confirmation" value="" placeholder="*******" disabled=""></x-input>
                   </div>
                   <div class="row">
                       <x-input-check col="6" set="" title="Usuário é administrador?" id="is_admin" name="is_admin" checked="" disabled=""></x-input>
