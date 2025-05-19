@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 // Auth
 use App\Http\Controllers\Auth\AuthController;
 
+
+
+
 // Users
 use App\Http\Controllers\Business\User\UserController;
 
@@ -19,6 +22,19 @@ use App\Http\Controllers\Business\Department\DepartmentController;
 
 //Employee
 use App\Http\Controllers\Business\Employee\EmployeeController;
+
+//Certificate
+use App\Http\Controllers\Business\Certificate\CertificateController;
+
+// Service
+use App\Http\Controllers\Business\Service\ServiceController;
+
+// Email
+use App\Http\Controllers\Business\Email\EmailController;
+
+// License
+use App\Http\Controllers\Business\License\LicenseController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -56,20 +72,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     
     Route::resource('employee', EmployeeController::class);
     
-    Route::resource('service', UserController::class);
+    Route::resource('service', ServiceController::class);
     
-    Route::resource('email', UserController::class);
+    Route::resource('email', EmailController::class);
     
     Route::resource('servicecontrol', UserController::class);
     
-    Route::resource('certificate', UserController::class);
+    Route::resource('certificate', CertificateController::class);
     
     Route::resource('device', UserController::class);
     
-    Route::resource('license', UserController::class);
+    Route::resource('license', LicenseController::class);
     
     Route::resource('devicecontrol', UserController::class);
-
 });
 
 

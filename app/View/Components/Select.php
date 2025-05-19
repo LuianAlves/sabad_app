@@ -8,17 +8,23 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
+    public $col;
+    public $set;
+    public $title;
+    public $id;
+    public $name;
+    public $disabled;
+
+    public function __construct($col, $title, $name, $id, $set = null, bool $disabled = false)
     {
-        //
+        $this->col = $col;
+        $this->title = $title;
+        $this->name = $name;
+        $this->id = $id;
+        $this->set = $set;
+        $this->disabled = $disabled;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     */
     public function render(): View|Closure|string
     {
         return view('components.select');
