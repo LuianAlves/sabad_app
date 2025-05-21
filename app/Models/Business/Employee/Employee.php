@@ -3,6 +3,7 @@
 namespace App\Models\Business\Employee;
 
 use App\Models\Business\Certificate\Certificate;
+use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,11 @@ class Employee extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     

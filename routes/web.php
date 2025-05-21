@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Route;
 // Auth
 use App\Http\Controllers\Auth\AuthController;
 
-
-
-
 // Users
 use App\Http\Controllers\Business\User\UserController;
 
@@ -32,9 +29,14 @@ use App\Http\Controllers\Business\Service\ServiceController;
 // Email
 use App\Http\Controllers\Business\Email\EmailController;
 
+//Device
+use App\Http\Controllers\Business\Device\DeviceController;
+
 // License
 use App\Http\Controllers\Business\License\LicenseController;
 
+// Charts
+use App\Http\Controllers\Common\ChartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,15 +82,25 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     
     Route::resource('certificate', CertificateController::class);
     
-    Route::resource('device', UserController::class);
+    Route::resource('device', DeviceController::class);
     
     Route::resource('license', LicenseController::class);
     
     Route::resource('devicecontrol', UserController::class);
 });
 
+/*
+|--------------------------------------------------------------------------
+| CHART ROUTES
+|--------------------------------------------------------------------------
+*/
 
-
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+    Route::group(['prefix' => 'charts'], function () {
+        /* --->| Employee per Department |<--- */
+        Route::get('/employee', [ChartController::class, 'employeePerDepartment']);
+    });
+});
 
 
 

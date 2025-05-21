@@ -6,23 +6,22 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDeviceRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    
     public function rules(): array
     {
         return [
-            //
+            'department_id' => 'required',
+            'device_type' => 'required|in:0,1,2,3',
+            'brand' => 'required|string|max:20',
+            'model' => 'required|string|max:20',
+            'phone_type' => 'required|in:0,1,2,',           
+            'phone_model' => 'required|string'
         ];
     }
 }

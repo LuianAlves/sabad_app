@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Business\Employee;
 
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Department\Department;
+use App\Models\Business\Company\Company;
 use App\Http\Requests\Business\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Business\Employee\UpdateEmployeeRequest;
 use App\Http\Controllers\Controller;
@@ -23,8 +24,10 @@ class EmployeeController extends Controller
     public function create()
     {
         $departments = Department::get();
+        $companies = Company::with('departments')->get();
 
-        return view('app.business.employee.employee_create', compact('departments'));
+
+        return view('app.business.employee.employee_create', compact('companies'));
     }
 
     

@@ -6,6 +6,8 @@
 <script src="{{ asset('js/plugins/smooth-scrollbar.min.js') }}"></script>
 <script src="{{ asset('js/plugins/chartjs.min.js') }}"></script>
 <script src="{{ asset('js/plugins/swiper-bundle.min.js" type="text/javascript') }}"></script>
+
+
 <script>
     if (document.getElementsByClassName('mySwiper')) {
         var swiper = new Swiper(".mySwiper", {
@@ -15,7 +17,7 @@
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
-            },
+            }
         });
     };
 

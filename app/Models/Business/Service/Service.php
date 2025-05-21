@@ -5,7 +5,9 @@ namespace App\Models\Business\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+// Models
 use App\Models\Business\Department\Department;
+use App\Models\Business\License\License;
 
 class Service extends Model
 {
@@ -29,5 +31,9 @@ class Service extends Model
 
     public function department() {
         return $this->belongsTo(Department::class);
+    }
+
+    public function licenses() {
+        return $this->hasMany(License::class);
     }
 }

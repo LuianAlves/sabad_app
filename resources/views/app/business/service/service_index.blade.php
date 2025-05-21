@@ -1,5 +1,53 @@
 @extends('layouts.templates.app-layout')
 @section('content')
+    <div class="position-relative overflow-hidden">
+        <div class="swiper mySwiper mt-4 mb-2">
+            <div class="swiper-wrapper">
+                @foreach ($departments as $department)
+                    <div class="swiper-slide">
+                        <div class="col-12">
+                            <div class="card border shadow-xs mb-4">
+                                <div class="card-body text-start p-3 w-100">
+                                    <span class="badge badge-sm border border-warning text-warning bg-warning mb-3">
+                                        <i class="fa-solid fa-file-invoice-dollar fs-5"></i>
+                                    </span>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="w-100">
+                                                <p class="text-sm text-secondary mb-1">{{ $department->name }}</p>
+
+                                                <h4 class="mb-2 font-weight-bold">
+                                                    R$ {{ number_format($department->totalCost, 2, ',', '.') }}
+                                                    <small class="text-muted"
+                                                        style="font-size: 14px !important; font-weight: 500 !important;">/mês</small>
+                                                </h4>
+
+                                                <div class="d-flex align-items-center">
+                                                    <span class="text-sm">
+                                                        <i
+                                                            class="fa-solid fa-circle-notch text-warning font-weight-bolder"></i>
+                                                        <span class="mx-2 text-muted">
+                                                            {{ $department->services->count() }} Serviços |
+                                                            {{ $department->services->flatMap->licenses->count() }} Licenças
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+            </div>
+        </div>
+
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
@@ -31,7 +79,8 @@
                                 </td>
 
                                 <td>
-                                    <p class="text-dark text-sm mb-0">R$ {{ $service->price }} / {{ $service->recurrence }}</p>
+                                    <p class="text-dark text-sm mb-0">R$ {{ $service->price }} / {{ $service->recurrence }}
+                                    </p>
                                 </td>
 
                                 <td>
@@ -47,7 +96,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                                                                     
+
                                 <td>
                                     <x-table-button route="service" :id="$service->id"></x-table-button>
                                 </td>
@@ -59,4 +108,16 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ asset('js/plugins/swiper-bundle.min.js') }}"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            effect: "cards",
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
 @endsection

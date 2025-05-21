@@ -11,11 +11,13 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->boolean('device_type');
+            $table->unsignedBigInteger('department_id');
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->tinyInteger('device_type');
             $table->string('brand');
             $table->string('model');
+            $table->tinyInteger('phone_type');
+            $table->string('phone_model');
             $table->timestamps();
         });
     }

@@ -4,8 +4,12 @@ namespace App\Models\Business\Department;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+// Models
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Company\Company;
+use App\Models\Business\Service\Service;
+use App\Models\Business\Device\Device;
 
 class Department extends Model
 {
@@ -25,4 +29,13 @@ class Department extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+
+    public function services() {
+        return $this->hasMany(Service::class);
+    }
+
+    public function device() {
+        return $this->belongsTo(Device::class);
+    }
+
 }

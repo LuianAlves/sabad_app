@@ -21,8 +21,29 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::get();
+        $departments = Department::with(['services.licenses'])->get();
 
-        return view('app.business.service.service_index', compact('services'));
+        foreach ($departments as $department) {
+            $totalServiceCost = 0;
+            $totalLicenseCost = 0;
+
+            foreach ($department->services as $service) {
+                // Serviços ativos
+                if ($service->is_active) {
+                    $totalServiceCost += $service->price ?? 0;
+
+                    foreach ($service->licenses as $license) {
+                        if ($license->is_active) {
+                            $totalLicenseCost += ($license->price_per_unit ?? 0) * ($license->quantity ?? 0);
+                        }
+                    }
+                }
+            }
+
+            $department->totalCost = $totalServiceCost + $totalLicenseCost;
+        }
+
+        return view('app.business.service.service_index', compact('services', 'departments'));
     }
 
     public function create()
@@ -35,7 +56,7 @@ class ServiceController extends Controller
     public function store(StoreServiceRequest $request)
     {
         $request->validated();
-        
+
         $password = $request->input('password');
         $cryptedPassword = Crypt::encrypt($password);
 

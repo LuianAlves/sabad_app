@@ -16,7 +16,7 @@
                                     @foreach ($departments as $department)
                                         <option value="{{ $department->id }}" 
                                             {{ (old('department_id', $employee->department_id) == $department->id) ? 'selected' : '' }}>
-                                            {{ $department->name }} — {{ $department->company?->name ?? 'Sem empresa' }}
+                                           {{ $department->name . ' - ' . $department->company->name }}
                                         </option>
                                     @endforeach
                                 </select>
