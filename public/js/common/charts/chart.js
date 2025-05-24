@@ -99,14 +99,14 @@ async function fetchChartData(companyId = 'all', showLoader = true) {
     }
 }
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     fetchChartData();
+document.addEventListener('DOMContentLoaded', function () {
+    fetchChartData();
 
-//     // Atualiza a cada 5 segundos sem mostrar loader
-//     setInterval(() => {
-//         fetchChartData('all', false);
-//     }, 30000);
-// });
+    // Atualiza a cada 5 segundos sem mostrar loader
+    setInterval(() => {
+        fetchChartData('all', false);
+    }, 30000);
+});
 
 document.querySelectorAll('input[name="companyFilter"]').forEach(function (radio) {
     radio.addEventListener('change', function () {

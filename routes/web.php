@@ -37,6 +37,7 @@ use App\Http\Controllers\Business\Device\DeviceController;
 use App\Http\Controllers\Business\Device\DeviceType\DeviceTypeController;
 use App\Http\Controllers\Business\Device\DeviceBrand\DeviceBrandController;
 use App\Http\Controllers\Business\Device\DeviceModel\DeviceModelController;
+use App\Http\Controllers\Business\Device\DeviceControl\DeviceControlController;
 
 // License
 use App\Http\Controllers\Business\License\LicenseController;
@@ -70,7 +71,7 @@ Route::any('/logout', [AuthController::class, 'destroy'])->name('logout');
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.index');
 
     Route::resource('user', UserController::class);
 
@@ -92,18 +93,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('device', DeviceController::class);
 
-    Route::resource('device_type', DeviceTypeController::class);
+    Route::resource('device_type', DeviceTypeController::class)->except('show');
     Route::get('/device_type/search', [DeviceTypeController::class, 'search'])->name('device_type.search');
     
-    Route::resource('device_brand', DeviceBrandController::class);
+    Route::resource('device_brand', DeviceBrandController::class)->except('show');
     Route::get('/device_brand/search', [DeviceBrandController::class, 'search'])->name('device_brand.search');
     
-    Route::resource('device_model', DeviceModelController::class);
+    Route::resource('device_model', DeviceModelController::class)->except('show');
     Route::get('/device_model/search', [DeviceModelController::class, 'search'])->name('device_model.search');
+
+    Route::resource('device_control', DeviceControlController::class);
 
     Route::resource('license', LicenseController::class);
 
-    Route::resource('devicecontrol', UserController::class);
 
     Route::resource('ticket', TicketController::class);
     Route::resource('ticket_category', TicketCategoryController::class);

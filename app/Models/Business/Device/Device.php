@@ -2,10 +2,15 @@
 
 namespace App\Models\Business\Device;
 
-use App\Models\Business\Department\Department;
-use App\Models\Business\Employee\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+// Models
+use App\Models\Business\Department\Department;
+use App\Models\Business\Employee\Employee;
+use App\Models\Business\Device\DeviceType\DeviceType;
+use App\Models\Business\Device\DeviceBrand\DeviceBrand;
+use App\Models\Business\Device\DeviceModel\DeviceModel;
 
 class Device extends Model
 {
@@ -27,5 +32,17 @@ class Device extends Model
 
         return $this->belongsTo(Employee::class);
 
+    }
+
+    public function deviceType() {
+        return $this->belongsTo(DeviceType::class);
+    }
+
+    public function deviceBrand() {
+        return $this->belongsTo(DeviceBrand::class);
+    }
+
+    public function deviceModel() {
+        return $this->belongsTo(DeviceModel::class);
     }
 }

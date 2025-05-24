@@ -16,7 +16,7 @@
         <ul class="navbar-nav">
 
             <li class="nav-item">
-                <a class="nav-link {{ $current == 'dashboard' ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                <a class="nav-link {{ $current == 'dashboard' ? 'active' : '' }}" href="{{ route('dashboard.index') }}">
                     <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-table-columns fs-5"></i>
                     </div>
@@ -135,7 +135,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ $current == 'devicecontrol' ? 'active' : '' }}" href="{{ route('devicecontrol.index') }}">
+                <a class="nav-link {{ $current == 'device_control' ? 'active' : '' }}" href="{{ route('device_control.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fas fa-sliders-h text-white fs-5"></i>

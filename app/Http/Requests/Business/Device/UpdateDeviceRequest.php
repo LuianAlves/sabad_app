@@ -13,13 +13,12 @@ class UpdateDeviceRequest extends FormRequest
     }
 
     
-    public function rules(): array
+   public function rules(): array
     {
         return [
-            'department_id' => 'required',
-            'device_type' => 'required|in:0,1,2,3',
-            'brand' => 'required|string|max:20',
-            'model' => 'required|string|max:20',
+            'device_type_id' => 'required',
+            'device_brand_id' => 'required',
+            'device_model_id' => 'required'
         ];
     }
 }

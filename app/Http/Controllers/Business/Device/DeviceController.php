@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers\Business\Device;
 
-use App\Models\Business\Device\Device;
+use App\Http\Controllers\Controller;
+
+// Request
 use App\Http\Requests\Business\Device\StoreDeviceRequest;
 use App\Http\Requests\Business\Device\UpdateDeviceRequest;
-use App\Http\Controllers\Controller;
+
+// Models
+use App\Models\Business\Device\Device;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Department\Department;
+
+// Dependences
+use Carbon\Carbon;
 
 class DeviceController extends Controller
 {
@@ -38,10 +45,10 @@ class DeviceController extends Controller
         $request->validated();
 
         $device = Device::create([
-            'department_id' => $request->department_id,
-            'device_type' => $request->device_type,
-            'brand' => $request->brand,
-            'model' => $request->model,
+            'device_type_id' => $request->device_type_id,
+            'device_brand_id' => $request->device_brand_id,
+            'device_model_id' => $request->device_model_id,
+            'created_at' => Carbon::now(),
         ]);
 
         return redirect()->route('device.index');

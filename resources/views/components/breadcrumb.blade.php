@@ -12,7 +12,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-1 pb-0 pt-1 px-0 me-sm-6 me-5">
         <li class="breadcrumb-item text-sm">
-            <a class="opacity-5 text-dark" href="{{ route('dashboard') }}">{{ __('breadcrumbs.dashboard') }}</a>
+            <a class="opacity-5 text-dark" href="{{ route('dashboard.index') }}">{{ __('breadcrumbs.dashboard') }}</a>
         </li>
         <li class="breadcrumb-item text-sm">
             <a class="opacity-5 text-dark" href="{{ route($resource . '.index') }}">{{ $title }}</a>

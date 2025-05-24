@@ -17,7 +17,6 @@ function createSmartSelect({ selectId, inputId, searchUrl, storeUrl, fieldName, 
         wrapper.appendChild(dropdown);
     }
 
-
     function renderDropdown(items, query) {
         dropdown.innerHTML = '';
         if (items.length > 0) {
@@ -33,7 +32,7 @@ function createSmartSelect({ selectId, inputId, searchUrl, storeUrl, fieldName, 
                     input.value = item[fieldName];
                     dropdown.style.display = 'none';
                     select.dispatchEvent(new Event('change'));
-                    onSelect(); // ✅ chama a função onSelect se fornecida
+                    onSelect(item); // ✅ chama a função onSelect se fornecida
                 });
 
 
@@ -72,8 +71,10 @@ function createSmartSelect({ selectId, inputId, searchUrl, storeUrl, fieldName, 
             });
     }
 
-
     function storeNewOption(name) {
+        const extraParams = getExtraParams();
+        console.log('Params enviados para criação:', extraParams); // 👈
+
         const data = { [fieldName]: name, ...getExtraParams() };
 
         fetch(storeUrl, {
@@ -95,6 +96,8 @@ function createSmartSelect({ selectId, inputId, searchUrl, storeUrl, fieldName, 
                     select.appendChild(option);
                 }
 
+                onCreate(newItem);
+
                 select.value = newItem.id;  // muito importante
                 input.value = newItem[fieldName];
                 select.dispatchEvent(new Event('change'));
@@ -102,7 +105,6 @@ function createSmartSelect({ selectId, inputId, searchUrl, storeUrl, fieldName, 
             })
             .catch(() => alert('Erro ao salvar o item.'));
     }
-
 
     input.addEventListener('input', () => {
         const query = input.value.trim();
@@ -125,29 +127,10 @@ function createSmartSelect({ selectId, inputId, searchUrl, storeUrl, fieldName, 
     });
 
     if (select.value) {
-        const selectedOption = select.options[select.selectedIndex];
+        const selectedOption = [...select.options].find(opt => opt.value == select.value);
         if (selectedOption) {
             input.value = selectedOption.textContent;
         }
     }
-
-document.getElementById('device_brand_id').addEventListener('change', (e) => {
-        const selectedBrandId = e.target.value;
-        const modelInput = document.getElementById('device_model_input');
-        const modelSelect = document.getElementById('device_model_id');
-
-        if (selectedBrandId) {
-            modelInput.disabled = false;
-            modelSelect.disabled = false;
-        } else {
-            modelInput.disabled = true;
-            modelSelect.disabled = true;
-        }
-
-        // Limpa o input e select de modelo quando muda a marca
-        modelInput.value = '';
-        modelSelect.value = '';
-    });
-
 }
 

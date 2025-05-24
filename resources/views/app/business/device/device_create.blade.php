@@ -16,7 +16,6 @@
                             </div>
                         </div>
 
-
                         <div class="col-4">
                             <div class="dropdown-wrapper" style="position: relative;">
                                 <select id="device_brand_id" name="device_brand_id" style="display:none;"></select>
@@ -49,7 +48,33 @@
             inputId: 'device_type_input',
             searchUrl: '{{ route('device_type.search') }}',
             storeUrl: '{{ route('device_type.store') }}',
-            fieldName: 'name'
+            fieldName: 'name',
+            onSelect: (item) => {
+                const select = document.getElementById('device_type_id');
+                if (select) {
+                    let option = select.querySelector(`option[value="${item.id}"]`);
+                    if (!option) {
+                        option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = item.name;
+                        select.appendChild(option);
+                    }
+                    select.value = item.id;
+                }
+            },
+            onCreate: (item) => {
+                const select = document.getElementById('device_type_id');
+                if (select) {
+                    let option = select.querySelector(`option[value="${item.id}"]`);
+                    if (!option) {
+                        option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = item.name;
+                        select.appendChild(option);
+                    }
+                    select.value = item.id;
+                }
+            }
         });
 
         createSmartSelect({
@@ -59,22 +84,42 @@
             storeUrl: '{{ route('device_brand.store') }}',
             fieldName: 'name',
             onSelect: (item) => {
-    const select = document.getElementById('device_brand_id');
-    select.value = item.id; // ou item.value, dependendo do seu dado
-    // Habilita o input e select de modelo
-    document.getElementById('device_model_input').disabled = false;
-    document.getElementById('device_model_id').disabled = false;
-},
-onCreate: (item) => {
-    const select = document.getElementById('device_brand_id');
-    select.value = item.id; // Atualiza o select também ao criar
-    document.getElementById('device_model_input').disabled = false;
-    document.getElementById('device_model_id').disabled = false;
-},
+                console.log('Marca selecionada:', item.id);
+                const select = document.getElementById('device_brand_id');
 
+                if (select) {
+                    let option = select.querySelector(`option[value="${item.id}"]`);
+                    if (!option) {
+                        option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = item.name;
+                        select.appendChild(option);
+                    }
+                    select.value = item.id;
+                }
 
+                document.getElementById('device_model_input').disabled = false;
+                document.getElementById('device_model_id').disabled = false;
+            },
+
+            onCreate: (item) => {
+                const select = document.getElementById('device_brand_id');
+
+                if (select) {
+                    let option = select.querySelector(`option[value="${item.id}"]`);
+                    if (!option) {
+                        option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = item.name;
+                        select.appendChild(option);
+                    }
+                    select.value = item.id;
+                }
+
+                document.getElementById('device_model_input').disabled = false;
+                document.getElementById('device_model_id').disabled = false;
+            }
         });
-
 
         createSmartSelect({
             selectId: 'device_model_id',
@@ -82,13 +127,41 @@ onCreate: (item) => {
             searchUrl: '{{ route('device_model.search') }}',
             storeUrl: '{{ route('device_model.store') }}',
             fieldName: 'name',
-            getExtraParams: () => {
-    const brandSelect = document.getElementById('device_brand_id');
-    console.log('Brand ID enviado:', brandSelect?.value);
-    return {
-        device_brand_id: brandSelect ? brandSelect.value : null
-    };
-}
+            getExtraParams: (item) => {
+                const brandSelect = document.getElementById('device_brand_id');
+                console.log('Brand Select:', brandSelect, item, 'Valor:', brandSelect?.value); // 👀
+                return {
+                    device_brand_id: brandSelect ? brandSelect.value : null
+                };
+            },
+            onSelect: (item) => {
+                const select = document.getElementById('device_model_id');
+                if (select) {
+                    let option = select.querySelector(`option[value="${item.id}"]`);
+                    if (!option) {
+                        option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = item.name;
+                        select.appendChild(option);
+                    }
+                    select.value = item.id;
+                }
+            },
+            onCreate: (item) => {
+                const select = document.getElementById('device_model_id');
+                if (select) {
+                    let option = select.querySelector(`option[value="${item.id}"]`);
+                    if (!option) {
+                        option = document.createElement('option');
+                        option.value = item.id;
+                        option.text = item.name;
+                        select.appendChild(option);
+                    }
+                    select.value = item.id;
+                }
+                console.log('Novo modelo criado:', item);
+            }
+
         });
 
         // Também escuta mudanças diretas no select, caso criem ou selecionem manualmente

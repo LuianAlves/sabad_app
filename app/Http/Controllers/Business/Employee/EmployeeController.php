@@ -2,12 +2,23 @@
 
 namespace App\Http\Controllers\Business\Employee;
 
-use App\Models\Business\Employee\Employee;
-use App\Models\Business\Department\Department;
-use App\Models\Business\Company\Company;
+use App\Http\Controllers\Controller;
+
+// Requests
 use App\Http\Requests\Business\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Business\Employee\UpdateEmployeeRequest;
-use App\Http\Controllers\Controller;
+
+// Models
+use App\Models\User;
+use App\Models\Business\User\EmployeeUser;
+use App\Models\Business\Employee\Employee;
+use App\Models\Business\Email\Email;
+use App\Models\Business\Company\Company;
+use App\Models\Business\Department\Department;
+
+// Dependences
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -19,7 +30,6 @@ class EmployeeController extends Controller
 
         return view('app.business.employee.employee_index', compact('employees'));
     }
-
     
     public function create()
     {
@@ -41,7 +51,29 @@ class EmployeeController extends Controller
             'hierarchical_level' => $request->hierarchical_level,
             'hired_in' => $request->hired_in,
             'fired_in' => $request->fired_in,
-            'status' => $request->status
+            'status' => $request->status,
+            'created_at' => Carbon::now()
+        ]);
+
+        $email = Email::create([
+            'employee_id' => $employee->id,
+            'user' => $request->name,
+            'email' => $request->email,
+            'created_at' => Carbon::now()
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'is_active' => (bool) $request->active,
+            'created_at' => Carbon::now()
+        ]);
+
+        $employeeUser = EmployeeUser::create([
+            'employee_id' => $employee->id,
+            'user_id' => $user->id,
+            'created_at' => Carbon::now()
         ]);
 
         return redirect()->route('employee.index');

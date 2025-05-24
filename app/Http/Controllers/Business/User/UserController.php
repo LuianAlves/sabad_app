@@ -62,10 +62,10 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
-
     public function show($id)
     {
-        return view('app.business.user.user_show');
+        $user = User::findOrFail($id);
+        return view('app.business.user.user_show', compact('user'));
     }
 
     public function edit($id)
