@@ -11,7 +11,6 @@
                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Empresa</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Departamento</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Dispositivo<br><small>Marca / Modelo</small></th>
-                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Celular<br><small>Modelo</small></th>
                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7"></th>
                         </tr>
                     </x-slot>
@@ -35,7 +34,7 @@
                                 {{-- Dispositivo --}}
                                 <td>
                                     @php
-                                        $types = ['Notebook', 'Desktop', 'Servidor', 'Impressora'];
+                                        $types = ['Notebook', 'Desktop', 'Servidor', 'Impressora', 'Celular'];
                                     @endphp
                                     <p class="text-dark text-sm mb-0">
                                         {{ $types[$device->device_type] ?? '-' }}

@@ -2,6 +2,7 @@
 
 namespace App\Models\Business\License;
 
+use App\Models\Business\Email\Email;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,5 +32,10 @@ class License extends Model
 
     public function service() {
         return $this->belongsTo(Service::class);
+    }
+
+    public function email()
+    {
+        return $this->belongsTo(Email::class);
     }
 }

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 // Auth
 use App\Http\Controllers\Auth\AuthController;
 
+// Dashboard
+use App\Http\Controllers\Common\DashboardController;
+
 // Users
 use App\Http\Controllers\Business\User\UserController;
 
@@ -31,12 +34,19 @@ use App\Http\Controllers\Business\Email\EmailController;
 
 //Device
 use App\Http\Controllers\Business\Device\DeviceController;
+use App\Http\Controllers\Business\Device\DeviceType\DeviceTypeController;
+use App\Http\Controllers\Business\Device\DeviceBrand\DeviceBrandController;
+use App\Http\Controllers\Business\Device\DeviceModel\DeviceModelController;
 
 // License
 use App\Http\Controllers\Business\License\LicenseController;
 
 // Charts
 use App\Http\Controllers\Common\ChartController;
+
+//  Tickets
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,39 +64,50 @@ Route::any('/logout', [AuthController::class, 'destroy'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| WEB ROUTES
+| RESOURCE ROUTES
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
-    // Users
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
     Route::resource('user', UserController::class);
-    
+
     Route::resource('company', CompanyController::class);
-    
+
     Route::resource('domain', DomainController::class);
-    
+
     Route::resource('department', DepartmentController::class);
-    
+
     Route::resource('employee', EmployeeController::class);
-    
+
     Route::resource('service', ServiceController::class);
-    
+
     Route::resource('email', EmailController::class);
-    
+
     Route::resource('servicecontrol', UserController::class);
-    
+
     Route::resource('certificate', CertificateController::class);
-    
+
     Route::resource('device', DeviceController::class);
+
+    Route::resource('device_type', DeviceTypeController::class);
+    Route::get('/device_type/search', [DeviceTypeController::class, 'search'])->name('device_type.search');
     
+    Route::resource('device_brand', DeviceBrandController::class);
+    Route::get('/device_brand/search', [DeviceBrandController::class, 'search'])->name('device_brand.search');
+    
+    Route::resource('device_model', DeviceModelController::class);
+    Route::get('/device_model/search', [DeviceModelController::class, 'search'])->name('device_model.search');
+
     Route::resource('license', LicenseController::class);
-    
+
     Route::resource('devicecontrol', UserController::class);
+
+    Route::resource('ticket', TicketController::class);
+    Route::resource('ticket_category', TicketCategoryController::class);
+
 });
 
 /*

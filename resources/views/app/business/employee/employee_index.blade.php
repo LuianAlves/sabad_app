@@ -2,7 +2,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
+            <div class="card card-crud border shadow-xs mb-4">
                 <x-card-header title="Funcionários cadastrados" count="{{ $employees->count() }}" action="novo"></x-card-header>
 
                 <x-table>
@@ -11,8 +11,6 @@
                             <th class="text-secondary text-xs font-weight-semibold opacity-7">Departamento/Empresa</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Nome</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Nivel Hierárquico</th>
-                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Contratado em</th>
-                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Dispensado em</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Status</th>
                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7"></th>
                         </tr>
@@ -40,12 +38,6 @@
                                 <td>
                                     <p class="text-secondary text-sm mb-0">{{ $employee->hierarchical_level }}</p>
                                 </td>
-
-                                {{-- Contratado em --}}
-                                <td class="text-secondary text-sm mb-0">{{ $employee->hired_in }}</td>
-
-                                {{-- Dispensado em --}}
-                                <td class="text-secondary text-sm mb-0">{{ $employee->fired_in }}</td>
 
                                 {{-- Status --}}
                                 <td>

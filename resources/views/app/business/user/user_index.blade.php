@@ -2,7 +2,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
+            <div class="card card-crud border shadow-xs mb-4">
                 <x-card-header title="Usuários cadastrados" count="{{ $users->count() }}" action="novo"></x-card-header>
 
                 <x-table>
@@ -20,7 +20,6 @@
                                 <td>
                                     <div class="d-flex justify-content-center">
                                         <div class="ms-2">
-
                                             <p class="text-dark fw-bold text-sm mb-0">{{ $user->name }}</p>
                                             <p class="text-secondary text-sm mb-0">{{ $user->email }}</p>
                                         </div>

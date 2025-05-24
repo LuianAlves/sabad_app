@@ -20,7 +20,7 @@
     @endif
 </div>
 
-<div class="card-body">
+<div class="card-body" style="height: calc(100vh - 32.5vh) !important; overflow-y: auto;">
     {{ $slot }}
 </div>
 

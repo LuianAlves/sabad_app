@@ -2,7 +2,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
+            <div class="card card-crud border shadow-xs mb-4">
                 <x-card-header title="Departamentos cadastrados" count="{{ $departments->count() }}"
                     action="novo"></x-card-header>
 

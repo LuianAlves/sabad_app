@@ -20,8 +20,6 @@ class UpdateDeviceRequest extends FormRequest
             'device_type' => 'required|in:0,1,2,3',
             'brand' => 'required|string|max:20',
             'model' => 'required|string|max:20',
-            'phone_type' => 'required|in:0,1,2,',           
-            'phone_model' => 'required|string'
         ];
     }
 }

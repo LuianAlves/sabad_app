@@ -4,7 +4,9 @@
         <div class="col-12">
             <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
                 <x-card-header title="Dominios cadastrados" count="{{ $domains->count() }}" action="novo"></x-card-header>
-
+                    @php
+                    use Carbon\Carbon;
+                    @endphp
                 <x-table>
                     <x-slot name="thead">
                         <tr class="text-center">
@@ -21,12 +23,12 @@
                         @foreach ($domains as $domain)
                             <tr class="text-center">
                                 {{-- Empresa --}}
-                                @foreach ($domains as $domain)
+                                
                                     <td>
                                         <p class="text-dark fw-bold text-sm mb-0">
                                             {{ $domain->company?->name ?? 'Sem empresa vinculada' }}</p>
                                     </td>
-                                @endforeach
+                                
 
                                 {{-- Domínio --}}
                                 <td>
@@ -35,14 +37,16 @@
 
                                 {{-- Validade --}}
                                 <td>
-                                    <p class="text-secondary text-sm mb-0">{{ $domain->plan_validity }}</p>
+                                    <p class="text-secondary text-sm mb-0">{{ \Carbon\Carbon::parse($domain->plan_validity)->format('d/m/Y') }}</p>
                                 </td>
 
                                 {{-- Último Pagamento --}}
-                                <td class="text-secondary text-sm mb-0">{{ $domain->last_payment }}</td>
+                                <td class="text-secondary text-sm mb-0">{{ \Carbon\Carbon::parse($domain->last_payment)->format('d/m/Y') }}</td>
 
                                 {{-- Próximo Pagamento --}}
-                                <td class="text-secondary text-sm mb-0">{{ $domain->next_payment }}</td>
+                                <td class="text-secondary text-sm mb-0">{{ \Carbon\Carbon::parse($domain->next_payment)->format('d/m/Y') }}</td>
+
+
 
                                 {{-- Status --}}
                                 <td>

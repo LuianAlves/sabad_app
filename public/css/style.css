@@ -5,3 +5,18 @@
 .nav-item .nav-link-text {
     margin-top: 3px !important;
 }
+
+.card-crud {
+    height: calc(100vh - 125px) !important;
+}
+
+@media (min-width: 992px) and (max-width: 1910px) {
+  .table-responsive {
+    overflow-x: hidden !important;
+  }
+
+  .table {
+    width: 100% !important;
+    table-layout: auto !important;
+  }
+}

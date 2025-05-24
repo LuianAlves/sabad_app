@@ -13,12 +13,9 @@ class Device extends Model
     use HasFactory;
 
     protected $fillable = [
-        'department_id',
-        'device_type',
-        'brand',
-        'model',
-        'phone_type',        
-        'phone_model'
+        'device_type_id',
+        'device_brand_id',
+        'device_model_id'
     ];
 
     public function department() {

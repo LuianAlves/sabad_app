@@ -42,8 +42,6 @@ class DeviceController extends Controller
             'device_type' => $request->device_type,
             'brand' => $request->brand,
             'model' => $request->model,
-            'phone_type' => $request->phone_type,
-            'phone_model' => $request->phone_model
         ]);
 
         return redirect()->route('device.index');
@@ -80,8 +78,6 @@ class DeviceController extends Controller
             'device_type' => $request->device_type,
             'brand' => $request->brand,
             'model' => $request->model,
-            'phone_type' => $request->phone_type,
-            'phone_model' => $request->phone_model
         ]);
 
         return redirect()->route('device.index');

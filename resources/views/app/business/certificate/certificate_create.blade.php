@@ -15,7 +15,7 @@
                         <select name="employee_id" id="employee_id" class="form-control" required>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}" {{ old('employee_id') == $employee->id ? 'selected' : '' }}>
-                                    {{ $employee->name }}
+                                    {{ $employee->name .' - '. Str::words($employee->department->company->name, 2, '')}}
                                 </option>
                             @endforeach
                         </select>

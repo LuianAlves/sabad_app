@@ -17,12 +17,6 @@
                                 2 => 'Servidor',
                                 3 => 'Impressora',
                             ];
-
-                            $phoneTypes = [
-                                0 => 'Motorola',
-                                1 => 'Samsung',
-                                2 => 'Xiaomi',
-                            ];
                         @endphp
 
                         <div class="card-body">
@@ -47,20 +41,9 @@
                                     <strong>Modelo:</strong>
                                     <p>{{ $device->model }}</p>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <strong>Dispositivo:</strong>
-                                    <p>{{ $phoneTypes[$device->phone_type] ?? 'Desconhecido' }}</p>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <strong>Modelo:</strong>
-                                    <p>{{ $device->phone_model }}</p>
-                                </div>
+                                
                             </div>
-                            
-                            
-
-
-
+                                                   
                             <div class="mt-4">
                                 <a href="{{ route('device.index') }}" class="btn btn-secondary">
                                     ← Voltar

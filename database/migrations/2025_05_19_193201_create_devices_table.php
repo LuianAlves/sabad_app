@@ -11,13 +11,9 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('department_id');
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->tinyInteger('device_type');
             $table->string('brand');
             $table->string('model');
-            $table->tinyInteger('phone_type');
-            $table->string('phone_model');
             $table->timestamps();
         });
     }

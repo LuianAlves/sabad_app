@@ -20521,7 +20521,7 @@ fieldset:disabled .btn {
 
 .btn-check:checked+.btn {
   font-weight: 700;
-  color: #774dd3;
+  color: var(--bs-warning);
   border: 1px solid #dde0e5;
 }
 
@@ -23275,25 +23275,18 @@ hr.horizontal.gray-light {
   box-shadow: 0 0.125rem 5px -0.0625rem rgba(12, 26, 36, 0.1), 0 0.0625rem 0.0625rem 0 rgba(12, 26, 36, 0.04);
 }
 
-.navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link .icon svg .color-background {
-  fill: rgba(30, 41, 59, 0.5);
-}
-
-.navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link .icon svg .color-foreground {
-  fill: #1e293b;
+.navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link .icon i {
+  color: #1e293b42 !important;
+  margin-top: 1px !important;
 }
 
 .navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link.active {
-  background: #0f172a;
-  box-shadow: 0 0.125rem 5px -0.0625rem rgba(12, 26, 36, 0.1), 0 0.0625rem 0.0625rem 0 rgba(12, 26, 36, 0.04);
+  background: #f1993721;
+  color: #f19937;
 }
 
-.navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link.active .icon svg .color-background {
-  fill: rgba(255, 255, 255, 0.5);
-}
-
-.navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link.active .icon svg .color-foreground {
-  fill: #fff;
+.navbar-vertical.bg-white .navbar-nav>.nav-item>.nav-link.active .icon i {
+  color: #f19937 !important;
 }
 
 .navbar-vertical.bg-white .navbar-nav>.nav-item.border-start {
@@ -23301,7 +23294,7 @@ hr.horizontal.gray-light {
 }
 
 .navbar-vertical.bg-white .navbar-nav>.nav-item.border-start .nav-link.active {
-  color: #1e293b;
+  color: #1e293b !important;
 }
 
 .navbar-vertical.bg-white .navbar-nav>.nav-item.border-start .nav-link.active:before {
@@ -23324,12 +23317,17 @@ hr.horizontal.gray-light {
   color: #fff;
 }
 
-.navbar-vertical.bg-slate-900 .navbar-nav>.nav-item>.nav-link .icon svg .color-background {
-  fill: rgba(255, 255, 255, 0.5);
+.navbar-vertical.bg-slate-900 .navbar-nav>.nav-item>.nav-link.active .icon i {
+  color: #f19937;
 }
 
-.navbar-vertical.bg-slate-900 .navbar-nav>.nav-item>.nav-link .icon svg .color-foreground {
-  fill: #fff;
+.navbar-vertical.bg-slate-900 .navbar-nav>.nav-item>.nav-link .icon i {
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 1px !important;
+}
+
+.navbar-vertical.bg-slate-900 .navbar-nav>.nav-item>.nav-link .icon i {
+  color: #fff;
 }
 
 .navbar-vertical.bg-slate-900 .navbar-nav>.nav-item.border-start {
@@ -23367,7 +23365,7 @@ hr.horizontal.gray-light {
 
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon svg .color-background,
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon svg .color-foreground {
-  fill: #774dd3;
+  color: #774dd3;
 }
 
 .navbar-vertical .navbar-nav>.nav-item.border-start {

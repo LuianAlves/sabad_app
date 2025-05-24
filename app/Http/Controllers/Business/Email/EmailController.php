@@ -5,64 +5,91 @@ namespace App\Http\Controllers\Business\Email;
 use App\Http\Controllers\Controller;
 
 use App\Models\Business\Email\Email;
-use App\Http\Requests\StoreEmailRequest;
-use App\Http\Requests\UpdateEmailRequest;
+use App\Models\Business\Employee\Employee;
+use App\Http\Requests\Business\Email\StoreEmailRequest;
+use App\Http\Requests\Business\Email\UpdateEmailRequest;
+use App\Models\Business\Company\Company;
+use App\Models\Business\Department\Department;
+use App\Models\Business\License\License;
+use Carbon\Carbon;
+
 
 class EmailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-    }
+        $emails = Email::with('employee.department.company')->get();   
 
-    /**
-     * Show the form for creating a new resource.
-     */
+        return view('app.business.email.email_index', compact('emails'));
+    }
+    
     public function create()
     {
-        //
-    }
+        
+        $companies = Company::with('employees.department.company')->get();
+        $licenses = License::get();
+        
 
-    /**
-     * Store a newly created resource in storage.
-     */
+        return view('app.business.email.email_create', compact('companies', 'licenses'));
+    }
+    
     public function store(StoreEmailRequest $request)
     {
-        //
+        $request->validated();
+
+        $email = Email::create([
+            'employee_id' => $request->employee_id,
+            'license_id' => $request->license_id,
+            'email' => $request->email,
+            'password' => $request->password,
+            'alias' => json_encode($request->alias),
+            'is_active' => $request->is_active,
+            'created_at' => Carbon::now()
+        
+        ]);
+
+        
+        return redirect()->route('email.index');
+    }
+    
+    public function show($id)
+    {
+        $email = Email::find($id);
+
+        return view('app.business.email.email.show', compact('email'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Email $email)
+    
+    public function edit($id)
     {
-        //
+        $email = Email::where('id', $id)->find($id);
+        $companies = Company::with('employees.department.company')->get();
+        $licenses = License::get();          
+
+        return view('app.business.email.email_edit', compact('email', 'companies', 'licenses'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Email $email)
+    public function update(UpdateEmailRequest $request, $id)
     {
-        //
-    }
+        $request->validated();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateEmailRequest $request, Email $email)
-    {
-        //
-    }
+        $email = Email::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Email $email)
+        $email->update([
+            'employee_id' => $request->employee_id,
+            'email' => $request->email,
+            'password' => $request->password,
+
+        ]);
+
+        return redirect()->route('email.index');
+    }
+    
+    public function destroy($id)
     {
-        //
+        $email = Email::find($id);
+        $email->delete();
+
+        return redirect()->route('email.index');
     }
 }

@@ -24,7 +24,7 @@ class EmployeeController extends Controller
     public function create()
     {
         $departments = Department::get();
-        $companies = Company::with('departments')->get();
+        $companies = Company::with('departments.employees')->get();
 
 
         return view('app.business.employee.employee_create', compact('companies'));

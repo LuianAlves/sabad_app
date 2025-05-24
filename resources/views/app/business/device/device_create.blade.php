@@ -1,84 +1,141 @@
 @extends('layouts.templates.app-layout')
+
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
+                <x-card-header title="Novo Dispositivo" action="Cadastrar" />
+                <x-form route="store">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="dropdown-wrapper" style="position: relative;">
+                                <select id="device_type_id" name="device_type_id" style="display:none;"></select>
+                                <input type="text" class="form-control" id="device_type_input"
+                                    placeholder="Digite ou selecione um tipo...">
+                                <div class="custom-dropdown"></div>
+                            </div>
+                        </div>
 
-            <x-card-header title="Novo Dispositivo" action="Cadastrar" />
 
-            <x-form route="store">
-                <div class="row">
-                    
-                    {{-- Empresa --}}
-                    <div class="col-6">
-                        <label for="company_id" class="form-control-label">Empresa</label>
-                        <select name="company_id" id="company_id" class="form-control" required>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->id }}" 
-                                    {{ old('company_id', $company_id ?? '') == $company->id ? 'selected' : '' }}>
-                                    {{ $company->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <div class="col-4">
+                            <div class="dropdown-wrapper" style="position: relative;">
+                                <select id="device_brand_id" name="device_brand_id" style="display:none;"></select>
+                                <input type="text" class="form-control" id="device_brand_input"
+                                    placeholder="Digite ou selecione uma marca...">
+                                <div class="custom-dropdown"></div>
+                            </div>
+                        </div>
 
-                    {{-- Departamento --}}
-                    <div class="col-6">
-                        <label for="department_id" class="form-control-label">Departamento</label>
-                        <select name="department_id" id="department_id" class="form-control" required>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
-                                    {{ $department->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    {{-- Dispositivo --}}
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="device_type" class="form-control-label">Dispositivo</label>
-                            <select class="form-control" id="device_type" name="device_type">
-                                <option value="0" {{ old('device_type', 0) == 0 ? 'selected' : '' }}>Notebook</option>
-                                <option value="1" {{ old('device_type', 1) == 1 ? 'selected' : '' }}>Desktop</option>
-                                <option value="2" {{ old('device_type', 2) == 2 ? 'selected' : '' }}>Servidor</option>
-                                <option value="3" {{ old('device_type', 3) == 3 ? 'selected' : '' }}>Impressora</option>
-                                <option value="4" {{ old('device_type', 4) == 4 ? 'selected' : '' }}>Celular</option>
-                            </select>
+                        <div class="col-4">
+                            <div class="dropdown-wrapper" style="position: relative;">
+                                <select id="device_model_id" name="device_model_id" style="display:none;" disabled></select>
+                                <input type="text" class="form-control" id="device_model_input"
+                                    placeholder="Digite ou selecione um modelo..." disabled>
+                                <div class="custom-dropdown"></div>
+                            </div>
                         </div>
                     </div>
-
-                    {{-- Marca --}}
-                    <x-input col="6" set="" type="string" title="Marca" id="brand"
-                        name="brand" value="{{ old('brand') }}" placeholder="" />
-
-                    {{-- Modelo --}}
-                    <x-input col="6" set="" type="string" title="Modelo" id="model"
-                        name="model" value="{{ old('model') }}" placeholder="" />
-
-
-                    {{-- Celular --}}
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="phone_type" class="form-control-label">Celular</label>
-                            <select class="form-control" id="phone_type" name="phone_type">
-                                <option value="0" {{ old('phone_type', 0) == 0 ? 'selected' : '' }}>Motorola</option>
-                                <option value="1" {{ old('phone_type', 1) == 1 ? 'selected' : '' }}>Samsung</option>
-                                <option value="2" {{ old('phone_type', 2) == 2 ? 'selected' : '' }}>Xiamoi</option>
-                            </select>
-                        </div>
-                    </div>
-                   
-
-                        {{-- Modelo --}}
-                        <x-input col="6" set="" type="string" title="Modelo" id="phone_model"
-                            name="phone_model" value="{{ old('phone_model', $device->phone_model ?? '') }}" placeholder="" />
-                   
-                    
-
-
-                </div>
-            </x-form>
+                </x-form>
+            </div>
         </div>
     </div>
-</div>
 @endsection
+
+<script src="{{ asset('js/common/select/custom_select.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        createSmartSelect({
+            selectId: 'device_type_id',
+            inputId: 'device_type_input',
+            searchUrl: '{{ route('device_type.search') }}',
+            storeUrl: '{{ route('device_type.store') }}',
+            fieldName: 'name'
+        });
+
+        createSmartSelect({
+            selectId: 'device_brand_id',
+            inputId: 'device_brand_input',
+            searchUrl: '{{ route('device_brand.search') }}',
+            storeUrl: '{{ route('device_brand.store') }}',
+            fieldName: 'name',
+            onSelect: (item) => {
+    const select = document.getElementById('device_brand_id');
+    select.value = item.id; // ou item.value, dependendo do seu dado
+    // Habilita o input e select de modelo
+    document.getElementById('device_model_input').disabled = false;
+    document.getElementById('device_model_id').disabled = false;
+},
+onCreate: (item) => {
+    const select = document.getElementById('device_brand_id');
+    select.value = item.id; // Atualiza o select também ao criar
+    document.getElementById('device_model_input').disabled = false;
+    document.getElementById('device_model_id').disabled = false;
+},
+
+
+        });
+
+
+        createSmartSelect({
+            selectId: 'device_model_id',
+            inputId: 'device_model_input',
+            searchUrl: '{{ route('device_model.search') }}',
+            storeUrl: '{{ route('device_model.store') }}',
+            fieldName: 'name',
+            getExtraParams: () => {
+    const brandSelect = document.getElementById('device_brand_id');
+    console.log('Brand ID enviado:', brandSelect?.value);
+    return {
+        device_brand_id: brandSelect ? brandSelect.value : null
+    };
+}
+        });
+
+        // Também escuta mudanças diretas no select, caso criem ou selecionem manualmente
+        document.getElementById('device_brand_id').addEventListener('change', function() {
+            const modelInput = document.getElementById('device_model_input');
+            if (this.value) {
+                modelInput.disabled = false;
+            } else {
+                modelInput.disabled = true;
+            }
+        });
+    });
+</script>
+
+
+<style>
+    .dropdown-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .custom-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 1050;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 0.375rem 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    .custom-dropdown .dropdown-item {
+        padding: 0.375rem 0.75rem;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .custom-dropdown .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>

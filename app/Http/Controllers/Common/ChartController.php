@@ -13,9 +13,13 @@ class ChartController extends Controller
     {
         $query = DB::table('employees')
             ->join('departments', 'employees.department_id', '=', 'departments.id')
-            ->select('departments.name as name', DB::raw('count(employees.id) as number'));
+            ->select(
+                'departments.name as name',
+                DB::raw("SUM(CASE WHEN employees.status = 1 THEN 1 ELSE 0 END) as active"),
+                DB::raw("SUM(CASE WHEN employees.status = 0 THEN 1 ELSE 0 END) as inactive"),
+                DB::raw("COUNT(employees.id) as total")
+            );
 
-        // Se vier o filtro por company_id e não for 'all', aplica
         if ($request->has('company_id') && $request->company_id !== 'all') {
             $query->where('departments.company_id', $request->company_id);
         }
@@ -26,7 +30,9 @@ class ChartController extends Controller
 
         return response()->json([
             'employee' => $results->pluck('name'),
-            'number' => $results->pluck('number'),
+            'number' => $results->pluck('total'),
+            'actives' => $results->pluck('active'),
+            'inactives' => $results->pluck('inactive')
         ]);
     }
 }

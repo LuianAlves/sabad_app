@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Business\User;
 
 use App\Http\Controllers\Controller;
+
+// Requests
 use App\Http\Requests\Business\User\StoreUserRequest;
 use App\Http\Requests\Business\User\UpdateUserRequest;
 
-use App\Models\User;  
+// Models
+use App\Models\User;
 
+// Dependences
+use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
 
 class UserController extends Controller
@@ -22,18 +27,18 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('app.business.user.user_create');
+        $permissions = Permission::all()->groupBy(function ($permission) {
+            return explode(' ', $permission->name)[1];
+        });
+
+        return view('app.business.user.user_create', compact('permissions'));
     }
-    
+
     public function store(StoreUserRequest $request)
     {
         $request->validated();
 
-        if((bool) $request->is_admin) {
-            $permission = 'admin';
-        } else {
-            $permission = 'user';
-        }
+        $isAdmin = (bool) $request->is_admin;
 
         $user = User::create([
             'name' => $request->name,
@@ -43,7 +48,16 @@ class UserController extends Controller
             'created_at' => Carbon::now()
         ]);
 
-        $user->assignRole($permission);
+        if ($isAdmin) {
+            $user->assignRole('admin');
+        } else {
+            $user->assignRole('user');
+
+            if ($request->has('permissions')) {
+                $permissions = Permission::whereIn('name', $request->permissions)->get();
+                $user->syncPermissions($permissions);
+            }
+        }
 
         return redirect()->route('user.index');
     }
@@ -55,7 +69,7 @@ class UserController extends Controller
     }
 
     public function edit($id)
-    { 
+    {
         $user = User::findOrFail($id);
 
         return view('app.business.user.user_edit', compact('user'));

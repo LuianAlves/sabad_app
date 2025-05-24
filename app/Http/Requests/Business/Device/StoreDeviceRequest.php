@@ -17,11 +17,9 @@ class StoreDeviceRequest extends FormRequest
     {
         return [
             'department_id' => 'required',
-            'device_type' => 'required|boolean',
+            'device_type' => 'required|in:0,1,2,3,4',
             'brand' => 'required|string|max:20',
             'model' => 'required|string|max:20',
-            'phone_type' => 'required|in:0,1,2,',         
-            'phone_model' => 'required|string'
         ];
     }
 }
