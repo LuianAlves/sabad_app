@@ -1,7 +1,7 @@
 @if ($route == 'store')
-    <form method="post" action="{{ route(currentRoute()[0] . '.store') }}">
+    <form method="post" action="{{ route(currentRoute()[0] . '.store') }}" enctype="multipart/form-data">
 @elseif($route == 'update')
-    <form method="post" action="{{ route(currentRoute()[0] . '.update', $id) }}">
+    <form method="post" action="{{ route(currentRoute()[0] . '.update', $id) }}" enctype="multipart/form-data">
     @method('PATCH')
 @endif
 @csrf

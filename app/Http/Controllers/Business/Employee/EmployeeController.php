@@ -16,9 +16,11 @@ use App\Models\Business\Email\Email;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Models\Business\License\License;
+
 // Dependences
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
 class EmployeeController extends Controller
 {
@@ -37,13 +39,42 @@ class EmployeeController extends Controller
         $companies = Company::with('departments.employees')->get();
         $licenses = License::get();
 
-        return view('app.business.employee.employee_create', compact('companies', 'licenses'));
+        $permissions = Permission::all()->groupBy(function ($permission) {
+            return explode(' ', $permission->name)[1];
+        });
+
+
+        return view('app.business.employee.employee_create', compact('companies', 'licenses', 'permissions'));
     }
 
 
     public function store(StoreEmployeeRequest $request)
     {
         $request->validated();
+
+        $imagemBase64 = null;
+
+        if ($request->hasFile('image')) {
+            $userImage = $request->file('image');
+            $imageData = file_get_contents($userImage->getRealPath());
+
+            $image = imagecreatefromstring($imageData);
+
+            if ($image !== false) {
+                $w = 250;
+                $h = 250;
+                $resizedImage = imagescale($image, $w, $h);
+
+                ob_start();
+                imagejpeg($resizedImage);
+                $rawImage = ob_get_clean();
+
+                $imagemBase64 = base64_encode($rawImage);
+
+                imagedestroy($resizedImage);
+                imagedestroy($image);
+            }
+        }
 
         $firstName = explode(' ', $request->name)[0];
         $password = ucfirst($firstName) . '@@MISB@@';
@@ -58,7 +89,7 @@ class EmployeeController extends Controller
             'created_at' => Carbon::now()
         ]);
 
-        $email = Email::create([
+        Email::create([
             'employee_id' => $employee->id,
             'license_id' => $request->license_id,
             'user' => $request->name,
@@ -66,15 +97,29 @@ class EmployeeController extends Controller
             'created_at' => Carbon::now()
         ]);
 
+        $isAdmin = (bool) $request->is_admin;
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($password),
             'is_active' => 1,
+            'image' => $imagemBase64,
             'created_at' => Carbon::now()
-        ])->assignRole('user');
+        ]);
 
-        $employeeUser = EmployeeUser::create([
+        if ($isAdmin) {
+            $user->assignRole('admin');
+        } else {
+            $user->assignRole('user');
+
+            if ($request->has('permissions')) {
+                $permissions = Permission::whereIn('name', $request->permissions)->get();
+                $user->syncPermissions($permissions);
+            }
+        }
+
+        EmployeeUser::create([
             'employee_id' => $employee->id,
             'user_id' => $user->id,
             'created_at' => Carbon::now()
@@ -87,8 +132,12 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $employee = Employee::with('employeeUser.user', 'department.company')->findOrFail($id);
+        $teammates = Employee::with('employeeUser.user', 'department.company')->where('department_id', $employee->department_id)->get();
+        $permissions = Permission::all()->groupBy(function ($permission) {
+            return explode(' ', $permission->name)[1];
+        });
 
-        return view('app.business.employee.employee_show', compact('employee'));
+        return view('app.business.employee.employee_show', compact('employee', 'teammates', 'permissions'));
     }
 
 

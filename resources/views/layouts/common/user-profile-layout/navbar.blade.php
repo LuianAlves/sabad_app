@@ -137,7 +137,7 @@
         <ul class="navbar-nav d-none d-lg-flex">
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
                 <a href="../pages/profile.html" class="nav-link text-white p-0">
-                    Profile
+                    Área do funcionário
                 </a>
             </li>
             <li class="nav-item border-radius-sm px-3 py-3 me-2  d-flex align-items-center">

@@ -40,11 +40,36 @@ class UserController extends Controller
 
         $isAdmin = (bool) $request->is_admin;
 
+        $imagemBase64 = null;
+
+        if ($request->hasFile('image')) {
+            $userImage = $request->file('image');
+            $imageData = file_get_contents($userImage->getRealPath());
+
+            $image = imagecreatefromstring($imageData);
+
+            if ($image !== false) {
+                $w = 250;
+                $h = 250;
+                $resizedImage = imagescale($image, $w, $h);
+
+                ob_start();
+                imagejpeg($resizedImage);
+                $rawImage = ob_get_clean();
+
+                $imagemBase64 = base64_encode($rawImage);
+
+                imagedestroy($resizedImage);
+                imagedestroy($image);
+            }
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'is_active' => (bool) $request->is_active,
+            'image' => $imagemBase64,
             'created_at' => Carbon::now()
         ]);
 
