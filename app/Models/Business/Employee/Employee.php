@@ -2,12 +2,15 @@
 
 namespace App\Models\Business\Employee;
 
-use App\Models\Business\Certificate\Certificate;
-use App\Models\Business\Company\Company;
-use App\Models\Business\Email\Email;
-use App\Models\Business\Department\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+// Models
+use App\Models\Business\User\EmployeeUser;
+use App\Models\Business\Email\Email;
+use App\Models\Business\Company\Company;
+use App\Models\Business\Department\Department;
+use App\Models\Business\Certificate\Certificate;
 
 class Employee extends Model
 {
@@ -43,8 +46,10 @@ class Employee extends Model
         return $this->hasMany(Email::class);
     }
 
-    
-
+    public function employeeUser()
+    {
+        return $this->hasOne(EmployeeUser::class, 'employee_id');
+    }
 }
     
 

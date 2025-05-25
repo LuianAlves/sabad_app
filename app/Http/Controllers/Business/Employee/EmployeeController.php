@@ -15,14 +15,14 @@ use App\Models\Business\Employee\Employee;
 use App\Models\Business\Email\Email;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
-
+use App\Models\Business\License\License;
 // Dependences
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
-    
+
     public function index()
     {
         $employees = Employee::with('department.company')->get();
@@ -30,20 +30,23 @@ class EmployeeController extends Controller
 
         return view('app.business.employee.employee_index', compact('employees'));
     }
-    
+
     public function create()
     {
         $departments = Department::get();
         $companies = Company::with('departments.employees')->get();
+        $licenses = License::get();
 
-
-        return view('app.business.employee.employee_create', compact('companies'));
+        return view('app.business.employee.employee_create', compact('companies', 'licenses'));
     }
 
-    
+
     public function store(StoreEmployeeRequest $request)
     {
         $request->validated();
+
+        $firstName = explode(' ', $request->name)[0];
+        $password = ucfirst($firstName) . '@@MISB@@';
 
         $employee = Employee::create([
             'department_id' => $request->department_id,
@@ -57,6 +60,7 @@ class EmployeeController extends Controller
 
         $email = Email::create([
             'employee_id' => $employee->id,
+            'license_id' => $request->license_id,
             'user' => $request->name,
             'email' => $request->email,
             'created_at' => Carbon::now()
@@ -65,10 +69,10 @@ class EmployeeController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'is_active' => (bool) $request->active,
+            'password' => Hash::make($password),
+            'is_active' => 1,
             'created_at' => Carbon::now()
-        ]);
+        ])->assignRole('user');
 
         $employeeUser = EmployeeUser::create([
             'employee_id' => $employee->id,
@@ -79,16 +83,15 @@ class EmployeeController extends Controller
         return redirect()->route('employee.index');
     }
 
-    
+
     public function show($id)
-{
-    // Carrega employee com departamento e empresa relacionados
-    $employee = Employee::with('department.company')->findOrFail($id);
+    {
+        $employee = Employee::with('employeeUser.user', 'department.company')->findOrFail($id);
 
-    return view('app.business.employee.employee_show', compact('employee'));
-}
+        return view('app.business.employee.employee_show', compact('employee'));
+    }
 
-    
+
     public function edit($id)
     {
         $employee = Employee::with('department.company')->findOrFail($id);
@@ -97,7 +100,7 @@ class EmployeeController extends Controller
         return view('app.business.employee.employee_edit', compact('employee', 'departments'));
     }
 
-    
+
     public function update(UpdateEmployeeRequest $request, $id)
     {
         $request->validated();
@@ -114,11 +117,8 @@ class EmployeeController extends Controller
         ]);
 
         return redirect()->route('employee.index');
-        
-
     }
 
-    
     public function destroy($id)
     {
         $employee = Employee::find($id);

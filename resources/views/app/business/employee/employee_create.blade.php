@@ -7,8 +7,8 @@
                 <x-card-header title="Novo Funcionário" action="Cadastrar" />
 
                 <x-form route="store">
-                    <div class="row">
 
+                    <div class="row">
                         <div class="col-6">
                             <label for="department_id" class="form-control-label">Departamento</label>
                             <select name="department_id" id="department_id" class="form-control" required>
@@ -25,12 +25,19 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
 
-                        {{-- Nome --}}
-                        <x-input col="6" set="" type="text" title="Nome do Funcionário" id="name"
-                            name="name" value="{{ old('name') }}" placeholder="Ex: João Silva" />
+                    <div class="row mt-3">
+                        <x-input col="4" set="" type="text" title="Funcionário" id="name" name="name" value="{{ old('name') }}" placeholder="João Silva" />
+                        <x-input col="4" set="" type="text" title="E-mail" id="email" name="email" value="{{ old('email') }}" placeholder="ti@bongas.com.br" />
+                        <x-select col="4" set="" title="Licença de e-mail" id="license_id" name="license_id">
+                            @foreach ($licenses as $license)
+                                <option value="{{ $license->id }}">{{ $license->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
 
-                        {{-- Nível Hierárquico --}}
+                    <div class="row mt-2">
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="hierarchical_level" class="form-control-label">Nível Hierárquico</label>
@@ -43,15 +50,14 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
 
-                        {{-- Datas --}}
-                        <x-input col="6" set="" type="date" title="Contratado em" id="hired_in"
-                            name="hired_in" value="{{ old('hired_in') }}" />
+                    <div class="row">
+                        <x-input col="6" set="" type="date" title="Contratado em" id="hired_in" name="hired_in" value="{{ old('hired_in') }}" />
+                        <x-input col="6" set="" type="date" title="Dispensado em" id="fired_in" name="fired_in" value="{{ old('fired_in') }}" />
+                    </div>
 
-                        <x-input col="6" set="" type="date" title="Dispensado em" id="fired_in"
-                            name="fired_in" value="{{ old('fired_in') }}" />
-
-                        {{-- Status --}}
+                    <div class="row">
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="status" class="form-control-label">Status</label>

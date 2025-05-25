@@ -11,6 +11,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Business\User\EmployeeUser;
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -75,11 +77,16 @@ class User extends Authenticatable
             return true;
         }
 
-        if (!$this->is_active) {
-            session()->flash('error', 'Sua conta não está ativa.');
-            return false;
-        }
+        // if (!$this->is_active) {
+        //     session()->flash('error', 'Sua conta não está ativa.');
+        //     return false;
+        // }
 
         return true;
+    }
+
+    public function employeeUser()
+    {
+        return $this->hasOne(EmployeeUser::class, 'user_id');
     }
 }
