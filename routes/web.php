@@ -49,6 +49,9 @@ use App\Http\Controllers\Common\ChartController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketCategoryController;
 
+// Logs
+use App\Http\Controllers\Log\ActivityLogController;
+
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATE ROUTES
@@ -110,6 +113,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('ticket', TicketController::class);
     Route::resource('ticket_category', TicketCategoryController::class);
 
+    Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 });
 
 /*

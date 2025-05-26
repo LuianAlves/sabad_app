@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Business\Service;
+
+use App\Http\Controllers\Controller;
+
 
 use App\Models\Business\Service\ServiceControl;
 use App\Http\Requests\StoreServiceControlRequest;

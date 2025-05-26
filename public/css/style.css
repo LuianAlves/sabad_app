@@ -10,7 +10,7 @@
     height: calc(100vh - 125px) !important;
 }
 
-@media (min-width: 992px) and (max-width: 1910px) {
+/* @media (min-width: 992px) and (max-width: 1910px) {
   .table-responsive {
     overflow-x: hidden !important;
   }
@@ -19,4 +19,4 @@
     width: 100% !important;
     table-layout: auto !important;
   }
-}
+} */

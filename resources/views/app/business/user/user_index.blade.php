@@ -7,26 +7,54 @@
 
                 <x-table>
                     <x-slot name="thead">
-                        <tr class="text-center">
-                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Usuário</th>
-                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Permissão</th>
-                            <th class="text-secondary text-xs font-weight-semibold opacity-7 ps-2">Status</th>
+                        <tr>
+                            <th class="text-secondary text-xs font-weight-semibold opacity-7" style="padding-left: 35px;">Usuário</th>
+                            <th class="text-secondary text-xs font-weight-semibold opacity-7">Departamento</th>
+                            <th class="text-secondary text-center text-xs font-weight-semibold opacity-7">Permissão</th>
+                            <th class="text-secondary text-center text-xs font-weight-semibold opacity-7">Status</th>
                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7"></th>
                         </tr>
                     </x-slot>
                     <x-slot name="tbody">
                         @foreach ($users as $user)
-                            <tr class="text-center">
-                                <td>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="ms-2">
-                                            <p class="text-dark fw-bold text-sm mb-0">{{ $user->name }}</p>
-                                            <p class="text-secondary text-sm mb-0">{{ $user->email }}</p>
+                            <tr>
+                                <td style="padding-left: 35px;">
+                                    <div class="d-flex py-1">
+                                        <div class="d-flex align-items-center">
+                                            @if ($user->image)
+                                                <img src="{{ 'data:image/png;base64,' . $user->image }}"
+                                                    class="avatar avatar-sm rounded-circle me-2" alt="{{ $user->name }}">
+                                            @else
+                                                <img src="{{ asset('img/profile/image_profile.webp') }}"
+                                                    class="avatar avatar-sm rounded-circle me-2" alt="Usuário sem imagem">
+                                            @endif
                                         </div>
-
+                                        <div class="d-flex flex-column justify-content-center ms-1">
+                                            <h6 class="mb-0 text-sm font-weight-semibold">{{ $user->name }}</h6>
+                                            <p class="text-sm text-secondary mb-0">{{ $user->email }}</p>
+                                        </div>
                                     </div>
                                 </td>
+
                                 <td>
+                                    @if (isset($user->employeeUser->employee))
+                                        <p class="text-sm text-dark font-weight-semibold mb-0">
+                                            {{ $user->employeeUser->employee->department->name }}
+                                        </p>
+                                        <p class="text-sm text-secondary mb-0">
+                                            {{ Str::words($user->employeeUser->employee->department->company->name, 2, ' ..') }}
+                                        </p>
+                                    @else
+                                        <p class="text-sm text-dark font-weight-semibold mb-0">
+                                            Não informado
+                                        </p>
+                                        <p class="text-sm text-secondary mb-0">
+                                            Não informado
+                                        </p>
+                                    @endif
+                                </td>
+
+                                <td class="align-middle text-center text-sm">
                                     @if ($user->is_active == 1)
                                         <span class="badge badge-sm border border-success text-success bg-success">
                                             <i class="fa fa-check" aria-hidden="true"></i>
@@ -39,7 +67,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="align-middle text-center">
                                     @if ($user->roles->count())
                                         <span
                                             class="badge badge-sm border border-info text-info bg-info">{{ $user->roles->pluck('name')->join(', ') }}</span>
@@ -82,10 +110,6 @@
                                         <span class="text-muted">Sem permissão</span>
                                     @endif
                                 </td>
-                                
-                                
-                               
-                                {{-- esse componente aqui direciona pras views: show, edit, delete ... --}}
                                 <td>
                                     <x-table-button route="user" :id="$user->id"></x-table-button>
                                 </td>

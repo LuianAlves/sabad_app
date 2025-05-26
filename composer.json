@@ -10,7 +10,9 @@
         "laravel/jetstream": "*",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.0"
+        "livewire/livewire": "^3.0",
+        "maatwebsite/excel": "*",
+        "spatie/laravel-permission": "^6.18"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -69,4 +71,4 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true
-} 
+}

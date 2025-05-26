@@ -27,8 +27,7 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $employees = Employee::with('department.company')->get();
-        // $department = Department::get();
+        $employees = Employee::with('employeeUser.user', 'department.company')->get();
 
         return view('app.business.employee.employee_index', compact('employees'));
     }

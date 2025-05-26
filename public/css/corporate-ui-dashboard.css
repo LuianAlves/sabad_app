@@ -23310,7 +23310,7 @@ hr.horizontal.gray-light {
 }
 
 .navbar-vertical.bg-white .sidenav-footer .card {
-  box-shadow: 0 0.125rem 5px -0.0625rem rgba(12, 26, 36, 0.1), 0 0.0625rem 0.0625rem 0 rgba(12, 26, 36, 0.04);
+  box-shadow: 0 0.125rem 5px -0.0625rem rgba(12, 26, 36, 0.3), 0 0.0625rem 0.0625rem 0 rgba(12, 26, 36, 0.1);
 }
 
 .navbar-vertical.bg-slate-900 .sidenav-header .navbar-brand span {

@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Business\Ticket;
 
-use App\Models\Ticket;
-use App\Http\Requests\StoreTicketRequest;
+use App\Http\Controllers\Controller;
+
+
+use App\Models\Business\Ticket;
+use App\Http\Requests\BuStoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
-        // $ticket = Ticket::get();
+        $tickets = Ticket::get();
 
-        // return view('app.tickets.ticket.ticket_index', compact('tickets'));
-        return view('app.tickets.ticket.ticket_index');
+        return view('app.tickets.ticket.ticket_index', compact('tickets'));
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function create()
     {
         //

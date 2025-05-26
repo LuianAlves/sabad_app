@@ -2,13 +2,15 @@
 
 namespace App\Models\Business\Domain;
 
-use App\Models\Business\Company\Company;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Contracts\Auditable;
 
-class Domain extends Model
+// Models
+use App\Models\Business\Company\Company;
+
+class Domain extends Model implements Auditable
 {
-   
     use HasFactory;
 
     protected $fillable = [
@@ -19,6 +21,11 @@ class Domain extends Model
         'next_payment',
         'is_active'
     ];
+
+    public function getDisplayName(): string
+    {
+        return $this->name ?? "ID {$this->id}";
+    }
 
     public function company()
     {

@@ -12,9 +12,10 @@ use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Models\Business\Certificate\Certificate;
 
-class Employee extends Model
+use App\Contracts\Auditable;
+
+class Employee extends Model implements Auditable
 {
-    
     use HasFactory;
 
     protected $fillable = [
@@ -25,6 +26,14 @@ class Employee extends Model
         'fired_in',
         'status'
     ];
+
+    public function getDisplayName(): string
+    {
+        return $this->name ?? "Funcionário #{$this->id}";
+    }
+
+
+
 
     public function certificates()
     {
@@ -51,5 +60,3 @@ class Employee extends Model
         return $this->hasOne(EmployeeUser::class, 'employee_id');
     }
 }
-    
-
