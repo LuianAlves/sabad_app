@@ -48,8 +48,7 @@ class ActivityLogController extends Controller
         if ($request->has('export')) {
             return Excel::download(new LogsExport($query->get()), 'logs_auditoria.xlsx');
         }
-
-        dd($logs);
+        // dd($logs);
         
         return view('logs.activity_log_index', compact('logs', 'users', 'models'));
     }

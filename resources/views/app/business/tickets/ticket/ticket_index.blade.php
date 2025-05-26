@@ -10,14 +10,23 @@
                         <i class="fas fa-envelope-open-text text-white" style="font-size: 18px;"></i>
                     </div>
                     <div class="row">
+
+                        @php
+                            $open = $tickets->where('status', 'open')->count();
+                            $inProgress = $tickets->where('status', 'in progress')->count();
+                            $completed = $tickets->where('status', 'completed')->count();
+                            $canceled = $tickets->where('status', 'canceled')->count();
+                        @endphp
+
+                        @foreach ( $tickets as $ticket )                                          
                         <div class="col-12">
                             <div class="w-100">
                                 <h6 class="mb-2 font-weight-bold">Em aberto</h6>
-                                <p class="text-sm text-secondary mb-3">Atualmente há <b>17</b> chamados em aberto.
+                                <p class="text-sm text-secondary mb-3">Atualmente há <b>{{ $open }}</b> chamados em aberto.
                                 </p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="">
-                                        <span class="text-sm">O chamado de <b>Fábio Berges</b> é o mais recente.</span>
+                                        <span class="text-sm">O chamado de <b>{{ $ticket->created_at }}</b> é o mais recente.</span>
                                     </div>
                                 </div>
                             </div>
@@ -37,7 +46,7 @@
                         <div class="col-12">
                             <div class="w-100">
                                 <h6 class="mb-2 font-weight-bold">Em andamento</h6>
-                                <p class="text-sm text-secondary mb-3">Atualmente há <b>05</b> chamados em andamento.
+                                <p class="text-sm text-secondary mb-3">Atualmente há <b>{{ $inProgress }}</b> chamados em andamento.
                                 </p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="text-sm">Última movimentação - <b>Alessandro Maucci</b></span>
@@ -59,7 +68,7 @@
                         <div class="col-12">
                             <div class="w-100">
                                 <h6 class="mb-2 font-weight-bold">Concluído</h6>
-                                <p class="text-sm text-secondary mb-3">Foram concluídos <b>85</b> chamados no mês.
+                                <p class="text-sm text-secondary mb-3">Foram concluídos <b>{{ $completed }}</b> chamados no mês.
                                 </p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="text-sm">Concluído recentemente - <b>Reginaldo Andrade</b></span>
@@ -81,7 +90,7 @@
                         <div class="col-12">
                             <div class="w-100">
                                 <h6 class="mb-2 font-weight-bold">Cancelado</h6>
-                                <p class="text-sm text-secondary mb-3">Total de <b>27</b> chamados cancelados
+                                <p class="text-sm text-secondary mb-3">Total de <b>{{ $canceled }}</b> chamados cancelados
                                 </p>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="text-sm">Cancelado recentemente - <b>Elaine Cristina</b></span>
@@ -165,6 +174,7 @@
                             </td>
                         </tr>
                     </x-slot>
+                    @endforeach
                 </x-table>
             </div>
         </div>

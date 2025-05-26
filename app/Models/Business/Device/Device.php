@@ -2,6 +2,7 @@
 
 namespace App\Models\Business\Device;
 
+use App\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ use App\Models\Business\Device\DeviceType\DeviceType;
 use App\Models\Business\Device\DeviceBrand\DeviceBrand;
 use App\Models\Business\Device\DeviceModel\DeviceModel;
 
-class Device extends Model
+class Device extends Model implements Auditable
 {
     
     use HasFactory;
@@ -22,6 +23,11 @@ class Device extends Model
         'device_brand_id',
         'device_model_id'
     ];
+
+    public function getDisplayName(): string
+    {
+        return $this->name ?? "Dispositivo #{$this->id}";
+    }
 
     public function department() {
 

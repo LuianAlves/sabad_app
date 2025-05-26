@@ -10,26 +10,28 @@
                         <div class="col-4">
                             <div class="dropdown-wrapper" style="position: relative;">
                                 <select id="device_type_id" name="device_type_id" style="display:none;"></select>
-                                <input type="text" class="form-control" id="device_type_input"
-                                    placeholder="Digite ou selecione um tipo...">
+                                <x-input col="" set="" type="text" id="device_type_input"
+                                    name="device_type_input" title="Dispositivo"
+                                    placeholder="Digite ou selecione um tipo..."></x-input>
                                 <div class="custom-dropdown"></div>
                             </div>
                         </div>
-
                         <div class="col-4">
                             <div class="dropdown-wrapper" style="position: relative;">
                                 <select id="device_brand_id" name="device_brand_id" style="display:none;"></select>
-                                <input type="text" class="form-control" id="device_brand_input"
-                                    placeholder="Digite ou selecione uma marca...">
+                                <x-input col="" set="" type="text" id="device_brand_input"
+                                    name="device_brand_input" title="Marca"
+                                    placeholder="Digite ou selecione uma marca..."></x-input>
                                 <div class="custom-dropdown"></div>
                             </div>
                         </div>
-
                         <div class="col-4">
                             <div class="dropdown-wrapper" style="position: relative;">
                                 <select id="device_model_id" name="device_model_id" style="display:none;" disabled></select>
-                                <input type="text" class="form-control" id="device_model_input"
-                                    placeholder="Digite ou selecione um modelo..." disabled>
+                                <x-input col="" set="" type="text" id="device_model_input"
+                                    name="device_model_input" title="Modelo" placeholder="Digite ou selecione um modelo..."
+                                    disabled="1"></x-input>
+
                                 <div class="custom-dropdown"></div>
                             </div>
                         </div>

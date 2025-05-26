@@ -24,7 +24,7 @@ class Domain extends Model implements Auditable
 
     public function getDisplayName(): string
     {
-        return $this->name ?? "ID {$this->id}";
+        return $this->name ?? "Domínio {$this->id}";
     }
 
     public function company()

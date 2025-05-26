@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Business\Device\DeviceContro;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTicketRequest extends FormRequest
+class UpdateDeviceControlRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

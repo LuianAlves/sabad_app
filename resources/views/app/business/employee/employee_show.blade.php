@@ -43,10 +43,10 @@
                             </div>
                         </div>
 
-                            <div class="col-4 offset-8 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3 text-sm-end">
-                                <a href="javascript:;" class="btn btn-sm btn-white m-0">Voltar</a>
-                                <a href="javascript:;" class="btn btn-sm btn-warning m-0">Salvar alterações</a>
-                            </div>
+                        <div class="col-4 offset-8 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3 text-sm-end">
+                            <a href="javascript:;" class="btn btn-sm btn-white m-0">Voltar</a>
+                            <a href="javascript:;" class="btn btn-sm btn-warning m-0">Salvar alterações</a>
+                        </div>
                     </div>
 
                 </div>
@@ -54,9 +54,8 @@
         </div>
 
         <div class="row my-3 py-3">
-
             <!-- Permissions -->
-            <div class="col-12 col-xl-4 mb-4">
+            <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100" style="max-height: 450px; overflow-y: auto;">
                     <div class="card-header pb-0 p-3">
                         <h6 class="mb-0 font-weight-semibold text-lg">Permissões de acesso</h6>
@@ -99,7 +98,7 @@
             </div>
 
             <!-- Profile -->
-            <div class="col-12 col-xl-4 mb-4">
+            <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100">
                     <div class="card-header pb-0 p-3">
                         <div class="row">
@@ -146,7 +145,7 @@
                                 {{ $employee->department->company->name }}
                             </li>
                             <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                <span class="text-secondary">E-mail (s):</span> &nbsp; <br>
+                                <span class="text-secondary">E-mail principal:</span> &nbsp;
                                 @if (isset($employee->employeeUser->user) && $employee->employeeUser->user->email)
                                     <a href="mailto::{{ $employee->employeeUser->user->email }}"
                                         class="text-info text-sm font-weight-bold">{{ $employee->employeeUser->user->email }}</a>
@@ -161,7 +160,7 @@
             </div>
 
             <!-- Deparment -->
-            <div class="col-12 col-xl-4 mb-4">
+            <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100">
                     <div class="card-header pb-0 p-3">
                         <div class="row mb-sm-0 mb-2">
@@ -205,92 +204,166 @@
                                     </span>
                                 </li>
                             @endforeach
-                            {{-- 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 pb-3">
+
+            <!-- Serviços -->
+            <div class="col-12 col-xl-4">
+                <div class="card border shadow-xs h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row mb-sm-0 mb-2">
+                            <div class="col-md-8 col-9">
+                                <h6 class="mb-0 font-weight-semibold text-lg">Serviços e Licenças</h6>
+                                <p class="text-sm mb-0">
+                                    O usuário possui acesso à:
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-3 text-end">
+                                <button type="button" class="btn btn-white btn-icon px-2 py-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3 pt-0">
+                        <ul class="list-group">
+                            @foreach ($teammates as $teammate)
                                 <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
                                     <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-1.jpg" alt="kal" class="w-100">
+                                        @if (isset($teammate->employeeUser->user) && $teammate->employeeUser->user->image)
+                                            <img src="{{ 'data:image/png;base64,' . $teammate->employeeUser->user->image }}"
+                                                alt="{{ $teammate->name }}" class="w-100">
+                                        @else
+                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="Não cadastrada"
+                                                class="w-100">
+                                        @endif
                                     </div>
                                     <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Sarah Lamalo</h6>
-                                        <p class="mb-0 text-sm text-secondary">Hi! I need more information about ...
-                                        </p>
+                                        <h6 class="mb-0 text-sm font-weight-semibold">{{ $teammate->name }}</h6>
+                                        <p class="mb-0 text-sm text-secondary">{{ $teammate->hierarchical_level }}</p>
                                     </div>
                                     <span class="p-1 bg-success rounded-circle ms-auto me-3">
                                         <span class="visually-hidden">Online</span>
                                     </span>
                                 </li>
-
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/marie.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Vicky Hladynets</h6>
-                                        <p class="mb-0 text-sm text-secondary">Hello, Noah!</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-5.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Charles Deluvio</h6>
-                                        <p class="mb-0 text-sm text-secondary">Great, thank you!</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-4.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Leio Mclaren</h6>
-                                        <p class="mb-0 text-sm text-secondary">Don't worry! 🙏🏻</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-3.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Mateus Campos</h6>
-                                        <p class="mb-0 text-sm text-secondary">Call me, please.</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-2.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Miriam Lore</h6>
-                                        <p class="mb-0 text-sm text-secondary">Well done!</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-
- --}}
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
 
+             <!-- Devices -->
+            <div class="col-12 col-xl-4">
+                <div class="card border shadow-xs h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row mb-sm-0 mb-2">
+                            <div class="col-md-8 col-9">
+                                <h6 class="mb-0 font-weight-semibold text-lg">Dispositivos</h6>
+                                <p class="text-sm mb-0">
+                                    Dispositivos em posse:
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-3 text-end">
+                                <button type="button" class="btn btn-white btn-icon px-2 py-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3 pt-0">
+                        <ul class="list-group">
+                            @foreach ($teammates as $teammate)
+                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
+                                    <div class="avatar avatar-sm rounded-circle me-2">
+                                        @if (isset($teammate->employeeUser->user) && $teammate->employeeUser->user->image)
+                                            <img src="{{ 'data:image/png;base64,' . $teammate->employeeUser->user->image }}"
+                                                alt="{{ $teammate->name }}" class="w-100">
+                                        @else
+                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="Não cadastrada"
+                                                class="w-100">
+                                        @endif
+                                    </div>
+                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm font-weight-semibold">{{ $teammate->name }}</h6>
+                                        <p class="mb-0 text-sm text-secondary">{{ $teammate->hierarchical_level }}</p>
+                                    </div>
+                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
+                                        <span class="visually-hidden">Online</span>
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+             <!-- E-mails -->
+            <div class="col-12 col-xl-4">
+                <div class="card border shadow-xs h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row mb-sm-0 mb-2">
+                            <div class="col-md-8 col-9">
+                                <h6 class="mb-0 font-weight-semibold text-lg">Colegas de equipe</h6>
+                                <p class="text-sm mb-0">
+                                    {{ '/ ' . $employee->department->name . ' - ' . Str::words($employee->department->company->name, 1, ' ..') }}
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-3 text-end">
+                                <button type="button" class="btn btn-white btn-icon px-2 py-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3 pt-0">
+                        <ul class="list-group">
+                            @foreach ($teammates as $teammate)
+                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
+                                    <div class="avatar avatar-sm rounded-circle me-2">
+                                        @if (isset($teammate->employeeUser->user) && $teammate->employeeUser->user->image)
+                                            <img src="{{ 'data:image/png;base64,' . $teammate->employeeUser->user->image }}"
+                                                alt="{{ $teammate->name }}" class="w-100">
+                                        @else
+                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="Não cadastrada"
+                                                class="w-100">
+                                        @endif
+                                    </div>
+                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm font-weight-semibold">{{ $teammate->name }}</h6>
+                                        <p class="mb-0 text-sm text-secondary">{{ $teammate->hierarchical_level }}</p>
+                                    </div>
+                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
+                                        <span class="visually-hidden">Online</span>
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-12">
                 <div class="card shadow-xs border mb-4 pb-3">
                     <div class="card-header pb-0 p-3">

@@ -2,6 +2,7 @@
 
 namespace App\Models\Business\Department;
 
+use App\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,7 @@ use App\Models\Business\Company\Company;
 use App\Models\Business\Service\Service;
 use App\Models\Business\Device\Device;
 
-class Department extends Model
+class Department extends Model implements Auditable
 {
     use HasFactory;
 
@@ -19,6 +20,11 @@ class Department extends Model
         'company_id',
         'name'
     ];
+
+    public function getDisplayName(): string
+    {
+        return $this->name ?? "Departamento #{$this->id}";
+    }
 
     public function company() 
     {

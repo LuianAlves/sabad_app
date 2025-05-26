@@ -216,10 +216,13 @@
                                             class="badge badge-sm border border-{{ $color }} text-{{ $color }} bg-{{ $color }}">{{ $icon }}
                                             {{ ucfirst($title) }}</span>
                                     </td>
-                                    <td>
-                                        <p class="text-muted font-weight-semibold mb-0" style="font-size: 12px;">
-                                            {{ $log->description }}</p>
-                                    </td>
+                                    <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+    <p class="text-muted font-weight-semibold mb-0" style="font-size: 12px;" title="{{ $log->description }}">
+        {{ $log->description }}
+    </p>
+</td>
+
+
                                     <td style="font-size: 12px;">
                                         <span class="text-muted font-weight-semibold mb-0">
                                             {{ $log->created_at->format('d/m/Y H:i:s') }}
@@ -237,7 +240,8 @@
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="diffModalLabel{{ $log->id }}">
+                                                            <h5 class="modal-title"
+                                                                id="diffModalLabel{{ $log->id }}">
                                                                 Alterações em {{ $log->model_type }}</h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Fechar"></button>

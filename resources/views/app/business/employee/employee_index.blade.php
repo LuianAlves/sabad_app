@@ -11,7 +11,7 @@
                         <tr>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7" style="padding-left: 35px;">
                                 Funcionário</th>
-                            <th class="text-secondary text-xs font-weight-bold opacity-7">Departamento</th>
+                            <th class="text-secondary text-xs font-weight-bold opacity-7 text-center">Departamento</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 text-center">Nivel Hierárquico
                             </th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 text-center">Status</th>
@@ -46,12 +46,12 @@
                                     </div>
                                 </td>
 
-                                <td>
+                                <td class="text-center">
                                     <p class="text-sm text-dark font-weight-semibold mb-0">
                                         {{ $employee->department->name }}
                                     </p>
                                     <small class="text-muted mb-0">
-                                        {{ Str::words($employee->department->company->name, 2, ' ..') }}
+                                        {{ Str::words($employee->department->company->name, 3, ' ..') }}
                                     </small>
 
                                 </td>

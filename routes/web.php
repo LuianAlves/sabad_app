@@ -46,8 +46,8 @@ use App\Http\Controllers\Business\License\LicenseController;
 use App\Http\Controllers\Common\ChartController;
 
 //  Tickets
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\TicketCategoryController;
+use App\Http\Controllers\Business\Tickets\TicketController;
+use App\Http\Controllers\Business\Tickets\TicketCategoryController;
 
 // Logs
 use App\Http\Controllers\Log\ActivityLogController;

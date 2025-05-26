@@ -2,12 +2,13 @@
 
 namespace App\Models\Business\Certificate;
 
+use App\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Employee\Employee;
 
-class Certificate extends Model
+class Certificate extends Model implements Auditable
 {
     use HasFactory;
 
@@ -20,7 +21,10 @@ class Certificate extends Model
         'status'
     ];
 
-    
+    public function getDisplayName(): string
+    {
+        return $this->creation_date ?? "Certificado #{$this->id}";
+    }
 
     public function employee() {
 

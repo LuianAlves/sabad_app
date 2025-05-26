@@ -13,7 +13,9 @@ use Spatie\Permission\Traits\HasRoles;
 
 use App\Models\Business\User\EmployeeUser;
 
-class User extends Authenticatable
+use App\Contracts\Auditable;
+
+class User extends Authenticatable implements Auditable
 {
     use HasApiTokens;
 
@@ -70,6 +72,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->name ?? "Usuário #{$this->id}";
     }
 
     public function canAuthenticate()

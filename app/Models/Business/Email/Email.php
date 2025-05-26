@@ -2,12 +2,13 @@
 
 namespace App\Models\Business\Email;
 
+use App\Contracts\Auditable;
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\License\License;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Email extends Model
+class Email extends Model implements Auditable
 {
     
     use HasFactory;
@@ -21,6 +22,11 @@ class Email extends Model
             'is_active'
 
     ];
+
+    public function getDisplayName(): string
+    {
+        return $this->email ?? "E-mail #{$this->id}";
+    }
 
     public function employee()
     {
