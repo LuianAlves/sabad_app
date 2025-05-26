@@ -49,6 +49,9 @@ use App\Http\Controllers\Common\ChartController;
 use App\Http\Controllers\Business\Tickets\TicketController;
 use App\Http\Controllers\Business\Tickets\TicketCategoryController;
 
+//Maintenance
+use App\Http\Controllers\Business\Maintenance\MaintenanceController;
+
 // Logs
 use App\Http\Controllers\Log\ActivityLogController;
 
@@ -112,6 +115,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('ticket', TicketController::class);
     Route::resource('ticket_category', TicketCategoryController::class);
+
+    Route::resource('maintenance', MaintenanceController::class);
 
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 });

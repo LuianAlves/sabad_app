@@ -20,7 +20,8 @@ class DeviceControlController extends Controller
 {
     public function index()
     {
-        return view('app.business.device.device_control.device_control_index');
+        $deviceControls = DeviceControl::all(); 
+        return view('app.business.device.device_control.device_control_index', compact('deviceControls'));
     }
 
     public function create()
@@ -28,17 +29,36 @@ class DeviceControlController extends Controller
         $devices = Device::all();
         $employees = Employee::all();
 
-        return view('app.business.device.device_control.device_control_create', compact('devices','employees'));
+        return view('app.business.device.device_control.device_control_create', compact('devices', 'employees'));
     }
 
     public function store(StoreDeviceControlRequest $request)
     {
         $request->validated();
 
-        $deviceControl = DeviceControl::create([
+        $device = Device::findOrFail($request->device_id);
+
+        $prefix = strtoupper(substr($device->deviceType->name, 0, 4));
+
+        $lastCode = DeviceControl::where('device_code', 'like', $prefix . '%')
+            ->orderBy('device_code', 'desc')
+            ->first();
+
+        if ($lastCode) {
+            $lastNumber = (int) substr($lastCode->device_code, 4);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        $deviceCode = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        dd($request, $deviceCode, $prefix);
+
+        DeviceControl::create([
             'device_id' => $request->device_id,
             'employee_id' => $request->employee_id,
-            'device_code' => $request->device_code,
+            'device_code' => $deviceCode,
             'delivered_in' => $request->delivered_in,
             'returned_in' => $request->returned_in,
             'estimated_price' => $request->estimated_price,
@@ -48,4 +68,8 @@ class DeviceControlController extends Controller
 
         return redirect()->route('device_control.index');
     }
+
+    public function show() {}
+    public function update() {}
+    public function destroy() {}
 }

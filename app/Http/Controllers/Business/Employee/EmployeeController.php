@@ -127,7 +127,6 @@ class EmployeeController extends Controller
         return redirect()->route('employee.index');
     }
 
-
     public function show($id)
     {
         $employee = Employee::with('employeeUser.user', 'department.company')->findOrFail($id);
@@ -138,7 +137,6 @@ class EmployeeController extends Controller
 
         return view('app.business.employee.employee_show', compact('employee', 'teammates', 'permissions'));
     }
-
 
     public function edit($id)
     {

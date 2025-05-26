@@ -11,6 +11,7 @@ use App\Models\Business\Email\Email;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Models\Business\Certificate\Certificate;
+use App\Models\Business\Device\DeviceControl\DeviceControl;
 
 use App\Contracts\Auditable;
 
@@ -31,9 +32,6 @@ class Employee extends Model implements Auditable
     {
         return $this->name ?? "Funcionário #{$this->id}";
     }
-
-
-
 
     public function certificates()
     {
@@ -58,5 +56,9 @@ class Employee extends Model implements Auditable
     public function employeeUser()
     {
         return $this->hasOne(EmployeeUser::class, 'employee_id');
+    }
+
+    public function deviceControl() {
+        return $this->hasOne(DeviceControl::class, 'device_controls');
     }
 }
