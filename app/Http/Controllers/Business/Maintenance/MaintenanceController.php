@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Business\Maintenance\StoreMaintenanceRequest;
 use App\Http\Requests\Business\Maintenance\UpdateMaintenanceRequest;
+use App\Models\Business\Device\Device;
 use App\Models\Business\Device\DeviceControl\DeviceControl;
+use App\Models\Business\Employee\Employee;
 use App\Models\Business\Maintenance\Maintenance;
 
 
@@ -16,17 +18,19 @@ class MaintenanceController extends Controller
     public function index()
     {
         $maintenances = Maintenance::get();
-        $device_controls = DeviceControl::get();
+        $devices = Device::with('devicetype');
+        $employees = Employee::get();
 
-        return view('app.business.maintenance.maintenance_index', compact('maintenances', 'device_controls'));
+        return view('app.business.maintenance.maintenance_index', compact('maintenances', 'devices', 'employees'));
     }
 
     
     public function create()
     {
-        $device_controls = DeviceControl::with('device.employee')->get();
+        $devices = Device::with('devicetype')->get();
+        $employees = Employee::get();
 
-        return view( 'app.business.maintenance.maintenance_create', compact('device_controls'));
+        return view( 'app.business.maintenance.maintenance_create', compact('devices', 'employees'));
     }
 
     

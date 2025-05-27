@@ -53,8 +53,6 @@ class DeviceControlController extends Controller
 
         $deviceCode = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
 
-        dd($request, $deviceCode, $prefix);
-
         DeviceControl::create([
             'device_id' => $request->device_id,
             'employee_id' => $request->employee_id,

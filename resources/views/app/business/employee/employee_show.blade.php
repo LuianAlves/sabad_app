@@ -237,36 +237,17 @@
                     </div>
                     <div class="card-body p-3 pt-0">
                         <ul class="list-group">
-                            @foreach ($teammates as $teammate)
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        @if (isset($teammate->employeeUser->user) && $teammate->employeeUser->user->image)
-                                            <img src="{{ 'data:image/png;base64,' . $teammate->employeeUser->user->image }}"
-                                                alt="{{ $teammate->name }}" class="w-100">
-                                        @else
-                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="Não cadastrada"
-                                                class="w-100">
-                                        @endif
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">{{ $teammate->name }}</h6>
-                                        <p class="mb-0 text-sm text-secondary">{{ $teammate->hierarchical_level }}</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                            @endforeach
+
                         </ul>
                     </div>
                 </div>
             </div>
 
-             <!-- Devices -->
+            <!-- Devices -->
             <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100">
                     <div class="card-header pb-0 p-3">
-                        <div class="row mb-sm-0 mb-2">
+                        <div class="row mb-sm-0 mb-3">
                             <div class="col-md-8 col-9">
                                 <h6 class="mb-0 font-weight-semibold text-lg">Dispositivos</h6>
                                 <p class="text-sm mb-0">
@@ -285,42 +266,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body p-3 pt-0">
-                        <ul class="list-group">
-                            @foreach ($teammates as $teammate)
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        @if (isset($teammate->employeeUser->user) && $teammate->employeeUser->user->image)
-                                            <img src="{{ 'data:image/png;base64,' . $teammate->employeeUser->user->image }}"
-                                                alt="{{ $teammate->name }}" class="w-100">
-                                        @else
-                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="Não cadastrada"
-                                                class="w-100">
-                                        @endif
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">{{ $teammate->name }}</h6>
-                                        <p class="mb-0 text-sm text-secondary">{{ $teammate->hierarchical_level }}</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
+                    <div class="card-body p-3 pt-3">
+                        @foreach ($devices as $device)
+                            <div class="mb-3">
+                                <h6 class="text-dark font-weight-semibold mb-1">{{ $device->device->deviceType->name }}
+                                </h6>
+                                <span class="text-muted text-sm font-weight-bold">
+                                    {{ $device->device->deviceBrand->name . ' ' . $device->device->deviceModel->name }} -
+                                </span>
+                                <small class="text-info" style="font-size: 12px;">{{ $device->device_code }}</small>
+                                <p class="text-muted" style="font-size: 12px;">
+                                    {{ \Carbon\Carbon::parse($device->delivered_in)->diffForHumans() }} com o funcionário
+                                </p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
 
-             <!-- E-mails -->
+            <!-- E-mails -->
             <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100">
                     <div class="card-header pb-0 p-3">
                         <div class="row mb-sm-0 mb-2">
                             <div class="col-md-8 col-9">
-                                <h6 class="mb-0 font-weight-semibold text-lg">Colegas de equipe</h6>
+                                <h6 class="mb-0 font-weight-semibold text-lg">E-mails</h6>
                                 <p class="text-sm mb-0">
-                                    {{ '/ ' . $employee->department->name . ' - ' . Str::words($employee->department->company->name, 1, ' ..') }}
+                                    / Aliás incluso na listagem
                                 </p>
                             </div>
                             <div class="col-md-4 col-3 text-end">
@@ -335,29 +307,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body p-3 pt-0">
-                        <ul class="list-group">
-                            @foreach ($teammates as $teammate)
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        @if (isset($teammate->employeeUser->user) && $teammate->employeeUser->user->image)
-                                            <img src="{{ 'data:image/png;base64,' . $teammate->employeeUser->user->image }}"
-                                                alt="{{ $teammate->name }}" class="w-100">
-                                        @else
-                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="Não cadastrada"
-                                                class="w-100">
-                                        @endif
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">{{ $teammate->name }}</h6>
-                                        <p class="mb-0 text-sm text-secondary">{{ $teammate->hierarchical_level }}</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
+                    <div class="card-body p-3 pt-3">
+                        @foreach ($emails as $email)
+                            <a href="mailto::{{ $email->email }}"
+                                class="text-info text-sm font-weight-bold">{{ $email->email }}</a>
+                        @endforeach
+                        <br>
+                        @foreach ($emails as $email)
+                            <a href="mailto::{{ $email->alias }}"
+                                class="text-info text-sm font-weight-bold">{{ $email->alias }}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>

@@ -23,7 +23,7 @@
                                 {{-- Usuario --}}                        
                                     <td>
                                         <p class="text-dark fw-bold text-sm mb-0">
-                                            {{ $device_control->user?->name ?? '-' }}</p>
+                                            {{ $device_control->employee?->name ?? '-' }}</p>
                                     </td>
                         @endforeach
                             

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
 
-            $table->unsignedInteger('device_code');
+            $table->string('device_code');
 
             $table->date('delivered_in')->nullable();
             $table->date('returned_in')->nullable();

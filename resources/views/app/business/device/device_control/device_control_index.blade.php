@@ -19,22 +19,22 @@
                         @foreach ($deviceControls as $control)
                             <tr class="text-center">
                                 <td>
-                                    <div class="d-flex py-1">
+                                    <div class="d-flex justify-content-center py-1">
                                         <div class="d-flex flex-column justify-content-center ms-1">
                                             <h6 class="mb-0 text-sm font-weight-semibold">{{ $control->device_code }}</h6>
                                             <p class="text-sm text-secondary mb-0">
-                                                {{ $control->device->name }}
+                                                {{ $control->device->deviceBrand->name .' '.  $control->device->deviceModel->name }}
                                             </p>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td>
-                                    <p class="text-dark text-sm mb-0">{{ $control->employee->name }}</p>
+                                    <p class="text-muted font-weight-semibold text-sm mb-0">{{ $control->employee->name }}</p>
                                 </td>
 
                                 <td>
-                                    <p class="text-dark text-sm mb-0">{{ $control->delivered_in }}</p>
+                                    <p class="text-dark font-weight-bold text-sm mb-0">{{ \Carbon\Carbon::parse($control->delivered_in)->format('d/m/Y') .' ['. \Carbon\Carbon::parse($control->delivered_in)->diffForHumans().']' }}</p>
                                 </td>
 
                                 <td>

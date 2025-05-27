@@ -16,6 +16,7 @@ use App\Models\Business\Email\Email;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Models\Business\License\License;
+use App\Models\Business\Device\DeviceControl\DeviceControl;
 
 // Dependences
 use Carbon\Carbon;
@@ -41,7 +42,6 @@ class EmployeeController extends Controller
         $permissions = Permission::all()->groupBy(function ($permission) {
             return explode(' ', $permission->name)[1];
         });
-
 
         return view('app.business.employee.employee_create', compact('companies', 'licenses', 'permissions'));
     }
@@ -134,8 +134,16 @@ class EmployeeController extends Controller
         $permissions = Permission::all()->groupBy(function ($permission) {
             return explode(' ', $permission->name)[1];
         });
+        $devices = DeviceControl::with('employee', 'device')->where('employee_id', $employee->id)->get();
+        $emails = Email::where('id', $employee->id)->get();
 
-        return view('app.business.employee.employee_show', compact('employee', 'teammates', 'permissions'));
+        return view('app.business.employee.employee_show', compact(
+            'employee',
+             'teammates',
+             'permissions',
+             'devices',
+             'emails'
+            ));
     }
 
     public function edit($id)
