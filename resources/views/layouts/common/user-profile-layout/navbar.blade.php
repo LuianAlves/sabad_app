@@ -140,6 +140,18 @@
                     Área do funcionário
                 </a>
             </li>
+            <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
+                <a href="../pages/profile.html" class="nav-link text-white p-0">
+                    Abrir chamado
+                </a>
+            </li>
+            @can('view device control')
+                <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
+                    <a href="../pages/profile.html" class="nav-link text-white p-0">
+                        Gestão do departamento
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item border-radius-sm px-3 py-3 me-2  d-flex align-items-center">
                 <a href="{{ route('logout') }}" class="nav-link text-white p-0">
                     Deslogar

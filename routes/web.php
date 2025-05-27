@@ -76,7 +76,6 @@ Route::any('/logout', [AuthController::class, 'destroy'])->name('logout');
 */
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
-
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.index');
 
     Route::resource('user', UserController::class);

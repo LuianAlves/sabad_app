@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
 
     <title>
-        SABAD SYSTEM
+        Sistema de gerenciamento
     </title>
 
     <!--     Fonts and icons     -->

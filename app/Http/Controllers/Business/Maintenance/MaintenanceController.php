@@ -17,20 +17,17 @@ class MaintenanceController extends Controller
     
     public function index()
     {
-        $maintenances = Maintenance::get();
-        $devices = Device::with('devicetype');
-        $employees = Employee::get();
+        $maintenances = Maintenance::with('deviceControl.device.deviceType', 'deviceControl.employee')->get();       
 
-        return view('app.business.maintenance.maintenance_index', compact('maintenances', 'devices', 'employees'));
+        return view('app.business.maintenance.maintenance_index', compact('maintenances'));
     }
 
     
     public function create()
     {
-        $devices = Device::with('devicetype')->get();
-        $employees = Employee::get();
+        $deviceControls = DeviceControl::with('employee', 'device.deviceType', 'device.deviceBrand')->get();
 
-        return view( 'app.business.maintenance.maintenance_create', compact('devices', 'employees'));
+        return view( 'app.business.maintenance.maintenance_create', compact('deviceControls'));
     }
 
     
@@ -39,7 +36,7 @@ class MaintenanceController extends Controller
         $request->validated();
 
         $maintenance = Maintenance::create([
-            'device_control_id' => $request->devicecontrol_id,
+            'device_control_id' => $request->device_control_id,
             'delivered_in' => $request->delivered_in,
             'last_maintenance' => $request->last_maintenance,
             'next_maintenance' => $request->next_maintenance
@@ -86,7 +83,7 @@ class MaintenanceController extends Controller
     public function destroy($id)
     {
         $maintenance = Maintenance::find($id);
-        $maintenance->delete($id);
+        $maintenance->delete();
 
         return redirect()->route('maintenance.index');
     }

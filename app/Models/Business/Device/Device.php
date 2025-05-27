@@ -13,6 +13,7 @@ use App\Models\Business\Device\DeviceType\DeviceType;
 use App\Models\Business\Device\DeviceBrand\DeviceBrand;
 use App\Models\Business\Device\DeviceModel\DeviceModel;
 use App\Models\Business\Device\DeviceControl\DeviceControl;
+use App\Models\Business\Maintenance\Maintenance;
 
 class Device extends Model implements Auditable
 {
@@ -55,5 +56,10 @@ class Device extends Model implements Auditable
 
     public function deviceControl() {
         return $this->hasMany(DeviceControl::class);
+    }
+
+    public function maintenance()
+    {
+        return $this->belongsTo(Maintenance::class);
     }
 }

@@ -55,6 +55,7 @@ class EmployeeController extends Controller
 
         if ($request->hasFile('image')) {
             $userImage = $request->file('image');
+            
             $imageData = file_get_contents($userImage->getRealPath());
 
             $image = imagecreatefromstring($imageData);
@@ -74,6 +75,53 @@ class EmployeeController extends Controller
                 imagedestroy($image);
             }
         }
+
+        // $arrayName = explode(' ', $request->name);
+
+        // $department = Department::findOrFail($request->department_id);
+
+        // $firstName = $arrayName[0]; // fabio
+
+        // $arrayLastName = array_key_last($arrayName); // 1
+        // $lastName = $arrayName[$arrayLastName]; // berges
+
+        // $subFirstName = substr($firstName, 0, 2); // fa
+        // $subLastName = substr($lastName, -2); // es
+
+        // $companyCnpj = $department->company->cnpj;
+
+        // $cnpj = substr($companyCnpj, -2); // 
+
+        // $dp = substr($department->name, 0, 3); // Adm
+        // $department = strtoupper($dp); // ADM
+
+        // $email = explode('@', $request->email)[0]; //custos
+
+        // $subFirstEmail = substr($email, 0, 2); // cu
+        // $subFirstEmail = ucfirst($subFirstEmail); // Cu
+
+        // $subLastEmail = substr($email, -2); // os
+
+        // dd(
+        //     $arrayName,
+        //     $subFirstName,
+        //     $subLastName,
+        //     $cnpj,
+        //     $dp,
+        //     $department,
+        //     $firstName,
+        //     $lastName,
+        //     $email,
+        //     $subFirstEmail,
+        //     $subLastEmail,
+        //     "O departmento $department",
+        //     "Padrão 01: #!{$subFirstName}{$cnpj}{$subLastName}#!",
+        //     "Padrão 02: #!{$subFirstName}00{$cnpj}{$subLastName}#!",
+        //     "Padrão 03: #!{$subFirstName}MISB{$subLastName}#!",
+        //     "Padrão 04: #!{$subFirstName}{$department}{$subLastName}#!",
+        //     "Padrão 04: #!{$subFirstEmail}{$department}{$subLastEmail}#!",
+        // );
+
 
         $firstName = explode(' ', $request->name)[0];
         $password = ucfirst($firstName) . '@@MISB@@';
@@ -139,11 +187,11 @@ class EmployeeController extends Controller
 
         return view('app.business.employee.employee_show', compact(
             'employee',
-             'teammates',
-             'permissions',
-             'devices',
-             'emails'
-            ));
+            'teammates',
+            'permissions',
+            'devices',
+            'emails'
+        ));
     }
 
     public function edit($id)

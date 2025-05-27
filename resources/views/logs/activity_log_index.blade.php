@@ -164,7 +164,10 @@
             <div class="col-12">
                 <div class="card card-crud border shadow-xs mb-4">
                     <x-card-header title="Logs do sistema" count="" action=""></x-card-header>
-
+<a href="{{ route('activity-log.index', array_merge(request()->all(), ['export' => true])) }}"
+                class="btn btn-success mb-3">
+                📤 Exportar Excel
+            </a>
                     <x-table>
                         <x-slot name="thead">
                             <tr class="text-center">

@@ -30,7 +30,7 @@ class DeviceControl extends Model implements Auditable
 
     public function maintenance()
     {
-        return $this->belongsTo(Maintenance::class);
+        return $this->hasMany(Maintenance::class);
     }
 
     public function device() {

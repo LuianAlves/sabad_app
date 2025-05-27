@@ -2,6 +2,7 @@
 
 namespace App\Models\Business\Maintenance;
 
+use App\Models\Business\Device\Device;
 use App\Models\Business\Device\DeviceControl\DeviceControl;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,8 +19,13 @@ class Maintenance extends Model
         'next_maintenance'
     ];
 
-    public function devicecontrol()
+    public function deviceControl()
     {
         return $this->belongsTo(DeviceControl::class);
+    }
+
+    public function device()
+    {
+        return $this->belongsTo(Device::class);
     }
 }

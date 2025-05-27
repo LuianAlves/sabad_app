@@ -54,6 +54,18 @@
         </div>
 
         <div class="row my-3 py-3">
+            @role('admin') 
+                é um admin            
+            @endrole
+
+            @role('user')
+                <p>é um usuario</p>
+            @endrole
+            
+            @can('delete users')
+                <p>pode deletar</p>
+            @endcan
+
             <!-- Permissions -->
             <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100" style="max-height: 450px; overflow-y: auto;">
