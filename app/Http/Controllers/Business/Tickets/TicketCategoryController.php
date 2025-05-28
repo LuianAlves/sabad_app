@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Business\Tickets;
 use App\Http\Controllers\Controller;
 
 
-use App\Models\TicketCategory;
-use App\Http\Requests\StoreTicketCategoryRequest;
-use App\Http\Requests\UpdateTicketCategoryRequest;
+use App\Models\Business\Tickets\TicketCategory;
+use App\Http\Requests\Business\Tickets\TicketCategory\StoreTicketCategoryRequest;
+use App\Http\Requests\Business\Tickets\TicketCategory\UpdateTicketCategoryRequest;
 
 class TicketCategoryController extends Controller
 {
@@ -20,7 +20,9 @@ class TicketCategoryController extends Controller
     
     public function create()
     {
-        //
+        $category = TicketCategory::get();
+
+        return view('app.business.tickets.ticket_category.ticket_category_create');
     }
 
     

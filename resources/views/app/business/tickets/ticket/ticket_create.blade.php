@@ -7,33 +7,36 @@
                 <x-card-header title="Novo Ticket" action="Cadastrar"></x-card-header>
 
                 <x-form route="store">
-                  <div class="row">
-                      <div class="col-6">
+                    <div class="row mb-3">
+                        <div class="col-6">
                             <label for="user_id" class="form-control-label">Usuário</label>
                             <select name="user_id" id="user_id" class="form-control">
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" {{ ($user_id ?? old('user_id')) == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }}
+                                    <option value="{{ $user->id ?? '' }}">
+                                        {{ $user->name ?? 'Sem usuário' }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-6">
-                            <label for="ticketcategory_id" class="form-control-label">Categoria</label>
-                            <select name="ticketcategory_id" id="ticketcategory_id" class="form-control">
-                                @foreach ($ticketcategories as $ticketcategory)
-                                    <option value="{{ $ticketcategory->id }}" {{ ($ticketcategory_id ?? old('user_id')) == $ticketcategory->id ? 'selected' : '' }}>
-                                        {{ $ticketcategory->name }}
+                            <label for="ticket_category_id" class="form-control-label">Categoria</label>
+                            <select name="ticket_category_id" id="ticket_category_id" class="form-control">
+                                @foreach ($ticketCategories as $category)
+                                    <option value="{{ $category->id }}">
+                                        {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
+                    </div>
 
-                      <x-input col="6" set="" type="text" title="Titulo" id="title" name="title" value="" placeholder="" disabled=""></x-input>
-                      <x-input col="6" set="" type="text" title="Descrição" id="descreption" name="descreption" value="" placeholder="" disabled=""></x-input>
-                      
-                      {{-- FALTA O INPUT DOS DOCUMENTOS --}}
+                    <div class="row">
+                        <x-input col="6" set="" type="text" title="Titulo" id="title" name="title"
+                            value="" placeholder="" disabled=""></x-input>
+                        <x-input col="6" set="" type="text" title="Descrição" id="descreption"
+                            name="descreption" value="" placeholder="" disabled=""></x-input>
+                    </div>
                 </x-form>
             </div>
         </div>

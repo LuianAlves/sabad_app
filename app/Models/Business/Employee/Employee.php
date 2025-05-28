@@ -14,6 +14,7 @@ use App\Models\Business\Certificate\Certificate;
 use App\Models\Business\Device\DeviceControl\DeviceControl;
 
 use App\Contracts\Auditable;
+use App\Models\Business\Tickets\Ticket;
 
 class Employee extends Model implements Auditable
 {
@@ -60,5 +61,10 @@ class Employee extends Model implements Auditable
 
     public function deviceControl() {
         return $this->hasOne(DeviceControl::class, 'device_controls');
+    }
+
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class);
     }
 }

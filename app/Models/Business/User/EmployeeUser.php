@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\User;
 use App\Models\Business\Employee\Employee;
+use App\Models\Business\Tickets\Ticket;
 
 class EmployeeUser extends Model
 {
@@ -22,5 +23,10 @@ class EmployeeUser extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'employee_id');
     }
 }

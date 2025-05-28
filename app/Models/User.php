@@ -14,6 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Business\User\EmployeeUser;
 
 use App\Contracts\Auditable;
+use App\Models\Business\Tickets\Ticket;
 
 class User extends Authenticatable implements Auditable
 {
@@ -97,4 +98,10 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasOne(EmployeeUser::class, 'user_id');
     }
+
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+    
 }

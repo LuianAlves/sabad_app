@@ -9,4 +9,9 @@ class TicketCategory extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketCategoryFactory> */
     use HasFactory;
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
 }
