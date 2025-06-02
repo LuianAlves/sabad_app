@@ -20,10 +20,10 @@ use App\Http\Controllers\Business\Domain\DomainController;
 //Department
 use App\Http\Controllers\Business\Department\DepartmentController;
 
-//Employee
+// Employee
 use App\Http\Controllers\Business\Employee\EmployeeController;
 
-//Certificate
+// Certificate
 use App\Http\Controllers\Business\Certificate\CertificateController;
 
 // Service
@@ -32,12 +32,19 @@ use App\Http\Controllers\Business\Service\ServiceController;
 // Email
 use App\Http\Controllers\Business\Email\EmailController;
 
-//Device
+// Device
 use App\Http\Controllers\Business\Device\DeviceController;
 use App\Http\Controllers\Business\Device\DeviceType\DeviceTypeController;
 use App\Http\Controllers\Business\Device\DeviceBrand\DeviceBrandController;
 use App\Http\Controllers\Business\Device\DeviceModel\DeviceModelController;
 use App\Http\Controllers\Business\Device\DeviceControl\DeviceControlController;
+
+// Heritage
+use App\Http\Controllers\Business\Heritage\HeritageController;
+use App\Http\Controllers\Business\Heritage\HeritageType\HeritageTypeController;
+use App\Http\Controllers\Business\Heritage\HeritageBrand\HeritageBrandController;
+use App\Http\Controllers\Business\Heritage\HeritageModel\HeritageModelController;
+use App\Http\Controllers\Business\Heritage\HeritageControl\HeritageControlController;
 
 // License
 use App\Http\Controllers\Business\License\LicenseController;
@@ -45,15 +52,24 @@ use App\Http\Controllers\Business\License\LicenseController;
 // Charts
 use App\Http\Controllers\Common\ChartController;
 
-//  Tickets
+//  Ticket
 use App\Http\Controllers\Business\Tickets\TicketController;
 use App\Http\Controllers\Business\Tickets\TicketCategoryController;
 
 //Maintenance
 use App\Http\Controllers\Business\Maintenance\MaintenanceController;
+use App\Http\Controllers\Business\Tickets\TicketStatusController;
+
+// Task
+use App\Http\Controllers\Business\Task\TaskController;
+use App\Http\Controllers\Business\Task\KanbanController;
+use App\Http\Controllers\Business\Task\TaskStatusController;
 
 // Logs
 use App\Http\Controllers\Log\ActivityLogController;
+
+//Collaborator
+use App\Http\Controllers\Collaborator\CollaboratorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,28 +112,66 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('certificate', CertificateController::class);
 
-    Route::resource('device', DeviceController::class);
+    // Devices
+    Route::group(['prefix' => 'device'], function () {
+        Route::resource('/', DeviceController::class)->names('device');
 
-    Route::resource('device_type', DeviceTypeController::class)->except('show');
-    Route::get('/device_type/search', [DeviceTypeController::class, 'search'])->name('device_type.search');
-    
-    Route::resource('device_brand', DeviceBrandController::class)->except('show');
-    Route::get('/device_brand/search', [DeviceBrandController::class, 'search'])->name('device_brand.search');
-    
-    Route::resource('device_model', DeviceModelController::class)->except('show');
-    Route::get('/device_model/search', [DeviceModelController::class, 'search'])->name('device_model.search');
+        Route::group(['prefix' => 'type'], function () {
+            Route::resource('/', DeviceTypeController::class)->except('show')->names('device_type');
+            Route::get('search', [DeviceTypeController::class, 'search'])->name('device_type.search');
+        });
 
-    Route::resource('device_control', DeviceControlController::class);
+        Route::group(['prefix' => 'brand'], function () {
+            Route::resource('/', DeviceBrandController::class)->except('show')->names('device_brand');
+            Route::get('search', [DeviceBrandController::class, 'search'])->name('device_brand.search');
+        });
+
+        Route::group(['prefix' => 'model'], function () {
+            Route::resource('/', DeviceModelController::class)->except('show')->names('device_model');
+            Route::get('search', [DeviceModelController::class, 'search'])->name('device_model.search');
+        });
+
+        Route::resource('control', DeviceControlController::class)->names('device_control');
+    });
+
+    // Heritages
+    Route::group(['prefix' => 'heritage'], function () {
+        Route::resource('/', HeritageController::class)->names('heritage');
+
+        Route::group(['prefix' => 'type'], function () {
+            Route::resource('/', HeritageTypeController::class)->except('show')->names('heritage_type');
+            Route::get('search', [HeritageTypeController::class, 'search'])->name('heritage_type.search');
+        });
+
+        Route::group(['prefix' => 'brand'], function () {
+            Route::resource('/', HeritageBrandController::class)->except('show')->names('heritage_brand');
+            Route::get('search', [HeritageBrandController::class, 'search'])->name('heritage_brand.search');
+        });
+
+        Route::group(['prefix' => 'model'], function () {
+            Route::resource('/', HeritageModelController::class)->except('show')->names('heritage_model');
+            Route::get('search', [HeritageModelController::class, 'search'])->name('heritage_model.search');
+        });
+
+        Route::resource('control', HeritageControlController::class)->names('heritage_control');
+    });
 
     Route::resource('license', LicenseController::class);
 
+    // Tickets
+    Route::group(['prefix' => 'ticket'], function () {
+        Route::resource('/', TicketController::class)->names('ticket');
+        Route::post('ticket-status/update/{ticketId}', [TicketStatusController::class, 'openToInProgress'])->name('update-ticket-status-open');
+        Route::resource('category', TicketCategoryController::class)->names('ticket_category');
+    });
 
-    Route::resource('ticket', TicketController::class);
-    Route::resource('ticket_category', TicketCategoryController::class);
+    // Tasks
 
     Route::resource('maintenance', MaintenanceController::class);
 
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
+
+    Route::resource('/collaborator', CollaboratorController::class);
 });
 
 /*
@@ -132,30 +186,3 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/employee', [ChartController::class, 'employeePerDepartment']);
     });
 });
-
-
-
-
-
-
-
-/* 
-* ---------- ANOTAÇÕES -----------
-/
-
-AS CORES PARA <span class="badge badge-sm border border-primary text-info bg-success">
-
-text-primary: cor do texto
-border-primary: cor da borda dos elementos
-bg-primary: Cor de fundo das coisas 
-
-        primary: roxo
-        success: verde
-        danger: vermelho
-        info: azul
-        warning: laranja
-        light: cinza claro
-        dark: cinza escuro (Quase preto)
-
-
-*/

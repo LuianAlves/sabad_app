@@ -153,8 +153,6 @@
                 </li>
             @endcan
 
-            
-
             <li class="nav-item">
                 <a class="nav-link {{ $current == 'ticket' ? 'active' : '' }}" href="{{ route('ticket.index') }}">
                     <div
@@ -173,6 +171,28 @@
                         <i class="fa-brands fa-slack fs-5"></i>
                     </div>
                     <span class="nav-link-text ms-1">Logs do sistema</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ $current == 'heritage' ? 'active' : '' }}"
+                    href="{{ route('heritage.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-industry fs-5"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Patrimônio</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ $current == 'heritage_control' ? 'active' : '' }}"
+                    href="{{ route('heritage_control.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-screwdriver-wrench fs-5"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Contr. de patrimônio</span>
                 </a>
             </li>
         </ul>

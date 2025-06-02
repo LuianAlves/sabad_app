@@ -12,6 +12,7 @@ use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Models\Business\Certificate\Certificate;
 use App\Models\Business\Device\DeviceControl\DeviceControl;
+use App\Models\Business\Heritage\HeritageControl\HeritageControl;
 
 use App\Contracts\Auditable;
 use App\Models\Business\Tickets\Ticket;
@@ -61,6 +62,10 @@ class Employee extends Model implements Auditable
 
     public function deviceControl() {
         return $this->hasOne(DeviceControl::class, 'device_controls');
+    }
+
+    public function heritageControl() {
+        return $this->hasOne(HeritageControl::class, 'device_controls');
     }
 
     public function ticket()

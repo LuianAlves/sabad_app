@@ -37,9 +37,7 @@ class Device extends Model implements Auditable
 
     }
     public function employee() {
-
         return $this->belongsTo(Employee::class);
-
     }
 
     public function deviceType() {

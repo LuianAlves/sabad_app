@@ -1,3 +1,5 @@
+    {{--  
+
 @php
     $routeName = request()->route()->getName(); // Ex: company.create
     [$resource, $action] = explode('.', $routeName);
@@ -21,3 +23,4 @@
     </ol>
     <h6 class="font-weight-bold mb-0">{{ $final }}</h6>
 </nav>
+--}}

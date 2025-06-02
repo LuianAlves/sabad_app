@@ -20,10 +20,6 @@ return new class extends Migration
             $table->unsignedBigInteger('phone_operator_id');
             $table->foreign('phone_operator_id')->references('id')->on('phone_operators')->onDelete('cascade');
 
-            $table->string('')->nullable();
-
-
-
             $table->timestamps();
         });
     }

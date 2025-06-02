@@ -16,8 +16,8 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = Ticket::latest()->get();
-
+        $tickets = Ticket::latest()->with('ticketCategory')->get();
+        $ticketCategories = TicketCategory::get(); // Assim
         $statusData = [
             'open' => [
                 'label' => 'Em aberto',
@@ -48,7 +48,7 @@ class TicketController extends Controller
             'canceled' => ['icon' => 'fa-times-circle', 'bg' => 'danger'],
         ];
 
-        return view('app.business.tickets.ticket.ticket_index', compact('tickets', 'statusData', 'icons'));
+        return view('app.business.tickets.ticket.ticket_index', compact('tickets', 'ticketCategories', 'statusData', 'icons'));
     }
 
     public function create()
@@ -67,12 +67,10 @@ class TicketController extends Controller
             'user_id' => $request->user_id,
             'ticket_category_id' => $request->ticket_category_id,
             'title' => $request->title,
-            'descreption' => $request->description,
-            'opened_at' => $request->opened_at,
-            'closed_at' => $request->closed_at,
-            'status' => $request->status,
-            'attachment_path' => $request->attachment_path
+            'descreption' => $request->descreption,
+
         ]);
+        
 
         return redirect()->route('ticket.index');
     }
@@ -105,10 +103,7 @@ class TicketController extends Controller
             'ticketcategory_id' => $request->ticketcategory_id,
             'title' => $request->title,
             'descreption' => $request->description,
-            'opened_at' => $request->opened_at,
-            'closed_at' => $request->closed_at,
-            'status' => $request->status,
-            'attachment_path' => $request->attachment_path
+
         ]);
 
         return redirect()->route('ticket.index');

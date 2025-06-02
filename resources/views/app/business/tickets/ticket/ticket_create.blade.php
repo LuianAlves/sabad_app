@@ -33,9 +33,9 @@
 
                     <div class="row">
                         <x-input col="6" set="" type="text" title="Titulo" id="title" name="title"
-                            value="" placeholder="" disabled=""></x-input>
+                            value="" placeholder=""></x-input>
                         <x-input col="6" set="" type="text" title="Descrição" id="descreption"
-                            name="descreption" value="" placeholder="" disabled=""></x-input>
+                            name="descreption" value="" placeholder=""></x-input>
                     </div>
                 </x-form>
             </div>

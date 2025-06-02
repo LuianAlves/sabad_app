@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('chip_controls', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('chip_id');
+            $table->foreign('chip_id')->references('id')->on('chips')->onDelete('cascade');
+
+            $table->unsignedBigInteger('employee_id');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+
+            $table->unsignedInteger('ddd')->nullable();
+            $table->unsignedInteger('number');
+
+            $table->date('delivered_in')->nullable();
+            $table->date('returned_in')->nullable();
+
             $table->timestamps();
         });
     }

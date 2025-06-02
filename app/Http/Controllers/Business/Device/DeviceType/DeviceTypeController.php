@@ -33,12 +33,12 @@ class DeviceTypeController extends Controller
     {
         $request->validated();
 
-        $DeviceType = DeviceType::create([
+        $deviceType = DeviceType::create([
             'name'       => $request->name,
             'created_at' => Carbon::now()
         ]);
 
-        return response()->json($DeviceType);
+        return response()->json($deviceType);
     }
 
     public function edit($id)

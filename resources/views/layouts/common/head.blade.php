@@ -24,8 +24,10 @@
     <script src="https://kit.fontawesome.com/d949d91b0e.js" crossorigin="anonymous"></script>
     
     <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/style.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('css/corporate-ui-dashboard.css?v=1.0.0') }}" rel="stylesheet" />
+
 </head>

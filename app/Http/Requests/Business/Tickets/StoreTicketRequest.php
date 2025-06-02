@@ -17,12 +17,12 @@ class StoreTicketRequest extends FormRequest
     {
         return [
             'user_id' => 'required',
-            'ticketcategory_id' => 'required',
+            'ticket_category_id' => 'required',
             'title' => 'required|string',
-            'descreption' => 'required|max:300',
+            'descreption' => 'required',
             'opened_at' => 'nullable',
             'closed_at' => 'nullable',
-            'status' => 'nullable',
+            'status' => 'nullable|in:open,in_progress,completed,canceled',
             'attachment_path' => 'nullable'
         ];
     }

@@ -22,23 +22,15 @@ class DeviceController extends Controller
 
     public function index()
     {
-        $devices = Device::with('department.company')->get();
+        $devices = Device::get();
 
-        $departments = Department::with('company')->get();
-
-        return view('app.business.device.device_index', compact('devices', 'departments'));
+        return view('app.business.device.device_index', compact('devices'));
     }
-
-
 
     public function create()
     {
-        $departments = Department::with('company')->get();
-        $companies = Company::get();
-
-        return view('app.business.device.device_create', compact('departments', 'companies'));
+        return view('app.business.device.device_create');
     }
-
 
     public function store(StoreDeviceRequest $request)
     {

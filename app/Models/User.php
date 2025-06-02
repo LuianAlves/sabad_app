@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 use App\Models\Business\User\EmployeeUser;
+use App\Models\Business\Task\TaskStatus;
 
 use App\Contracts\Auditable;
 use App\Models\Business\Tickets\Ticket;
@@ -104,4 +105,9 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Ticket::class);
     }
     
+    public function taskStatuses()
+{
+    return $this->hasMany(TaskStatus::class);
+}
+
 }
