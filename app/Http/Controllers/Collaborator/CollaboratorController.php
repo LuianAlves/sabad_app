@@ -10,13 +10,14 @@ use App\Models\User;
 
 class CollaboratorController extends Controller
 {
-    
+
     public function index()
     {
-        $users = User::get();
+        $users = User::with('employeeUser.employee.department')->get();
 
         return view('app.collaborator.collaborator_index', compact('users'));
     }
+
 
     
     public function create()

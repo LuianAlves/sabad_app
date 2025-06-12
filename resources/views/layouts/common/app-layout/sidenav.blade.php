@@ -131,6 +131,26 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link {{ $current == 'chip_control' ? 'active' : '' }}" href="{{ route('chipcontrol.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Controle de Chips</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ $current == 'maintenance' ? 'active' : '' }}" href="{{ route('maintenance.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Manutenção</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link {{ $current == 'license' ? 'active' : '' }}" href="{{ route('license.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">

@@ -35,11 +35,11 @@
 
                                 {{-- Datas e status --}}
                                 <td>
-                                    <p class="text-secondary text-sm mb-0">{{ \Carbon\Carbon::parse($certificate->creation_date)->format('d/m/Y') }}</p>
+                                    <p class="text-secondary text-sm mb-0">{{ Carbon::parse($certificate->creation_date)->format('d/m/Y') }}</p>
                                 </td>
 
-                                <td class="text-secondary text-sm mb-0">{{ \Carbon\Carbon::parse($certificate->renewal_date)->format('d/m/Y') }}</td>
-                                <td class="text-secondary text-sm mb-0">{{ \Carbon\Carbon::parse($certificate->last_renovation)->format('d/m/Y') }}</td>
+                                <td class="text-secondary text-sm mb-0">{{ Carbon::parse($certificate->renewal_date)->format('d/m/Y') }}</td>
+                                <td class="text-secondary text-sm mb-0">{{ Carbon::parse($certificate->last_renovation)->format('d/m/Y') }}</td>
 
                                 <td>
                                     @if ($certificate->status == 1)

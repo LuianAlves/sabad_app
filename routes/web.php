@@ -71,6 +71,11 @@ use App\Http\Controllers\Log\ActivityLogController;
 //Collaborator
 use App\Http\Controllers\Collaborator\CollaboratorController;
 
+//Chip
+use App\Http\Controllers\Business\Chip\ChipController;
+use App\Http\Controllers\Business\Chip\ChipControl\ChipControlController;
+use App\Http\Controllers\Business\Chip\PhoneOperator\PhoneOperatorController;
+
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATE ROUTES
@@ -111,6 +116,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('servicecontrol', UserController::class);
 
     Route::resource('certificate', CertificateController::class);
+
+    Route::resource('operator', PhoneOperatorController::class);
+
+    Route::resource('chipcontrol', ChipControlController::class);
+
+    Route::resource('chip', ChipController::class);       
+    
+    });
+
+
 
     // Devices
     Route::group(['prefix' => 'device'], function () {
@@ -172,7 +187,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 
     Route::resource('/collaborator', CollaboratorController::class);
-});
+
+    Route::resource('/task', TaskController::class);
 
 /*
 |--------------------------------------------------------------------------

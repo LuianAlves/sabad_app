@@ -16,7 +16,9 @@
                                 @foreach ($deviceControls as $control)
                                 
                                     <option value="{{ $control->id }}"> 
-                                        {{ $control->device->deviceType->name.' - '. $control->device->deviceBrand->name.' - '. $control->employee->name }}
+                                        {{ $control->device->deviceType->name.' - '. 
+                                        $control->device->deviceBrand->name.' - '. 
+                                        $control->employee->name }}
                                     </option>
                                 @endforeach
                             </select>

@@ -40,7 +40,7 @@ class EmployeeController extends Controller
         $licenses = License::get();
 
         $permissions = Permission::all()->groupBy(function ($permission) {
-            return explode(' ', $permission->name)[1];
+            // return explode(' ', $permission->name)[1];       
         });
 
         return view('app.business.employee.employee_create', compact('companies', 'licenses', 'permissions'));

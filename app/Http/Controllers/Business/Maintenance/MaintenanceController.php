@@ -10,6 +10,7 @@ use App\Models\Business\Device\Device;
 use App\Models\Business\Device\DeviceControl\DeviceControl;
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Maintenance\Maintenance;
+use Carbon\Carbon;
 
 
 class MaintenanceController extends Controller
@@ -18,8 +19,12 @@ class MaintenanceController extends Controller
     public function index()
     {
         $maintenances = Maintenance::with('deviceControl.device.deviceType', 'deviceControl.employee')->get();       
+        $nextMaintenance = $maintenances
+        ->filter(fn ($m) => Carbon::parse($m->next_maintenance)->greaterThanOrEqualTo(Carbon::today()));
 
-        return view('app.business.maintenance.maintenance_index', compact('maintenances'));
+    
+
+        return view('app.business.maintenance.maintenance_index', compact('maintenances', 'nextMaintenance'));
     }
 
     
@@ -48,7 +53,7 @@ class MaintenanceController extends Controller
     
     public function show($id)
     {
-        $maintenance = Maintenance::find($id);
+        $maintenance = Maintenance::with('deviceControl.device.deviceType', 'deviceControl.employee')->find($id);
 
         return view('app.business.maintenance.maintenance_show', compact('maintenance'));
     }
@@ -56,8 +61,8 @@ class MaintenanceController extends Controller
     
     public function edit($id)
     {
-        $maintenance = Maintenance::wherw('id', $id)->first();
-        $device_controls =DeviceControl::get();
+        $maintenance = Maintenance::where('id', $id)->first();
+        $device_controls =DeviceControl::with('employee')->get();
 
         return view('app.business.maintenance.maintenance_edit', compact('maintenance', 'device_controls'));
     }
@@ -70,7 +75,7 @@ class MaintenanceController extends Controller
         $maintenance = Maintenance::find($id);
 
         $maintenance->update([
-            'device_control_id' => $request->devicecontrol_id,
+            'device_control_id' => $request->device_control_id,
             'delivered_in' => $request->delivered_in,
             'last_maintenance' => $request->last_maintenance,
             'next_maintenance' => $request->next_maintenance

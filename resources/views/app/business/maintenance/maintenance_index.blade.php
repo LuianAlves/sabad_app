@@ -5,6 +5,36 @@
             <div class="card border shadow-xs mb-4">
                 <x-card-header title="Manutenções" count="{{ $maintenances->count() }}" action="novo"></x-card-header>
 
+                @php
+                    use Carbon\Carbon;
+                    
+                    $nextMaintenance = $maintenances
+                        ->filter(fn ($m) =>
+                            Carbon::parse($m->next_maintenance)->greaterThanOrEqualTo(Carbon::today())
+                        )
+                        ->sortBy(fn ($m) =>
+                            Carbon::parse($m->next_maintenance)->timestamp
+                        )
+                        ->values()
+                        ->first();
+                @endphp
+
+                @if($nextMaintenance)
+                    <div class="card mb-4 p-4 shadow-sm border rounded">
+                        <div class="card-header bg-warning text-white fw-semibold d-flex justify-content-between align-items-center">
+                            <span>🔧 Próxima Manutenção Agendada</span>
+                            <a href="{{ route('maintenance.edit', $nextMaintenance->id) }}" class="btn btn-sm btn-secondary">
+                                Atualizar Manutenção
+                            </a>
+                        </div>
+                        <div class="card-body p-3">
+                            <p class="mb-2"><strong>Funcionário:</strong> {{ $nextMaintenance->deviceControl->employee->name }}</p>
+                            <p class="mb-2"><strong>Equipamento:</strong> {{ $nextMaintenance->deviceControl->device->deviceType->name }}</p>
+                            <p class="mb-0"><strong>Data:</strong> {{ Carbon::parse($nextMaintenance->next_maintenance)->format('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                @endif
+
                 <x-table>
                     <x-slot name="thead">
                         <tr class="text-center">
@@ -16,6 +46,7 @@
                         </tr>
                     </x-slot>
                     <x-slot name="tbody">
+
                         @foreach ($maintenances as $maintenance)
                             <tr class="text-center">
 
@@ -31,15 +62,15 @@
 
                                 {{-- Entregue em --}}
                                     <td>
-                                        <p class="text-dark text-sm mb-0">{{ $maintenance->delivered_in }}</p>
+                                        <p class="text-dark text-sm mb-0">{{ Carbon::parse($maintenance->delivered_in)->format('d/m/Y') }}</p>
                                     </td>
                                 {{-- Ultima Manutenção --}}
                                     <td>
-                                        <p class="text-dark text-sm mb-0">{{ $maintenance->last_maintenance }}</p>
+                                        <p class="text-dark text-sm mb-0">{{ Carbon::parse($maintenance->last_maintenance)->format('d/m/Y') }}</p>
                                     </td>
                                 {{-- Proxima Manutenção --}}
                                     <td>
-                                        <p class="text-dark text-sm mb-0">{{ $maintenance->next_maintenance }}</p>
+                                        <p class="text-dark text-sm mb-0">{{ Carbon::parse($maintenance->next_maintenance)->format('d/m/Y') }}</p>
                                     </td>
 
                                 {{-- Botões de ações --}}

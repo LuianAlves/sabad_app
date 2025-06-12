@@ -15,6 +15,8 @@ use App\Models\Business\Device\DeviceControl\DeviceControl;
 use App\Models\Business\Heritage\HeritageControl\HeritageControl;
 
 use App\Contracts\Auditable;
+use App\Models\Business\Chip\ChipControl\ChipControl;
+use App\Models\Business\Task\Task;
 use App\Models\Business\Tickets\Ticket;
 
 class Employee extends Model implements Auditable
@@ -71,5 +73,15 @@ class Employee extends Model implements Auditable
     public function ticket()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function task()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function chipControl()
+    {
+        return $this->hasOne(ChipControl::class);
     }
 }
