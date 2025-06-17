@@ -10,7 +10,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="chip_id" class="form-label">Empresa</label>
                             <select name="chip_id" id="chip_id" class="form-control" required>
-                                <option value="">Selecione um Chip</option>
+                                <option value="">Selecione uma Empresa</option>
                                 @foreach ($chips as $chip)
                                     <option value="{{ $chip->id }}">
                                         {{ $chip->company->name .' - '.
@@ -20,11 +20,12 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="employee_id" class="form-label">Empresa</label>
+                            <label for="employee_id" class="form-label">Funcionario</label>
                             <select name="employee_id" id="employee_id" class="form-control" required>
-                                <option value="">Selecione uma empresa</option>
+                                <option value="">Selecione um Funcionario</option>
                                 @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                    <option value="{{ $employee->id }}">
+                                    {{ $employee->name .' - '. $employee->department->company->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -38,7 +39,7 @@
                             name="ddd" value="{{ 'ddd' }}" placeholder="Ex: 11" />
 
                         <x-input col="6" set="" type="number" title="Numero do telefone" id="number"
-                            name="number" value="{{ 'number' }}" placeholder="Ex: 99999999" />
+                            name="number" value="{{ 'number' }}" placeholder="Ex: 123456789" />
 
 
                 </x-form>
