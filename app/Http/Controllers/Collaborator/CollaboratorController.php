@@ -13,7 +13,7 @@ class CollaboratorController extends Controller
 
     public function index()
     {
-        $users = User::with('employeeUser.employee.department')->get();
+        $users = User::with('employeeUser.employee.department.company', 'employeeUser.employee.chipControl')->get();
 
         return view('app.collaborator.collaborator_index', compact('users'));
     }

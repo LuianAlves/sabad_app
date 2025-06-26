@@ -8,7 +8,11 @@
                     <div class="col-auto">
                         <div
                             class="avatar avatar-2xl rounded-circle position-relative mt-n7 border border-gray-100 border-4">
-                            <img src="../img/team-2.jpg" alt="profile_image" class="w-100">
+                            @if (isset($user) && $user->image)
+                            <img src="{{ 'data:image/png;base64,' . $user->image }}" alt="profile_image" class="w-100">
+                            @else
+                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="profile_image" class="w-100">
+                            @endif
                         </div>
                     </div>
                     <div class="col-auto my-auto">
@@ -31,7 +35,7 @@
 
         <div class="container my-3 py-3">
             <div class="row">
-                <div class="col-12 col-xl-4 mb-4">
+                {{-- <div class="col-12 col-xl-4 mb-4">
                     <div class="card border shadow-xs h-100">
                         <div class="card-header pb-0 p-3">
                             <h6 class="mb-0 font-weight-semibold text-lg">Notifications settings</h6>
@@ -95,7 +99,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-12 col-xl-4 mb-4">
                     <div class="card border shadow-xs h-100">
@@ -103,7 +107,7 @@
                             <div class="row">
                                 <div class="col-md-8 col-9">
                                     <h6 class="mb-0 font-weight-semibold text-lg">Profile information</h6>
-                                    <p class="text-sm mb-1">Edit the information about you.</p>
+                                    {{-- <p class="text-sm mb-1">Edit the information about you.</p> --}}
                                 </div>
                                 <div class="col-md-4 col-3 text-end">
                                     <button type="button" class="btn btn-white btn-icon px-2 py-2">
@@ -116,28 +120,40 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body p-3">
-                            <p class="text-sm mb-4">
-                                Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally
-                                difficult paths, choose the one more painful in the short term (pain avoidance is
-                                creating an illusion of equality).
-                            </p>
+                        <div class="card-body p-3">                          
                             <ul class="list-group">
+
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pt-0 pb-1 text-sm">
-                                    <span class="text-secondary">First Name:</span> &nbsp; Noah
+                                    <span class="text-secondary">Nome:</span> {{ explode(' ', auth()->user()->name)[0] }}
+
                                 </li>
+
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Last Name:</span> &nbsp; Mclaren
+                                    <span class="text-secondary">Sobrenome:</span> {{ explode(' ', auth()->user()->name)[1] }}
+
                                 </li>
+
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Mobile:</span> &nbsp; +(44) 123 1234 123
+                                    <span class="text-secondary">Telefone:</span>
+                                    @if(optional(auth()->user()->employeeUser->employee->chipControl)->number)
+                                        {{ auth()->user()->employeeUser->employee->chipControl->ddd }}
+                                        {{ auth()->user()->employeeUser->employee->chipControl->number }}
+                                    @else
+                                        <span class="text-muted">Não informado</span>
+                                    @endif
+
                                 </li>
+
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Function:</span> &nbsp; Manager - Organization
+                                    <span class="text-secondary">Cargo:</span> {{ auth()->user()->employeeUser->employee->hierarchical_level }}
+
                                 </li>
+
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Location:</span> &nbsp; USA
+                                    <span class="text-secondary">Empresa:</span> {{auth()->user()->employeeUser->employee->department->company->name}}
+
                                 </li>
+
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Social:</span> &nbsp;
                                     <a class="btn btn-link text-dark mb-0 ps-1 pe-1 py-0" href="javascript:;">
@@ -161,7 +177,6 @@
                             <div class="row mb-sm-0 mb-2">
                                 <div class="col-md-8 col-9">
                                     <h6 class="mb-0 font-weight-semibold text-lg">Colegas de equipe</h6>
-                                    <p class="text-sm mb-0">/marketing channel</p>
                                 </div>
                                 <div class="col-md-4 col-3 text-end">
                                     <button type="button" class="btn btn-white btn-icon px-2 py-2">
@@ -175,83 +190,35 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body p-3 pt-0">
-                            <ul class="list-group">
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-1.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Sarah Lamalo</h6>
-                                        <p class="mb-0 text-sm text-secondary">Hi! I need more information about ...
-                                        </p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/marie.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Vicky Hladynets</h6>
-                                        <p class="mb-0 text-sm text-secondary">Hello, Noah!</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-5.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Charles Deluvio</h6>
-                                        <p class="mb-0 text-sm text-secondary">Great, thank you!</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-4.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Leio Mclaren</h6>
-                                        <p class="mb-0 text-sm text-secondary">Don't worry! 🙏🏻</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-3.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Mateus Campos</h6>
-                                        <p class="mb-0 text-sm text-secondary">Call me, please.</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                                <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                    <div class="avatar avatar-sm rounded-circle me-2">
-                                        <img src="../img/team-2.jpg" alt="kal" class="w-100">
-                                    </div>
-                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">Miriam Lore</h6>
-                                        <p class="mb-0 text-sm text-secondary">Well done!</p>
-                                    </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
-                                        <span class="visually-hidden">Online</span>
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
+                        @php
+                            $departmentId = auth()->user()?->employeeUser?->employee?->department_id;
+                            $teams = App\Models\Business\Employee\Employee::where('department_id', $departmentId)
+                                ->whereHas('employeeUser.user')
+                                ->whereHas('employeeUser', fn($q) => $q->where('user_id', '!=', auth()->id()))
+                                ->get();
+                        @endphp
+
+
+                                @foreach ($teams as $team)
+                                    <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
+                                        <div class="avatar avatar-sm rounded-circle me-2">
+                                        @if(isset($user) && $team->employeeUser->user->image)
+                                            <img src="{{ 'data:image/png;base64,' . $team->employeeUser->user->image }}" alt="{{ $team->getDisplayName() }}" class="w-100">
+                                        @else
+                                            <img src="{{ asset('img/profile/image_profile.webp') }}" alt="{{ $team->getDisplayName() }}" class="w-100">
+                                        @endif
+
+                                        </div>
+                                        <div class="d-flex align-items-start flex-column justify-content-center">
+                                            <h6 class="mb-0 text-sm font-weight-semibold">{{ $team->getDisplayName() }}</h6>
+                                            <p class="mb-0 text-sm text-secondary">{{ $team->employeeUser?->user?->email ?? '' }}</p>
+                                        </div>
+                                        <span class="p-1 bg-success rounded-circle ms-auto me-3">
+                                            <span class="visually-hidden">Online</span>
+                                        </span>
+                                    </li>
+                                @endforeach
+
                     </div>
                 </div>
 
@@ -362,6 +329,7 @@
                     </div>
                 </div>
             </div>
+            
 
             <!-- Include:Footer -->
             @include('layouts.common.footer')

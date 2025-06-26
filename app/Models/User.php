@@ -13,6 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 use App\Models\Business\User\EmployeeUser;
 use App\Models\Business\Task\Task;
+use App\Models\Business\Chip\ChipControl\ChipControl;
 
 use App\Contracts\Auditable;
 use App\Models\Business\Tickets\Ticket;
@@ -25,7 +26,7 @@ class User extends Authenticatable implements Auditable
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
-    use hasRoles;
+    use HasRoles;
 
     use TwoFactorAuthenticatable;
 
@@ -106,8 +107,14 @@ class User extends Authenticatable implements Auditable
     }
     
     public function tasks()
-{
-    return $this->hasMany(Task::class);
-}
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function chipControl()
+    {
+        return $this->hasOne(ChipControl::class, 'employee_id', 'id');
+    }
+
 
 }

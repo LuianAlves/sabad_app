@@ -34,27 +34,37 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+    $user = Auth::user();
 
-            /** @var \App\Models\User $user */
-            if ($user->canAuthenticate()) {
+    /** @var \App\Models\User $user */
+    if ($user->canAuthenticate()) {
 
-                if ($request->hasSession()) {
-                    $request->session()->regenerateToken();
-                }
-
-                return redirect()->intended('/dashboard');
-            } else {
-                Auth::logout();
-
-                if ($request->hasSession()) {
-                    $request->session()->invalidate();
-                    $request->session()->regenerateToken();
-                }
-
-                return back()->with('error', 'Acesso negado.');
-            }
+        if ($request->hasSession()) {
+            $request->session()->regenerateToken();
         }
+
+        // Redirecionamento baseado em role
+        if ($user->hasRole('admin')) {
+            return redirect()->route('dashboard.index'); // Ex: /dashboard
+        } elseif ($user->hasRole('user')) {
+            return redirect()->route('user.show', $user->id); // Ex: /user/{id}
+        } else {
+            return redirect('/'); // fallback
+        }
+    }
+
+    // caso o usuário não possa autenticar
+    Auth::logout();
+
+    if ($request->hasSession()) {
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    }
+
+    return back()->with('error', 'Acesso negado.');
+}
+
+
 
         return back()->withErrors([
             'email' => 'As credenciais fornecidas estão incorretas.',
@@ -128,4 +138,19 @@ class AuthController extends Controller
     {
         return view('app.auth.register');
     }
+
+    // app/Http/Controllers/Auth/LoginController.php
+
+protected function redirectTo()
+{
+    $user = Auth::User();
+
+    if ($user->role == 'admin') {
+        return '/dashboard';
+    }
+
+    return '/collaborator';
+}
+
+
 }

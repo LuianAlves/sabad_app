@@ -6,11 +6,11 @@
             </div>
         </nav>
         <ul class="navbar-nav d-none d-lg-flex">
-            <li class="nav-item px-3 py-3 border-radius-sm  d-flex align-items-center">
+            {{-- <li class="nav-item px-3 py-3 border-radius-sm  d-flex align-items-center">
                 <a href="{{ route('dashboard.index') }}" class="nav-link text-white p-0">
                     Dashboard
                 </a>
-            </li>
+            </li> --}}
         </ul>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <ul class="navbar-nav ms-md-auto  justify-content-end">
@@ -136,22 +136,22 @@
     <div class="container pb-3 pt-3">
         <ul class="navbar-nav d-none d-lg-flex">
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
-                <a href="../pages/profile.html" class="nav-link text-white p-0">
+                <a href="{{ route('user.show', auth()->user()) }}" class="nav-link text-white p-0">
                     Área do funcionário
                 </a>
             </li>
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
-                <a href="../pages/profile.html" class="nav-link text-white p-0">
+                <a href="{{ route('ticket.collaborator.index')}}" class="nav-link text-white p-0">
                     Abrir chamado
                 </a>
             </li>
-            @can('view device control')
+            {{-- @can('view device control')
                 <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
                     <a href="../pages/profile.html" class="nav-link text-white p-0">
                         Gestão do departamento
                     </a>
                 </li>
-            @endcan
+            @endcan --}}
             <li class="nav-item border-radius-sm px-3 py-3 me-2  d-flex align-items-center">
                 <a href="{{ route('logout') }}" class="nav-link text-white p-0">
                     Deslogar

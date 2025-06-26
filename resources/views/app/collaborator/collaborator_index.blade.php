@@ -102,8 +102,8 @@
                         <div class="card-header pb-0 p-3">
                             <div class="row">
                                 <div class="col-md-8 col-9">
-                                    <h6 class="mb-0 font-weight-semibold text-lg">Profile information</h6>
-                                    <p class="text-sm mb-1">Edit the information about you.</p>
+                                    <h6 class="mb-0 font-weight-semibold text-lg">Perfil</h6>
+                                    <p class="text-sm mb-1"></p>
                                 </div>
                                 <div class="col-md-4 col-3 text-end">
                                     <button type="button" class="btn btn-white btn-icon px-2 py-2">
@@ -120,22 +120,29 @@
                             
                             <ul class="list-group">
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pt-0 pb-1 text-sm">
-                                    <span class="text-secondary">First Name:</span> {{ explode(' ', auth()->user()->name)[0] }}
+                                    <span class="text-secondary">Nome:</span> {{ explode(' ', auth()->user()->name)[0] }}
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Last Name:</span> {{ explode(' ', auth()->user()->name)[1] }}
+                                    <span class="text-secondary">Sobrenome:</span> {{ explode(' ', auth()->user()->name)[1] }}
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Mobile:</span> &nbsp; +(44) 123 1234 123
-                                </li>
-                                <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Function:</span> {{ auth()->user()->hierarchical_level }}
+                                    <span class="text-secondary">Telefone:</span>
+                                    @if(optional(auth()->user()->employeeUser->employee->chipControl)->number)
+                                        {{ auth()->user()->employeeUser->employee->chipControl->ddd }}
+                                        {{ auth()->user()->employeeUser->employee->chipControl->number }}
+                                    @else
+                                        <span class="text-muted">Não informado</span>
+                                    @endif
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Location:</span> SP - Brasil
+                                    <span class="text-secondary">Cargo:</span> {{ auth()->user()->employeeUser->employee->hierarchical_level }}
+
+                                </li>
+                                <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
+                                    <span class="text-secondary">Empresa:</span> SP - Brasil
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
@@ -182,7 +189,7 @@
                                 ->get();
                         @endphp
 
-                            @foreach ($teams as $team)
+
                                 @foreach ($teams as $team)
                                     <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
                                         <div class="avatar avatar-sm rounded-circle me-2">
@@ -197,7 +204,7 @@
                                         </span>
                                     </li>
                                 @endforeach
-                            @endforeach
+
                     </div>
                 </div>
 

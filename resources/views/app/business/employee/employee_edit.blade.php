@@ -4,7 +4,7 @@
         <div class="col-12">
             <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
 
-                <x-card-header title="Editar Empresa" action="Atualizar"></x-card-header>
+                <x-card-header title="Editar Funcionário" action="Atualizar"></x-card-header>
 
                  <x-form route="update" :id="$employee->id">
                   <div class="row">

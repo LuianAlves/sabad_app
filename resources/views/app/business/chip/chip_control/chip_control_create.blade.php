@@ -7,6 +7,7 @@
                 <x-card-header title="Novo Chip" action="cadastrar"></x-card-header>
 
                 <x-form route="store">
+                
                         <div class="col-md-6 mb-3">
                             <label for="chip_id" class="form-label">Empresa</label>
                             <select name="chip_id" id="chip_id" class="form-control" required>
@@ -29,11 +30,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        
-
-                        
-
 
                         <x-input col="6" set="" type="number" title="DDD" id="ddd"
                             name="ddd" value="{{ 'ddd' }}" placeholder="Ex: 11" />

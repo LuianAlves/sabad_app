@@ -8,6 +8,7 @@ use App\Http\Requests\Business\Chip\ChipControl\UpdateChipControlRequest;
 use App\Models\Business\Chip\Chip;
 use App\Models\Business\Employee\Employee;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class ChipControlController extends Controller
 {
@@ -19,7 +20,7 @@ class ChipControlController extends Controller
         return view('app.business.chip.chip_control.chip_control_index', compact('chipControls'));
     }
 
-    
+
     public function create()
     {
         $chips = Chip::with('company', 'phone_operator')->get();

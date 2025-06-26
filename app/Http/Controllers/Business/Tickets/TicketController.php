@@ -10,10 +10,11 @@ use App\Http\Requests\Business\Tickets\StoreTicketRequest;
 use App\Http\Requests\Business\Tickets\UpdateTicketRequest;
 use App\Models\Business\Tickets\TicketCategory;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 
 class TicketController extends Controller
 {
-
     public function index()
     {
         $tickets = Ticket::latest()->with('ticketCategory')->get();
@@ -63,6 +64,8 @@ class TicketController extends Controller
     {
         $request->validated();
 
+        $isAdmin = Auth::user()->hasRole('admin');
+
         $ticket = Ticket::create([
             'user_id' => $request->user_id,
             'ticket_category_id' => $request->ticket_category_id,
@@ -71,8 +74,16 @@ class TicketController extends Controller
 
         ]);
         
+        if ($isAdmin)
+        {
+            return redirect()->route('ticket.index');
+        }
+        else
+        {
+            return redirect()->route('ticket.collaborator.index');
+        }
+        
 
-        return redirect()->route('ticket.index');
     }
 
 

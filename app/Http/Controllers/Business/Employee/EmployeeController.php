@@ -180,7 +180,7 @@ class EmployeeController extends Controller
         $employee = Employee::with('employeeUser.user', 'department.company')->findOrFail($id);
         $teammates = Employee::with('employeeUser.user', 'department.company')->where('department_id', $employee->department_id)->get();
         $permissions = Permission::all()->groupBy(function ($permission) {
-            return explode(' ', $permission->name)[1];
+            // return explode(' ', $permission->name)[1];
         });
         $devices = DeviceControl::with('employee', 'device')->where('employee_id', $employee->id)->get();
         $emails = Email::where('id', $employee->id)->get();

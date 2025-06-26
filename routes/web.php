@@ -55,6 +55,7 @@ use App\Http\Controllers\Common\ChartController;
 //  Ticket
 use App\Http\Controllers\Business\Tickets\TicketController;
 use App\Http\Controllers\Business\Tickets\TicketCategoryController;
+use App\Http\Controllers\Business\Tickets\TicketCollaboratorController;
 
 //Maintenance
 use App\Http\Controllers\Business\Maintenance\MaintenanceController;
@@ -75,6 +76,8 @@ use App\Http\Controllers\Collaborator\CollaboratorController;
 use App\Http\Controllers\Business\Chip\ChipController;
 use App\Http\Controllers\Business\Chip\ChipControl\ChipControlController;
 use App\Http\Controllers\Business\Chip\PhoneOperator\PhoneOperatorController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -179,6 +182,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::post('ticket-status/update/{ticketId}', [TicketStatusController::class, 'openToInProgress'])->name('update-ticket-status-open');
         Route::resource('category', TicketCategoryController::class)->names('ticket_category');
     });
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/ticket/collaborator/create', [TicketCollaboratorController::class, 'create'])->name('ticket.collaborator.create');
+        Route::get('/ticket/collaborator/index', [TicketCollaboratorController::class, 'index'])->name('ticket.collaborator.index');
+    });
+
 
     // Tasks
 
