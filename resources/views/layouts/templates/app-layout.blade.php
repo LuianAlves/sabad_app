@@ -24,7 +24,7 @@
         </main>
 
         <!-- Include:Config Button -->
-        @include('layouts.common.config-button')
+        {{-- @include('layouts.common.config-button') --}}
 
         <!-- Include:Scripts -->
         @include('layouts.common.scripts')
