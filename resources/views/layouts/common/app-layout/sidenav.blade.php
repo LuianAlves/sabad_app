@@ -10,7 +10,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand d-flex align-items-center m-0"
             href=" https://demos.creative-tim.com/corporate-ui-dashboard/pages/dashboard.html " target="_blank">
-            <span class="font-weight-bold text-lg">Sistema Sabad</span>
+            <span class="font-weight-bold text-lg" style="font-size: 36px !important; letter-spacing: 1px !important;"><span class="text-info">D</span>ry<span class="text-info">L</span>o</span>
         </a>
     </div>
     <div class="collapse navbar-collapse px-4  w-auto " id="sidenav-collapse-main">

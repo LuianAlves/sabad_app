@@ -139,6 +139,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/chat/messages/{userId}', [ChatController::class, 'messages'])->name('chat.messages');
         Route::get('/chat/check/message', [ChatController::class, 'checkMessages'])->name('check.messages');
         Route::get('/contacts', [ChatController::class, 'contacts'])->name('contacts.index');
+        Route::get('/chat/check-messages', [UserController::class, 'checkMessages']);
+
 });
 
 

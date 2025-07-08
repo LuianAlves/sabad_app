@@ -6,6 +6,15 @@
     margin-top: 3px !important;
 }
 
+.navbar-nav .nav-item .nav-link:hover {
+  color: #78B6E7 !important;
+}
+
+.navbar-nav .nav-item .icon:hover, .navbar-nav .nav-item i:hover {
+  color: #111111 !important;
+  opacity: 1 !important;
+}
+
 .card-crud {
     height: calc(100vh - 125px) !important;
 }
@@ -20,3 +29,9 @@
     table-layout: auto !important;
   }
 } */
+ 
+.notification-badge {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+}

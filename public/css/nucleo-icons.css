@@ -592,6 +592,9 @@ License - nucleoapp.com/license/
 .ni-ui-04::before {
   content: "\ea65";
 }
-
-
+.notification-badge {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+}
 /* all icon font classes list here */

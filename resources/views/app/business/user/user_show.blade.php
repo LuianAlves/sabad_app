@@ -1,6 +1,7 @@
 <x-user-profile-layout>
     @section('content-user-layout')
-        <div class="pt-7 pb-6 bg-cover"
+        <div class="pt-7
+                pb-6 bg-cover"
             style="background-image: url('../img/header-orange-purple.jpg'); background-position: bottom;"></div>
 
         <div class="container">
@@ -30,6 +31,7 @@
                 </div>
             </div>
         </div>
+        
 
         <div class="container my-3 py-3">
             <div class="row">
@@ -49,7 +51,8 @@
                             <ul class="list-group">
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pt-0 pb-1 text-sm">
-                                    <span class="text-secondary">Nome:</span> {{ explode(' ', auth()->user()->name)[0] }}
+                                    <span class="text-secondary">Nome:</span>
+                                    {{ explode(' ', auth()->user()->name)[0] }}
 
                                 </li>
 
@@ -138,6 +141,15 @@
 
                         <ul class="list-group">
                             @foreach ($teams as $team)
+                                @php
+                                    $unreadCount = \App\Models\Message::where(
+                                        'sender_id',
+                                        $team->employeeUser->user->id,
+                                    )
+                                        ->where('receiver_id', auth()->id())
+                                        ->where('is_read', false)
+                                        ->count();
+                                @endphp
                                 <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
                                     <div class="avatar avatar-sm rounded-circle me-2">
                                         @if ($team->employeeUser?->user?->image)
@@ -149,22 +161,57 @@
                                         @endif
                                     </div>
                                     <div class="d-flex align-items-start flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm font-weight-semibold">
-                                            <a href="#" class="text-dark openChatModal" data-bs-toggle="modal"
-                                                data-bs-target="#chatModal" data-user="{{ $team->employeeUser->user->id }}"
-                                                data-name="{{ $team->getDisplayName() }}">
+                                        <h6 class="mb-0 text-sm font-weight-semibold d-flex align-items-center">
+                                            <a href="#" class="text-dark openChatModal username me-1"
+                                                data-bs-toggle="modal" data-bs-target="#chatModal"
+                                                data-user="{{ $team->employeeUser->user->id }}"
+                                                data-name="{{ $team->getDisplayName() }}"
+                                                data-user-id="{{ $team->employeeUser->user->id }}">
                                                 {{ $team->getDisplayName() }}
                                             </a>
+
+                                            @if ($unreadCount > 0)
+                                                <span class="badge rounded-pill bg-danger notification-badge ms-2"
+                                                    data-user-id="{{ $team->employeeUser->user->id }}"
+                                                    style="
+                                                        font-size: 0.75rem !important;
+                                                        min-width: 24px !important;
+                                                        height: 24px !important;
+                                                        display: inline-flex !important;
+                                                        align-items: center !important;
+                                                        justify-content: center !important;
+                                                        padding: 0 6px !important;
+                                                        background-color: #dc3545 !important;
+                                                        color: white !important;
+                                                        border: 2px solid white !important;
+                                                        line-height: 1 !important;
+                                                        box-shadow: 0 0 6px rgba(220, 53, 69, 0.9) !important;
+                                                        opacity: 1 !important;
+                                                        visibility: visible !important;
+                                                    ">
+                                                    {{ $unreadCount }}
+                                                </span>
+
+
+                                            @endif
+
+
+
                                         </h6>
+
+
                                         <p class="mb-0 text-sm text-secondary">
-                                            {{ $team->employeeUser?->user?->email ?? '' }}</p>
+                                            {{ $team->employeeUser?->user?->email ?? '' }}
+                                        </p>
                                     </div>
-                                    <span class="p-1 bg-success rounded-circle ms-auto me-3">
+
+                                    <span class="p-2 bg-success rounded-circle ms-auto me-3"
+                                        style="width: 14px; height: 14px; display: inline-block; border: 2px solid white;">
                                         <span class="visually-hidden">Online</span>
                                     </span>
+
                                 </li>
                             @endforeach
-
                         </ul>
                         <div class="position-absolute bottom-0 end-0 p-3">
                             <a href="{{ route('contacts.index') }}" class="btn btn-sm btn-primary"
@@ -183,7 +230,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Fechar"></button>
                                     </div>
-                                    <div class="modal-body" id="chatMessages" style="max-height: 300px; overflow-y: auto;">
+                                    <div class="modal-body" id="chatMessages"
+                                        style="max-height: 300px; overflow-y: auto;">
                                         <p class="text-muted">Selecione um colega para iniciar uma conversa.</p>
                                     </div>
                                     <div class="modal-footer">
@@ -198,6 +246,8 @@
                             </div>
                         </div>
 
+
+
                         <!-- JavaScript para abrir modal e preencher dados -->
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
@@ -205,10 +255,13 @@
                                 const chatInput = document.getElementById('chatInput');
                                 const chatMessages = document.getElementById('chatMessages');
                                 const chatUserIdInput = document.getElementById('chatUserId');
+                                const modal = document.getElementById('chatModal');
 
+                                const currentUserId = {{ auth()->id() }}; // Passa o id do usuário logado para JS
                                 let refreshInterval = null;
                                 let currentChatUserId = null;
 
+                                // Função para carregar mensagens do chat
                                 function loadMessages(userId) {
                                     fetch(`/chat/messages/${userId}`)
                                         .then(res => res.json())
@@ -219,7 +272,7 @@
                                                 msgElem.classList.add('mb-1', 'text-sm', 'p-1', 'rounded');
                                                 msgElem.textContent = msg.message;
 
-                                                if (msg.sender_id == {{ auth()->id() }}) {
+                                                if (msg.sender_id == currentUserId) {
                                                     msgElem.classList.add('text-end', 'bg-light');
                                                 } else {
                                                     msgElem.classList.add('text-start', 'bg-secondary', 'text-white');
@@ -232,6 +285,56 @@
                                         });
                                 }
 
+                                // Remove badge de notificação para um usuário específico
+                                function removeNotificationBadge(userId) {
+                                    const badge = document.querySelector(`.notification-badge[data-user-id="${userId}"]`);
+                                    if (badge) badge.remove();
+                                }
+
+                                // Atualiza notificações de mensagens não lidas para todos os usuários
+                                function refreshNotifications() {
+                                    fetch('/chat/check-messages')
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            data.count.forEach(user => {
+                                                const badgeEl = document.querySelector(
+                                                    `.notification-badge[data-user-id="${user.id}"]`);
+                                                const usernameEl = document.querySelector(
+                                                    `.username[data-user-id="${user.id}"]`);
+
+                                                if (user.unread_count > 0) {
+                                                    if (!badgeEl && usernameEl) {
+                                                        const span = document.createElement('span');
+                                                        span.className =
+                                                            'badge rounded-pill bg-danger notification-badge ms-2';
+                                                        span.dataset.userId = user.id;
+                                                        span.style.cssText = `
+                                                            font-size: 0.75rem; 
+                                                            min-width: 24px; 
+                                                            height: 24px;
+                                                            display: inline-flex; 
+                                                            align-items: center; 
+                                                            justify-content: center;
+                                                            padding: 0 6px;
+                                                            background-color: #dc3545 !important; 
+                                                            color: white;
+                                                            border: 2px solid white; 
+                                                            line-height: 1;
+                                                            box-shadow: 0 0 6px rgba(220, 53, 69, 0.9);
+                                `;
+                                                        span.textContent = user.unread_count;
+                                                        usernameEl.appendChild(span);
+                                                    } else if (badgeEl) {
+                                                        badgeEl.textContent = user.unread_count;
+                                                    }
+                                                } else {
+                                                    if (badgeEl) badgeEl.remove();
+                                                }
+                                            });
+                                        });
+                                }
+
+                                // Ao clicar para abrir o chat
                                 document.querySelectorAll('.openChatModal').forEach(link => {
                                     link.addEventListener('click', function() {
                                         const userId = this.getAttribute('data-user');
@@ -244,10 +347,12 @@
                                         chatInput.value = '';
                                         chatMessages.innerHTML = '<p class="text-muted">Carregando mensagens...</p>';
 
-                                        // Carrega mensagens imediatamente
                                         loadMessages(userId);
 
-                                        // Inicia atualização automática a cada 3 segundos
+                                        // Remove badge ao abrir chat
+                                        removeNotificationBadge(userId);
+
+                                        // Inicia atualização periódica das mensagens do chat aberto
                                         if (refreshInterval) clearInterval(refreshInterval);
                                         refreshInterval = setInterval(() => {
                                             loadMessages(userId);
@@ -255,8 +360,7 @@
                                     });
                                 });
 
-                                // Quando o modal for fechado, interrompe a atualização
-                                const modal = document.getElementById('chatModal');
+                                // Para atualização quando modal for fechado
                                 modal.addEventListener('hidden.bs.modal', function() {
                                     if (refreshInterval) {
                                         clearInterval(refreshInterval);
@@ -265,6 +369,7 @@
                                     currentChatUserId = null;
                                 });
 
+                                // Envio do formulário de mensagem
                                 chatForm.addEventListener('submit', function(e) {
                                     e.preventDefault();
 
@@ -286,7 +391,6 @@
                                         .then(data => {
                                             if (data.success) {
                                                 chatInput.value = '';
-                                                // Recarrega mensagens após envio
                                                 loadMessages(receiverId);
                                             } else {
                                                 alert('Erro ao enviar a mensagem.');
@@ -296,10 +400,16 @@
                                             alert('Erro ao enviar a mensagem.');
                                         });
                                 });
+
+                            
+
+                                // Atualiza notificações a cada 3 segundos, uma única vez aqui
+                                setInterval(refreshNotifications, 3000);
+
+                                // Atualiza logo que a página carrega
+                                refreshNotifications();
                             });
                         </script>
-
-
 
 
                     </div>
@@ -421,5 +531,6 @@
                 <!-- Include:Footer -->
                 @include('layouts.common.footer')
             </div>
+
         @endsection
 </x-user-profile-layout>
