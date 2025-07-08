@@ -16,20 +16,20 @@
                             <span class="visually-hidden">New</span>
                         </span>
                     </span>
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    <a href="#" type="button" data-bs-toggle="modal"
                         data-bs-target="#onlineUsersModal">
                         <span class="btn-inner--text">({{ $onlineCount }}) Online</span>
-                    </button> </button>
-                <button type="button" class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0">
-                    <span class="btn-inner--icon">
-                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="d-block me-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                        </svg>
-                    </span>
-                    <span class="btn-inner--text">Atualizar dados</span>
-                </button>
+                    </a>
+                    <button type="button" class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0">
+                        <span class="btn-inner--icon">
+                            <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="d-block me-2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                        </span>
+                        <span class="btn-inner--text">Atualizar dados</span>
+                    </button>
             </div>
         </div>
     </div>

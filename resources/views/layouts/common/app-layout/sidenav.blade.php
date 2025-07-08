@@ -243,7 +243,7 @@
                             aria-hidden="true"></i>
                     </a>
                     <br><br>
-                    <a href="{{ route('logout') }}" class="font-weight-bold text-sm mb-0 icon-move-right pt-2 w-100 mb-0 text-danger opacity-9">
+                    <a href="{{ route('logout') }}" class="font-weight-bold text-sm mb-0 icon-move-right pt-2 w-100 mb-0 text-info">
                         Deslogar
                     </a>
                 </div>

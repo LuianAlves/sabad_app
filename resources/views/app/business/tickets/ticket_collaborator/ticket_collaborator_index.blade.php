@@ -1,8 +1,6 @@
 <x-user-profile-layout>
     @section('content-user-layout')
-        <div class="pt-7 pb-6 bg-cover" 
-     style="background-image: url('{{ asset('img/header-orange-purple.jpg') }}'); 
-            background-position: bottom;">
+        <div class="pt-7 pb-6 bg-info">
             
 </div>
 

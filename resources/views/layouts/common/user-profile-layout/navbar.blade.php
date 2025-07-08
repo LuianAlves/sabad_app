@@ -1,9 +1,12 @@
-<nav class="navbar bg-slate-900 navbar-expand-lg flex-wrap top-0 px-0 py-0">
+<nav class="navbar navbar-expand-lg flex-wrap top-0 px-0 py-0">
     <div class="container py-2">
         <nav aria-label="breadcrumb">
             <div class="d-flex align-items-center">
-                <span class="px-3 font-weight-bold text-lg text-white me-4">Sabad System</span>
+                <span class="fs-2">
+                    <span class="text-info">D</span>ry<span class="text-info">L</span>u
+                </span>
             </div>
+
         </nav>
         <ul class="navbar-nav d-none d-lg-flex">
             {{-- <li class="nav-item px-3 py-3 border-radius-sm  d-flex align-items-center">
@@ -125,7 +128,8 @@
                 <li class="nav-item dropdown pe-2 d-flex align-items-center">
                     <div class="avatar avatar-sm position-relative">
                         @if (auth()->check() && auth()->user()->image)
-                            <img src="{{ 'data:image/png;base64,' . auth()->user()->image }}" alt="profile_image" class="w-100 border-radius-md">
+                            <img src="{{ 'data:image/png;base64,' . auth()->user()->image }}" alt="profile_image"
+                                class="w-100 border-radius-md">
                         @endif
 
                     </div>
@@ -136,7 +140,10 @@
         </div>
     </div>
     <hr class="horizontal w-100 my-0 dark">
-    <div class="container pb-3 pt-3">
+</nav>
+
+<nav  class="navbar bg-dark navbar-expand-lg flex-wrap top-0 px-0 py-0">
+<div class="container pb-3 pt-3">
         <ul class="navbar-nav d-none d-lg-flex">
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
                 <a href="{{ route('user.show', auth()->user()) }}" class="nav-link text-white p-0">
@@ -144,7 +151,7 @@
                 </a>
             </li>
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
-                <a href="{{ route('ticket.collaborator.index')}}" class="nav-link text-white p-0">
+                <a href="{{ route('ticket.collaborator.index') }}" class="nav-link text-white p-0">
                     Abrir chamado
                 </a>
             </li>

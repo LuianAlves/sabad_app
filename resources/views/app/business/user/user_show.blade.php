@@ -1,8 +1,8 @@
 <x-user-profile-layout>
     @section('content-user-layout')
         <div class="pt-7
-                pb-6 bg-cover"
-            style="background-image: url('../img/header-orange-purple.jpg'); background-position: bottom;"></div>
+                pb-6 bg-cover bg-info"
+            ></div>
 
         <div class="container">
             <div class="card card-body py-2 bg-transparent shadow-none">
