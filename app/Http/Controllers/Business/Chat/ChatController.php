@@ -37,13 +37,11 @@ class ChatController extends Controller
     {
         $authId = auth()->id();
 
-        // Marca como lidas todas as mensagens recebidas ainda não lidas
         Message::where('sender_id', $userId)
             ->where('receiver_id', $authId)
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
-        // Busca as mensagens entre os dois usuários
         $messages = Message::where(function ($q) use ($authId, $userId) {
             $q->where('sender_id', $authId)
                 ->where('receiver_id', $userId);
@@ -52,8 +50,22 @@ class ChatController extends Controller
                 ->where('receiver_id', $authId);
         })->orderBy('created_at', 'asc')->get();
 
-        return response()->json($messages);
+        $messagesArr = $messages->map(function ($msg) {
+            $user = $msg->sender; 
+            return [
+                'id' => $msg->id,
+                'sender_id' => $msg->sender_id,
+                'message' => $msg->message,
+                'created_at' => $msg->created_at,
+                'avatar' => $user && $user->image
+                    ? 'data:image/png;base64,' . $user->image
+                    : '/img/profile/image_profile.webp',
+            ];
+        });
+
+        return response()->json($messagesArr);
     }
+
 
     /**
      * Lista todos os contatos (exceto o logado) e marca se há mensagens não lidas.
@@ -76,9 +88,10 @@ class ChatController extends Controller
         return view('app.business.contacts', compact('user', 'users')); // Passa o usuário autenticado
     }
 
-    public function checkMessages() {
+    public function checkMessages()
+    {
         $users = User::where('id', '!=', Auth::user()->id)->get();
-        
+
         foreach ($users as $contact) {
             $contact->unread_count = Message::where('sender_id', $contact->id)
                 ->where('receiver_id', Auth::user()->id)
@@ -88,7 +101,7 @@ class ChatController extends Controller
             $contact->has_unread_messages = $contact->unread_count > 0;
         }
 
-    //    dd($users);
+        //    dd($users);
 
         return response()->json([
             'status' => 'success',

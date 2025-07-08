@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        
+
 
         <div class="container my-3 py-3">
             <div class="row">
@@ -126,8 +126,6 @@
                             </div>
                         </div>
 
-
-
                         @php
                             $departmentId = auth()->user()?->employeeUser?->employee?->department_id;
                             $teams = collect();
@@ -191,8 +189,6 @@
                                                     ">
                                                     {{ $unreadCount }}
                                                 </span>
-
-
                                             @endif
 
 
@@ -223,16 +219,14 @@
                         <!-- Modal único para o chat -->
                         <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel"
                             aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-dialog modal-xl modal-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="chatModalLabel">Chat</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Fechar"></button>
                                     </div>
-                                    <div class="modal-body" id="chatMessages"
-                                        style="max-height: 300px; overflow-y: auto;">
-                                        <p class="text-muted">Selecione um colega para iniciar uma conversa.</p>
+                                    <div class="modal-body p-0" id="chatMessages" style="background:#ece5dd;">
                                     </div>
                                     <div class="modal-footer">
                                         <form id="chatForm" class="w-100 d-flex align-items-center gap-2">
@@ -268,21 +262,55 @@
                                         .then(messages => {
                                             chatMessages.innerHTML = '';
                                             messages.forEach(msg => {
-                                                const msgElem = document.createElement('div');
-                                                msgElem.classList.add('mb-1', 'text-sm', 'p-1', 'rounded');
-                                                msgElem.textContent = msg.message;
-
+                                                const msgContainer = document.createElement('div');
+                                                msgContainer.classList.add('d-flex', 'align-items-end', 'gap-2', 'mb-2');
                                                 if (msg.sender_id == currentUserId) {
-                                                    msgElem.classList.add('text-end', 'bg-light');
+                                                    msgContainer.classList.add('justify-content-end');
                                                 } else {
-                                                    msgElem.classList.add('text-start', 'bg-secondary', 'text-white');
+                                                    msgContainer.classList.add('justify-content-start');
                                                 }
 
-                                                chatMessages.appendChild(msgElem);
-                                            });
+                                                const avatar = document.createElement('img');
+                                                avatar.src = msg.avatar || '/img/profile/image_profile.webp';
+                                                avatar.alt = 'Avatar';
+                                                avatar.style.width = '32px';
+                                                avatar.style.height = '32px';
+                                                avatar.style.borderRadius = '50%';
+                                                avatar.style.objectFit = 'cover';
+                                                avatar.style.background = '#eee';
 
+                                                const msgElem = document.createElement('div');
+                                                msgElem.classList.add('msg');
+                                                msgElem.innerHTML = `
+        <div>${msg.message}</div>
+        <div class="text-end text-muted" style="font-size:11px; margin-top:2px;">${formatHora(msg.created_at)}</div>
+    `;
+                                                if (msg.sender_id == currentUserId) {
+                                                    msgElem.classList.add('msg-send');
+                                                } else {
+                                                    msgElem.classList.add('msg-receive');
+                                                }
+
+                                                if (msg.sender_id == currentUserId) {
+                                                    msgContainer.appendChild(msgElem);
+                                                    msgContainer.appendChild(avatar);
+                                                } else {
+                                                    msgContainer.appendChild(avatar);
+                                                    msgContainer.appendChild(msgElem);
+                                                }
+                                                chatMessages.appendChild(msgContainer);
+                                            });
                                             chatMessages.scrollTop = chatMessages.scrollHeight;
                                         });
+                                }
+
+                                function formatHora(dataString) {
+                                    const d = new Date(dataString);
+                                    let h = d.getHours();
+                                    let m = d.getMinutes();
+                                    if (h < 10) h = '0' + h;
+                                    if (m < 10) m = '0' + m;
+                                    return `${h}:${m}`;
                                 }
 
                                 // Remove badge de notificação para um usuário específico
@@ -345,7 +373,7 @@
                                         document.getElementById('chatModalLabel').textContent = `Chat com ${userName}`;
                                         chatUserIdInput.value = userId;
                                         chatInput.value = '';
-                                        chatMessages.innerHTML = '<p class="text-muted">Carregando mensagens...</p>';
+                                        chatMessages.innerHTML = '<p class="text-muted spinner-chat"></p>';
 
                                         loadMessages(userId);
 
@@ -401,7 +429,7 @@
                                         });
                                 });
 
-                            
+
 
                                 // Atualiza notificações a cada 3 segundos, uma única vez aqui
                                 setInterval(refreshNotifications, 3000);

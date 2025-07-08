@@ -1,22 +1,23 @@
 .nav-item .icon i {
-    font-size: 14px !important;
+  font-size: 14px !important;
 }
 
 .nav-item .nav-link-text {
-    margin-top: 3px !important;
+  margin-top: 3px !important;
 }
 
 .navbar-nav .nav-item .nav-link:hover {
   color: #78B6E7 !important;
 }
 
-.navbar-nav .nav-item .icon:hover, .navbar-nav .nav-item i:hover {
+.navbar-nav .nav-item .icon:hover,
+.navbar-nav .nav-item i:hover {
   color: #111111 !important;
   opacity: 1 !important;
 }
 
 .card-crud {
-    height: calc(100vh - 125px) !important;
+  height: calc(100vh - 125px) !important;
 }
 
 /* @media (min-width: 992px) and (max-width: 1910px) {
@@ -29,9 +30,67 @@
     table-layout: auto !important;
   }
 } */
- 
+
 .notification-badge {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: inline-flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-flex !important;
 }
+
+
+
+/* CHAT */
+.spinner-chat {
+  width: 24px;
+  height: 24px;
+  border: 6px solid #eee;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 100px auto;
+  display: block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#chatMessages {
+  height: 80vh !important;
+  overflow-y: auto !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  background: #ece5dd !important;
+}
+
+.msg {
+  max-width: 60%;
+  padding: 8px 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  position: relative;
+  word-break: break-word;
+  margin-bottom: 2px;
+}
+
+.msg-send {
+  background: #dcf8c6;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-receive {
+  background: #fff;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+/* END:CHAT */

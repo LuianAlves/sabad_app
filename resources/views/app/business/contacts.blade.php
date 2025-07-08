@@ -113,7 +113,7 @@
                     </span>
                 @endif
                 <div class="card-body d-flex align-items-center">
-               
+
 
 
                     <!-- Modal único para o chat -->
