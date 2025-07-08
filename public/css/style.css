@@ -61,6 +61,10 @@
   }
 }
 
+.modal-header .btn-close {
+  color: red !important;
+}
+
 #chatMessages {
   height: 80vh !important;
   overflow-y: auto !important;

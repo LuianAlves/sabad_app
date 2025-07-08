@@ -16,8 +16,10 @@
                             <span class="visually-hidden">New</span>
                         </span>
                     </span>
-                    <span class="btn-inner--text">(41) Online</span>
-                </button>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                        data-bs-target="#onlineUsersModal">
+                        <span class="btn-inner--text">({{ $onlineCount }}) Online</span>
+                    </button> </button>
                 <button type="button" class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0">
                     <span class="btn-inner--icon">
                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -28,6 +30,58 @@
                     </span>
                     <span class="btn-inner--text">Atualizar dados</span>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal com a lista de usuários online -->
+    <div class="modal fade" id="onlineUsersModal" tabindex="-1" aria-labelledby="onlineUsersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="onlineUsersModalLabel">Usuários Online ({{ $onlineCount }})</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nome</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($onlineUsers as $user)
+                                <tr>
+                                    <td style="width: 56px;">
+                                        @if ($user->image)
+                                            <img src="{{ 'data:image/png;base64,' . $user->image }}"
+                                                alt="{{ $user->name }}" class="rounded-circle"
+                                                style="width: 48px; height: 48px;">
+                                        @else
+                                            <img src="{{ asset('img/profile/image_profile.webp') }}"
+                                                alt="{{ $user->name }}" class="rounded-circle"
+                                                style="width: 48px; height: 48px;">
+                                        @endif
+                                    </td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-primary openChatModal"
+                                            data-bs-toggle="modal" data-bs-target="#chatModal"
+                                            data-user="{{ $user->id }}" data-name="{{ $user->name }}">
+                                            Chat
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">Nenhum usuário online.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -59,7 +113,8 @@
                                                 <span class="text-sm">de 100 dispositivos</span>
                                             </div>
 
-                                            <a href="{{ route('device.index') }}"><small class="font-weight-bold text-warning">Ver todos</small></a>
+                                            <a href="{{ route('device.index') }}"><small
+                                                    class="font-weight-bold text-warning">Ver todos</small></a>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +143,8 @@
                                                 <span class="text-sm">de 135 funcionários</span>
                                             </div>
 
-                                            <a href="{{ route('employee.index') }}"><small class="font-weight-bold text-warning">Ver todos</small></a>
+                                            <a href="{{ route('employee.index') }}"><small
+                                                    class="font-weight-bold text-warning">Ver todos</small></a>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +157,7 @@
                         <div class="card-body text-start p-3 w-100">
                             <div
                                 class="icon icon-shape icon-sm bg-warning text-white text-center border-radius-sm d-flex align-items-center justify-content-center mb-3">
-                            <i class="fas fa-concierge-bell text-white" style="font-size: 18px;"></i>
+                                <i class="fas fa-concierge-bell text-white" style="font-size: 18px;"></i>
                             </div>
                             <div class="row">
                                 <div class="col-12">
@@ -117,7 +173,8 @@
                                                 <span class="text-sm">de 27 serviços</span>
                                             </div>
 
-                                            <a href="{{ route('service.index') }}"><small class="font-weight-bold text-warning">Ver todos</small></a>
+                                            <a href="{{ route('service.index') }}"><small
+                                                    class="font-weight-bold text-warning">Ver todos</small></a>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +213,8 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     <div class="ms-2">
-                                                        <p class="text-dark fw-bold text-sm mb-0">{{ $employee->name }}</p>
+                                                        <p class="text-dark fw-bold text-sm mb-0">{{ $employee->name }}
+                                                        </p>
                                                         <p class="text-secondary text-sm mb-0">
                                                             {{ $employee->department->name }}</p>
                                                     </div>
@@ -181,7 +239,7 @@
             </div>
         </div>
     </div>
- 
+
     <!-- Gráfico de departamentos/funcionários -->
     <div class="row mb-4">
         <div class="col-12">

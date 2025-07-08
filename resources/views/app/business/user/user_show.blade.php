@@ -164,6 +164,7 @@
                                                 data-bs-toggle="modal" data-bs-target="#chatModal"
                                                 data-user="{{ $team->employeeUser->user->id }}"
                                                 data-name="{{ $team->getDisplayName() }}"
+                                                data-avatar="data:image/png;base64,{{ $team->employeeUser->user->image }}"
                                                 data-user-id="{{ $team->employeeUser->user->id }}">
                                                 {{ $team->getDisplayName() }}
                                             </a>
@@ -201,10 +202,14 @@
                                         </p>
                                     </div>
 
-                                    <span class="p-2 bg-success rounded-circle ms-auto me-3"
+                                    <span
+                                        class="p-2 {{ $team->employeeUser->user->isOnline() ? 'bg-success' : 'bg-secondary' }} rounded-circle ms-auto me-3"
                                         style="width: 14px; height: 14px; display: inline-block; border: 2px solid white;">
-                                        <span class="visually-hidden">Online</span>
+                                        <span class="visually-hidden">
+                                            {{ $team->employeeUser->user->isOnline() ? 'Online' : 'Offline' }}
+                                        </span>
                                     </span>
+
 
                                 </li>
                             @endforeach
@@ -222,9 +227,12 @@
                             <div class="modal-dialog modal-xl modal-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="chatModalLabel">Chat</h5>
+                                        <img id="chatModalAvatar" src="/img/profile/image_profile.webp" alt="Avatar"
+                                            style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#eee;">
+                                        <h5 class="modal-title" style="font-size: 16px; margin-left: 10px;"
+                                            id="chatModalLabel"></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Fechar"></button>
+                                            aria-label="Fechar"><b>X</b></button>
                                     </div>
                                     <div class="modal-body p-0" id="chatMessages" style="background:#ece5dd;">
                                     </div>
@@ -239,8 +247,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <!-- JavaScript para abrir modal e preencher dados -->
                         <script>
@@ -368,9 +374,14 @@
                                         const userId = this.getAttribute('data-user');
                                         const userName = this.getAttribute('data-name');
 
+                                        const avatarUrl = this.getAttribute('data-avatar') ||
+                                            '/img/profile/image_profile.webp';
+
                                         currentChatUserId = userId;
 
-                                        document.getElementById('chatModalLabel').textContent = `Chat com ${userName}`;
+                                        document.getElementById('chatModalLabel').textContent = `${userName}`;
+                                        document.getElementById('chatModalAvatar').src = avatarUrl;
+
                                         chatUserIdInput.value = userId;
                                         chatInput.value = '';
                                         chatMessages.innerHTML = '<p class="text-muted spinner-chat"></p>';

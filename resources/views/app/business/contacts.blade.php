@@ -67,7 +67,13 @@
                                     {{ $contact->unread_count }}
                                 </span>
 
-
+                                <span class="position-absolute top-0 start-0 translate-middle-y ms-3 mt-3"
+                                    style="width: 16px; height: 16px; display: inline-block;">
+                                    <span class="d-block rounded-circle border border-white"
+                                        style="width: 16px; height: 16px; background: {{ $contact->isOnline() ? '#28a745' : '#6c757d' }};"
+                                        title="{{ $contact->isOnline() ? 'Online' : 'Offline' }}">
+                                    </span>
+                                </span>
 
 
                                 <div class="card-body d-flex align-items-center">
@@ -112,6 +118,8 @@
                         <span class="visually-hidden">Mensagem não lida</span>
                     </span>
                 @endif
+
+
                 <div class="card-body d-flex align-items-center">
 
 

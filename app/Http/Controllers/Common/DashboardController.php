@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Common;
 use App\Http\Controllers\Controller;
 
 use App\Models\Business\Employee\Employee;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+
 
 use Carbon\Carbon;
 
@@ -20,8 +23,22 @@ class DashboardController extends Controller
             $employee->hired_in = Carbon::parse($employee->hired_in)->diffForhumans();
         });
 
+
+        /* Online Users */
+        $minutes = config('session.lifetime');
+        $onlineUserIds = DB::table('sessions')
+            ->where('last_activity', '>=', now()->subMinutes($minutes)->timestamp)
+            ->pluck('user_id')
+            ->unique()
+            ->filter();
+
+        $onlineUsers = User::whereIn('id', $onlineUserIds)->get();
+        $onlineCount = $onlineUsers->count();
+
         return view("app.dashboard", compact(
-            "recentEmployees"
+            "recentEmployees",
+            "onlineUsers",
+            "onlineCount"
         ));
     }
 }

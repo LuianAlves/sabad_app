@@ -18,6 +18,9 @@ use App\Models\Business\Chip\ChipControl\ChipControl;
 use App\Contracts\Auditable;
 use App\Models\Business\Tickets\Ticket;
 
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 class User extends Authenticatable implements Auditable
 {
     use HasApiTokens;
@@ -105,7 +108,7 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(Ticket::class);
     }
-    
+
     public function tasks()
     {
         return $this->hasMany(Task::class);
@@ -116,5 +119,13 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne(ChipControl::class, 'employee_id', 'id');
     }
 
+    public function isOnline()
+    {
+        $minutes = config('session.lifetime');
 
+        return DB::table('sessions')
+            ->where('user_id', $this->id)
+            ->where('last_activity', '>=', now()->subMinutes($minutes)->timestamp)
+            ->exists();
+    }
 }
