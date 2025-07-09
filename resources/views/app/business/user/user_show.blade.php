@@ -58,7 +58,7 @@
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Sobrenome:</span>
-                                    {{ explode(' ', auth()->user()->name)[1] }}
+                                    {{-- {{ explode(' ', auth()->user()->name)[1] }} --}}
 
                                 </li>
 
@@ -343,16 +343,16 @@
                                                             'badge rounded-pill bg-danger notification-badge ms-2';
                                                         span.dataset.userId = user.id;
                                                         span.style.cssText = `
-                                                            font-size: 0.75rem; 
-                                                            min-width: 24px; 
+                                                            font-size: 0.75rem;
+                                                            min-width: 24px;
                                                             height: 24px;
-                                                            display: inline-flex; 
-                                                            align-items: center; 
+                                                            display: inline-flex;
+                                                            align-items: center;
                                                             justify-content: center;
                                                             padding: 0 6px;
-                                                            background-color: #dc3545 !important; 
+                                                            background-color: #dc3545 !important;
                                                             color: white;
-                                                            border: 2px solid white; 
+                                                            border: 2px solid white;
                                                             line-height: 1;
                                                             box-shadow: 0 0 6px rgba(220, 53, 69, 0.9);
                                 `;
