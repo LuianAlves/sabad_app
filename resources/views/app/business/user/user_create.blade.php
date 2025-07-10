@@ -4,30 +4,8 @@
         <div class="col-12">
             <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
 
-                {{-- 
-                
-                Esse componente aqui é o cabeçalho da página: <x-card-header></x-card-header>
-
-                o "action" aceita os valores: 'cadastrar' e 'atualizar'
-                
-                Como essa view é a de create (usamos a rota de store) a gente usa o cadastrar.
-
-                na view de edit a gente colocaria action="atualizar"
-
-                OK
-
-                vou fazer a view de user_edit agora
-                Quer ver?
-
-                sim sim vamos lá
-                
-                --}}
                 <x-card-header title="Novo usuário" action="cadastrar"></x-card-header>
 
-                <!-- como a route é STORE, não precisa do id -->
-                <!-- Se a route for update, precisa enviar o :id junto -->
-                <!-- view create: não precisa do id -->
-                <!-- view edit:  precisa do id -->
                 <x-form route="store">
                     <div class="row">
                         <x-input col="6" set="" type="text" title="Nome do usuário" id="name"
