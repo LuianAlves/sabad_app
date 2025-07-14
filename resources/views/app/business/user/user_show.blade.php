@@ -58,7 +58,7 @@
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Sobrenome:</span>
-                                    {{-- {{ explode(' ', auth()->user()->name)[1] }} --}}
+                                    {{ explode(' ', auth()->user()->name)[1] }}
 
                                 </li>
 
@@ -288,9 +288,9 @@
                                                 const msgElem = document.createElement('div');
                                                 msgElem.classList.add('msg');
                                                 msgElem.innerHTML = `
-        <div>${msg.message}</div>
-        <div class="text-end text-muted" style="font-size:11px; margin-top:2px;">${formatHora(msg.created_at)}</div>
-    `;
+                                                    <div>${msg.message}</div>
+                                                    <div class="text-end text-muted" style="font-size:11px; margin-top:2px;">${formatHora(msg.created_at)}</div>
+                                                `;
                                                 if (msg.sender_id == currentUserId) {
                                                     msgElem.classList.add('msg-send');
                                                 } else {

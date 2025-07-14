@@ -141,7 +141,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ $current == 'chip_control' ? 'active' : '' }}" href="{{ route('chipcontrol.index') }}">
+                <a class="nav-link {{ $current == 'chipcontrol' ? 'active' : '' }}" href="{{ route('chipcontrol.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-microchip"></i>
@@ -225,6 +225,7 @@
                     <span class="nav-link-text ms-1">Contr. de patrimônio</span>
                 </a>
             </li>
+
         </ul>
     </div>
 
