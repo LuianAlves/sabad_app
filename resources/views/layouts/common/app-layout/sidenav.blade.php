@@ -225,6 +225,7 @@
                     <span class="nav-link-text ms-1">Contr. de patrimônio</span>
                 </a>
             </li>
+
         </ul>
     </div>
 

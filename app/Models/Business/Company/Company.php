@@ -4,6 +4,7 @@ namespace App\Models\Business\Company;
 
 use App\Contracts\Auditable;
 use App\Models\Business\Chip\Chip;
+use App\Models\Business\Room\Room;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Business\Chip\PhoneOperator\PhoneOperator;
@@ -37,8 +38,13 @@ class Company extends Model implements Auditable
         return $this->hasMany(Chip::class);
     }
 
-    public function phone_operators() 
+    public function phone_operators()
     {
         return $this->hasMany(PhoneOperator::class);
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
     }
 }

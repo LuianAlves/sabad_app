@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Business\Room\RoomController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -129,9 +130,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('chipcontrol', ChipControlController::class);
 
-    Route::resource('chip', ChipController::class);    
-    
+    Route::resource('chip', ChipController::class);
+
     Route::resource('extension', ExtensionController::class);
+
+    Route::resource('room', RoomController::class);
 
 
     Route::middleware('auth')->group(function () {
@@ -145,7 +148,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 
 
-    
+
     });
 
 
