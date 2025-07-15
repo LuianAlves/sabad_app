@@ -23,6 +23,7 @@ return [
     'activity-log' => 'Logs do Sistema',
     'heritage_control' => 'Controle de Patrimônios',
     'heritage' => 'Patrimônios',
+    'room' => 'Salas',
 
 
     'singular' => [
@@ -46,7 +47,7 @@ return [
         'activity-log' => 'logs do sistema',
         'heritage_control' => 'controle de patrimônios',
         'heritage' => 'patrimônio',
-
+        'room' => 'sala',
     ],
 
     'create' => 'Cadastro de',
