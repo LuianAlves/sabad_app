@@ -84,7 +84,7 @@ use App\Http\Controllers\Business\Extension\ExtensionController;
 //Chat
 use App\Http\Controllers\Business\Chat\ChatController;
 
-
+use App\Http\Controllers\Business\Booking\BookingController;
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATE ROUTES
@@ -135,6 +135,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('extension', ExtensionController::class);
 
     Route::resource('room', RoomController::class);
+
+    Route::middleware('auth')->group(function () {
+        Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
+        Route::get('bookings/{room}', [BookingController::class, 'show'])->name('bookings.show');
+        Route::get('bookings/{room}/create', [BookingController::class, 'create'])->name('bookings.create');
+        Route::post('bookings/{room}', [BookingController::class, 'store'])->name('bookings.store');
+    });
+
+
+
+
 
 
     Route::middleware('auth')->group(function () {

@@ -2,12 +2,12 @@
 
 namespace App\Models\Business\User;
 
-use Illuminate\Database\Eloquent\Model;
-
-use App\Models\User;
+use App\Models\Business\Booking\Booking;
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Extension\Extension;
 use App\Models\Business\Tickets\Ticket;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 class EmployeeUser extends Model
 {
@@ -34,5 +34,10 @@ class EmployeeUser extends Model
     public function extension()
     {
         return $this->belongsTo(Extension::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }
