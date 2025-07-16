@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Business\Room\RoomController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -142,6 +143,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('bookings/{room}/create', [BookingController::class, 'create'])->name('bookings.create');
         Route::post('bookings/{room}', [BookingController::class, 'store'])->name('bookings.store');
     });
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
+        Route::post('/notifications/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+    });
+
 
 
 
