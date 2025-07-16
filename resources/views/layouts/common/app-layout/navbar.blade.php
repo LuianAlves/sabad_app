@@ -33,6 +33,38 @@
                         </svg>
                     </a>
                 </li> --}}
+
+                @php
+                    $unreadNotifications = auth()->user()->notifications()->wherePivot('is_read', false)->latest()->take(5)->get();
+                    $unreadCount = $unreadNotifications->count();
+                @endphp
+
+                <li class="nav-item dropdown" id="notification-area">
+                    <a class="nav-link" href="#" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notificações">
+                        <i class="fa fa-bell"></i>
+                        @if($unreadCount > 0)
+                            <span class="badge bg-danger rounded-pill" id="notificationCountBadge">{{ $unreadCount }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" id="notificationDropdownMenu">
+                        @forelse($unreadNotifications as $not)
+                            <li>
+                                <a href="#" class="dropdown-item notification-item fw-bold" data-id="{{ $not->id }}">
+                                    <strong>{{ $not->title }}</strong><br>
+                                    {{ \Illuminate\Support\Str::limit($not->message, 50) }}
+                                </a>
+                            </li>
+                        @empty
+                            <li><span class="dropdown-item text-center">Nenhuma notificação</span></li>
+                        @endforelse
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a href="{{ route('notifications.index') }}" class="dropdown-item text-center">Ver todas</a></li>
+                    </ul>
+                </li>
+
+
+
                 <li class="nav-item dropdown pe-2 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -137,3 +169,91 @@
         </div>
     </div>
 </nav>
+
+<script>
+    // Função para atualizar o dropdown e badge via AJAX
+    function loadNotifications() {
+        fetch("{{ route('notifications.unread') }}")
+            .then(res => res.json())
+            .then(data => {
+                const badge = document.getElementById('notificationCountBadge');
+                const menu = document.getElementById('notificationDropdownMenu');
+
+                if (data.count > 0) {
+                    if (!badge) {
+                        // Cria badge se não existir
+                        const badgeSpan = document.createElement('span');
+                        badgeSpan.id = 'notificationCountBadge';
+                        badgeSpan.className = 'badge bg-danger rounded-pill';
+                        badgeSpan.textContent = data.count;
+                        document.getElementById('notificationDropdown').appendChild(badgeSpan);
+                    } else {
+                        badge.textContent = data.count;
+                        badge.style.display = 'inline-block';
+                    }
+                } else {
+                    if (badge) badge.style.display = 'none';
+                }
+
+                if (data.count === 0) {
+                    menu.innerHTML = '<li><span class="dropdown-item text-center">Nenhuma notificação</span></li>';
+                } else {
+                    menu.innerHTML = data.notifications.map(not => `
+                        <li>
+                            <a href="#" class="dropdown-item notification-item fw-bold" data-id="${not.id}">
+                                <strong>${not.title}</strong><br>
+                                ${not.message.length > 50 ? not.message.substring(0, 47) + '...' : not.message}
+                            </a>
+                        </li>
+                    `).join('') + `
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a href="{{ route('notifications.index') }}" class="dropdown-item text-center">Ver todas</a></li>`;
+                }
+            })
+            .catch(err => console.error('Erro ao carregar notificações:', err));
+    }
+
+    // Função para marcar como lida
+    function marcarComoLida(notificationId, element) {
+        fetch('{{ route('notifications.read') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ notification_id: notificationId })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove destaque no item
+                    element.classList.remove('fw-bold');
+                    element.style.opacity = '0.6'; // visual que já foi lida
+                    loadNotifications(); // Atualiza lista e badge
+                } else {
+                    alert('Erro ao marcar notificação como lida');
+                }
+            })
+            .catch(err => {
+                console.error('Erro na requisição:', err);
+                alert('Erro na comunicação com o servidor');
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Atualiza notificações no navbar a cada 10 segundos
+        loadNotifications();
+        setInterval(loadNotifications, 10000);
+
+        // Delegação de clique nos itens do dropdown para marcar como lida
+        document.getElementById('notificationDropdownMenu').addEventListener('click', function (e) {
+            const item = e.target.closest('.notification-item');
+            if (item) {
+                e.preventDefault();
+                const id = item.dataset.id;
+                marcarComoLida(id, item);
+            }
+        });
+    });
+</script>
+

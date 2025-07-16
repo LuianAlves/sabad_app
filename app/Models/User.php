@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Business\Company\Company;
+use App\Models\Business\Department\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -133,6 +134,19 @@ class User extends Authenticatable implements Auditable
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'notification_user')
+            ->withPivot('is_read')
+            ->withTimestamps();
+    }
+
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
 }
