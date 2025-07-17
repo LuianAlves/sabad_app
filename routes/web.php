@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
+use App\Http\Controllers\Business\Training\Training\TrainingController;
+use App\Http\Controllers\Business\Training\TrainingClass\TrainingClassController;
+use App\Http\Controllers\Business\Training\TrainingParticipant\TrainingParticipantController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -87,6 +89,7 @@ use App\Http\Controllers\Business\Extension\ExtensionController;
 use App\Http\Controllers\Business\Chat\ChatController;
 
 use App\Http\Controllers\Business\Booking\BookingController;
+
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATE ROUTES
@@ -138,38 +141,29 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('room', RoomController::class);
 
-    Route::resource('record_controls', RecordControlController::class);
-
-    Route::middleware('auth')->group(function () {
-        Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
-        Route::get('bookings/{room}', [BookingController::class, 'show'])->name('bookings.show');
-        Route::get('bookings/{room}/create', [BookingController::class, 'create'])->name('bookings.create');
-        Route::post('bookings/{room}', [BookingController::class, 'store'])->name('bookings.store');
+    Route::group(['prefix' => 'bookings'], function () {
+        Route::get('/', [BookingController::class, 'index'])->name('bookings.index');
+        Route::get('/{room}/create', [BookingController::class, 'create'])->name('bookings.create');
+        Route::get('/{room}', [BookingController::class, 'show'])->name('bookings.show');
+        Route::post('/{room}', [BookingController::class, 'store'])->name('bookings.store');
     });
 
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
-        Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
-        Route::post('/notifications/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-        Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/', [NotificationController::class, 'store'])->name('notifications.store');
+        Route::get('/create', [NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::get('/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
     });
 
-
-
-    Route::middleware('auth')->group(function () {
-        Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
-        Route::get('/chat/messages/{userId}', [ChatController::class, 'messages'])->name('chat.messages');
-        Route::get('/chat/check/message', [ChatController::class, 'checkMessages'])->name('check.messages');
-        Route::get('/contacts', [ChatController::class, 'contacts'])->name('contacts.index');
-        Route::get('/chat/check-messages', [UserController::class, 'checkMessages']);
-
-});
-
+    Route::group(['prefix' => 'chat'], function () {
+        Route::post('/send', [ChatController::class, 'send'])->name('chat.send');
+        Route::get('/messages/{userId}', [ChatController::class, 'messages'])->name('chat.messages');
+        Route::get('/check/message', [ChatController::class, 'checkMessages'])->name('check.messages');
+        Route::get('/check-messages', [UserController::class, 'checkMessages']);
     });
 
-
+    Route::get('/contacts', [ChatController::class, 'contacts'])->name('contacts.index');
 
     // Devices
     Route::group(['prefix' => 'device'], function () {
@@ -224,13 +218,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::resource('category', TicketCategoryController::class)->names('ticket_category');
     });
 
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/ticket/collaborator/create', [TicketCollaboratorController::class, 'create'])->name('ticket.collaborator.create');
-        Route::get('/ticket/collaborator/index', [TicketCollaboratorController::class, 'index'])->name('ticket.collaborator.index');
-    });
+    Route::get('/ticket/collaborator/create', [TicketCollaboratorController::class, 'create'])->name('ticket.collaborator.create');
+    Route::get('/ticket/collaborator/index', [TicketCollaboratorController::class, 'index'])->name('ticket.collaborator.index');
 
-
-    // Tasks
 
     Route::resource('maintenance', MaintenanceController::class);
 
@@ -238,15 +228,25 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('/collaborator', CollaboratorController::class);
 
+    // Tasks
     Route::resource('/task', TaskController::class);
 
-/*
-|--------------------------------------------------------------------------
-| CHART ROUTES
-|--------------------------------------------------------------------------
-*/
 
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+    // Trainings
+    Route::resource('/training', TrainingController::class)->names('training');
+
+    Route::resource('/training-class', TrainingClassController::class)->except('index', 'create');
+
+    Route::get('/training-class', [TrainingClassController::class, 'index'])->name('training-class.index');
+    Route::get('/training/training-class/create/{trainingId}', [TrainingClassController::class, 'create'])->name('training-class.create');
+    Route::post('/training/{trainingClassId}/email', [TrainingClassController::class, 'sendEmail'])->name('training.send-email');
+
+     /*
+    |--------------------------------------------------------------------------
+    | CHART ROUTES
+    |--------------------------------------------------------------------------
+    */
+
     Route::group(['prefix' => 'charts'], function () {
         /* --->| Employee per Department |<--- */
         Route::get('/employee', [ChartController::class, 'employeePerDepartment']);

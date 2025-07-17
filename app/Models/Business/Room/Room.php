@@ -4,6 +4,7 @@ namespace App\Models\Business\Room;
 
 use App\Models\Business\Booking\booking;
 use app\Models\Business\Company\Company;
+use App\Models\Business\Training\TrainingClass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ class Room extends Model
 
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'company_id',
         'name'
     ];
@@ -25,5 +26,10 @@ class Room extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function trainingClass()
+    {
+        return $this->hasMany(TrainingClass::class);
     }
 }

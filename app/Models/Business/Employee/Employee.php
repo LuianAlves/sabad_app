@@ -2,6 +2,7 @@
 
 namespace App\Models\Business\Employee;
 
+use App\Models\Business\Training\TrainingClass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -91,5 +92,10 @@ class Employee extends Model implements Auditable
     {
         return $this->hasOne(Extension::class, 'employee_id');
     }
-    
+
+    public function trainingClass()
+    {
+        return $this->hasMany(TrainingClass::class, 'instructor_id', 'id');
+    }
+
 }

@@ -3,63 +3,74 @@
 namespace App\Http\Controllers\Business\Training\Training;
 
 use App\Http\Controllers\Controller;
+use App\Models\Business\Training\Training;
 use Illuminate\Http\Request;
 
 class TrainingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // List all trainings
     public function index()
     {
-        //
+        $trainings = Training::all();
+
+        return view('app.business.training.training.training_index', compact('trainings'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show form to create
     public function create()
     {
-        //
+        return view('app.business.training.training.training_create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store new training
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Training::create($data);
+
+        return redirect()->route('training.index')
+            ->with('success', 'Training criado.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $training = Training::where('id', $id)->firstOrFail();
+
+        return view('app.business.training.training.training_show', compact('training'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $training = Training::where('id', $id)->firstOrFail();
+
+        return view('app.business.training.training.training_edit', compact('training'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Update existing training
+    public function update(Request $request, Training $training)
     {
-        //
+        $data = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $training->update($data);
+
+        return redirect()->route('training.index')
+            ->with('success', 'Training atualizado.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Delete a training
+    public function destroy($id)
     {
-        //
+        $training = Training::where('id', $id)->firstOrFail();
+
+        $training->delete();
+
+        return redirect()->route('training.index')->with('success', 'Training removido.');
     }
 }
