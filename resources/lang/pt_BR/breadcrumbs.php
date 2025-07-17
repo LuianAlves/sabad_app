@@ -23,6 +23,9 @@ return [
     'activity-log' => 'Logs do Sistema',
     'heritage_control' => 'Controle de Patrimônios',
     'heritage' => 'Patrimônios',
+    'room' => 'Salas de Reunião / Treinamento',
+    'bookings' => 'Agendamento de Salas',
+
 
     'singular' => [
         'user' => 'usuário',
@@ -45,6 +48,8 @@ return [
         'activity-log' => 'logs do sistema',
         'heritage_control' => 'controle de patrimônios',
         'heritage' => 'patrimônio',
+        'room' => 'sala de reunião / treinamento',
+        'bookings' => 'agendamento de salas',
     ],
 
     'create' => 'Cadastro de',

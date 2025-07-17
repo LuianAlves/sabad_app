@@ -194,6 +194,26 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link {{ $current == 'room' ? 'active' : '' }}" href="{{ route('room.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-house"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Salas</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ $current == 'bookings' ? 'active' : '' }}" href="{{ route('bookings.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-house-laptop"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Agendamento de Sala</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link {{ $current == 'activity-log' ? 'active' : '' }}"
                     href="{{ route('activity-log.index') }}">
                     <div
@@ -225,6 +245,7 @@
                     <span class="nav-link-text ms-1">Contr. de patrimônio</span>
                 </a>
             </li>
+
         </ul>
     </div>
 

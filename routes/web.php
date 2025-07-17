@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Business\Room\RoomController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -83,7 +85,7 @@ use App\Http\Controllers\Business\Extension\ExtensionController;
 //Chat
 use App\Http\Controllers\Business\Chat\ChatController;
 
-
+use App\Http\Controllers\Business\Booking\BookingController;
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATE ROUTES
@@ -129,9 +131,32 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('chipcontrol', ChipControlController::class);
 
-    Route::resource('chip', ChipController::class);    
-    
+    Route::resource('chip', ChipController::class);
+
     Route::resource('extension', ExtensionController::class);
+
+    Route::resource('room', RoomController::class);
+
+    Route::middleware('auth')->group(function () {
+        Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
+        Route::get('bookings/{room}', [BookingController::class, 'show'])->name('bookings.show');
+        Route::get('bookings/{room}/create', [BookingController::class, 'create'])->name('bookings.create');
+        Route::post('bookings/{room}', [BookingController::class, 'store'])->name('bookings.store');
+    });
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/notifications/create', [NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
+        Route::post('/notifications/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+    });
+
+
+
+
+
 
 
     Route::middleware('auth')->group(function () {
@@ -145,7 +170,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 
 
-    
+
     });
 
 

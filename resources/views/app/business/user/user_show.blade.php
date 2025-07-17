@@ -58,7 +58,11 @@
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Sobrenome:</span>
+
+                                    {{ explode(' ', auth()->user()->name)[1] }}
+
                                      {{ explode(' ', auth()->user()->name)[1] }}
+
 
                                 </li>
 
