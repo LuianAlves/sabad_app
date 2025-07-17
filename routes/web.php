@@ -233,15 +233,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 
     // Trainings
-    Route::group(['prefix' => 'training'], function () {
-        Route::resource('/',TrainingController::class)->names('training');
-        Route::post('/{trainingId}/participants/random',[TrainingClassController::class, 'randomizeParticipants'])->name('training.participant-random');
-        Route::post('/{trainingId}/email',[TrainingController::class, 'sendEmail'])->name('training.send-email');
+    Route::resource('/training', TrainingController::class)->names('training');
 
-        Route::resource('/class',TrainingClassController::class)->names('training-class');
-        Route::resource('/participant',TrainingParticipantController::class)->names('training-participant');
-    });
+    Route::resource('/training-class', TrainingClassController::class)->except('index', 'create');
 
+    Route::get('/training-class', [TrainingClassController::class, 'index'])->name('training-class.index');
+    Route::get('/training/training-class/create/{trainingId}', [TrainingClassController::class, 'create'])->name('training-class.create');
+
+//    Route::group(['prefix' => 'training'], function () {
+//        Route::post('/{trainingId}/participants/random', [TrainingClassController::class, 'randomizeParticipants'])->name('training.participant-random');
+//        Route::post('/{trainingId}/email', [TrainingController::class, 'sendEmail'])->name('training.send-email');
+//
+//
+//        Route::resource('/participant', TrainingParticipantController::class)->names('training-participant');
+//    });
 
 
     /*

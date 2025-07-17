@@ -3,6 +3,7 @@
 namespace App\Models\Business\Training;
 
 use App\Models\Business\Employee\Employee;
+use App\Models\Business\Room\Room;
 use Illuminate\Database\Eloquent\Model;
 
 class TrainingClass extends Model
@@ -25,5 +26,15 @@ class TrainingClass extends Model
     public function participants() {
         return $this->belongsToMany(Employee::class,'training_participants','training_class_id','employee_id')
             ->withTimestamps();
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Employee::class, 'instructor_id', 'id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
     }
 }

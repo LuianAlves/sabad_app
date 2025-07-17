@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Business\Training\TrainingClass;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TrainingInvite;
+use App\Models\Business\Company\Company;
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Room\Room;
 use App\Models\Business\Training\Training;
@@ -15,17 +16,23 @@ class TrainingClassController extends Controller
 {
     public function index()
     {
-        $turmas = Turma::with(['training', 'instructor', 'participants'])->get();
-        return view('turmas.index', compact('turmas'));
+        $trainingClasss = TrainingClass::with(['training', 'room', 'participants'])->get();
+
+        return view('app.business.training.training_class.training_class_index', compact('trainingClasss'));
     }
 
-    public function create()
+    public function create($trainingId)
     {
-        $trainings   = Training::all();
-        $instructors = Employee::all();
-        $meetClasses = Room::all();
+        $training   = Training::where('id', $trainingId)->firstOrFail();
 
-        return view('turmas.create', compact('trainings','instructors','meetClasses'));
+        $instructors = Employee::all();
+        $rooms = Room::all();
+
+        $participants = Employee::all();
+
+        $companies = Company::all();
+
+        return view('app.business.training.training_class.training_class_create', compact('training','instructors', 'rooms', 'companies', 'participants'));
     }
 
 
@@ -38,16 +45,18 @@ class TrainingClassController extends Controller
             'start_date'    => 'required|date',
         ]);
 
-        TrainingClass::create($r->only([
-            'training_id',
-            'room_id',
-            'instructor_id',
-            'external_instructor_name',
-            'external_instructor_email',
-            'capacity',
-            'start_date',
-            'end_date'
-        ]));
+        dd($r->all());
+
+        $training = TrainingClass::create([
+            'training_id' => $r->training_id,
+            'room_id' => $r->room_id,
+            'instructor_id' => $r->instructor_id,
+            'external_instructor_name' => $r->external_instructor_name,
+            'external_instructor_email' => $r->external_instructor_email,
+            'capacity' => $r->capacity,
+            'start_date' => $r->start_date,
+            'end_date' => $r->end_date
+        ]);
 
         return back()->with('success','Turma criada.');
     }
