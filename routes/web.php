@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
@@ -169,9 +170,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 });
 
 
+        Route::resource('recordcontrol', RecordControlController::class);
 
 
-    });
+
+});
 
 
 
