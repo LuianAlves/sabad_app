@@ -17,9 +17,10 @@ return new class extends Migration
             $table->foreignId('training_id')->constrained()->onDelete('cascade');
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
 
-            $table->foreignId('instructor_id')->constrained('employees')->onDelete('cascade');
-            $table->string('external_instructor_name')->nullable()->after('instructor_id');
-            $table->string('external_instructor_email')->nullable()->after('external_instructor_name');
+            $table->unsignedBigInteger('instructor_id')->nullable();
+
+            $table->string('external_instructor_name')->nullable();
+            $table->string('external_instructor_email')->nullable();
 
             $table->integer('capacity');
             $table->date('start_date');
