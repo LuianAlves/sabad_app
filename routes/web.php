@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Business\Room\RoomController;
+use App\Http\Controllers\Business\Training\Training\TrainingController;
+use App\Http\Controllers\Business\Training\TrainingClass\TrainingClassController;
+use App\Http\Controllers\Business\Training\TrainingParticipant\TrainingParticipantController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -162,8 +165,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('/contacts', [ChatController::class, 'contacts'])->name('contacts.index');
 
-
-// Devices
+    // Devices
     Route::group(['prefix' => 'device'], function () {
         Route::resource('/', DeviceController::class)->names('device');
 
@@ -185,7 +187,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::resource('control', DeviceControlController::class)->names('device_control');
     });
 
-// Heritages
+    // Heritages
     Route::group(['prefix' => 'heritage'], function () {
         Route::resource('/', HeritageController::class)->names('heritage');
 
@@ -209,7 +211,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('license', LicenseController::class);
 
-// Tickets
+    // Tickets
     Route::group(['prefix' => 'ticket'], function () {
         Route::resource('/', TicketController::class)->names('ticket');
         Route::post('ticket-status/update/{ticketId}', [TicketStatusController::class, 'openToInProgress'])->name('update-ticket-status-open');
@@ -220,15 +222,27 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/ticket/collaborator/index', [TicketCollaboratorController::class, 'index'])->name('ticket.collaborator.index');
 
 
-// Tasks
-
     Route::resource('maintenance', MaintenanceController::class);
 
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 
     Route::resource('/collaborator', CollaboratorController::class);
 
+    // Tasks
     Route::resource('/task', TaskController::class);
+
+
+    // Trainings
+    Route::group(['prefix' => 'training'], function () {
+        Route::resource('/',TrainingController::class)->names('training');
+        Route::post('/{trainingId}/participants/random',[TrainingClassController::class, 'randomizeParticipants'])->name('training.participant-random');
+        Route::post('/{trainingId}/email',[TrainingController::class, 'sendEmail'])->name('training.send-email');
+
+        Route::resource('/class',TrainingClassController::class)->names('training-class');
+        Route::resource('/participant',TrainingParticipantController::class)->names('training-participant');
+    });
+
+
 
     /*
     |--------------------------------------------------------------------------
