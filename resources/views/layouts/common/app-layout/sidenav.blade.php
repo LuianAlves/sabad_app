@@ -246,6 +246,28 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link {{ $current == 'notifications' ? 'active' : '' }}"
+                   href="{{ route('notifications.create') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Criar Notificação</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {{ $current == 'record_controls' ? 'active' : '' }}"
+                   href="{{ route('record_controls.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-file"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Controle de Docs</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 

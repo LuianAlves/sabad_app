@@ -25,6 +25,8 @@ return [
     'heritage' => 'Patrimônios',
     'room' => 'Salas de Reunião / Treinamento',
     'bookings' => 'Agendamento de Salas',
+    'record_controls' => 'Controle de Documentos',
+    'notifications' => 'Notificações',
 
 
     'singular' => [
@@ -50,6 +52,8 @@ return [
         'heritage' => 'patrimônio',
         'room' => 'sala de reunião / treinamento',
         'bookings' => 'agendamento de salas',
+        'record_controls' => 'controle de documento',
+        'notifications' => 'notificação',
     ],
 
     'create' => 'Cadastro de',
