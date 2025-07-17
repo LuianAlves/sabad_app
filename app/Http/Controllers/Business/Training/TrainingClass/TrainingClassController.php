@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Business\Training\TrainingClass;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TrainingInvite;
+use App\Models\Business\Booking\Booking;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Employee\Employee;
 use App\Models\Business\Room\Room;
 use App\Models\Business\Training\Training;
 use App\Models\Business\Training\TrainingClass;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class TrainingClassController extends Controller
 {
@@ -23,7 +26,7 @@ class TrainingClassController extends Controller
 
     public function create($trainingId)
     {
-        $training   = Training::where('id', $trainingId)->firstOrFail();
+        $training = Training::where('id', $trainingId)->firstOrFail();
 
         $instructors = Employee::all();
         $rooms = Room::all();
@@ -32,73 +35,155 @@ class TrainingClassController extends Controller
 
         $companies = Company::all();
 
-        return view('app.business.training.training_class.training_class_create', compact('training','instructors', 'rooms', 'companies', 'participants'));
+        return view('app.business.training.training_class.training_class_create', compact('training', 'instructors', 'rooms', 'companies', 'participants'));
     }
 
 
-    public function store(Request $r)
+    public function store(Request $request)
     {
-        $r->validate([
-            'training_id'   => 'required|exists:trainings,id',
-            'room_id' => 'required|exists:rooms,id',
-            'capacity'      => 'required|integer|min:1',
-            'start_date'    => 'required|date',
-        ]);
+//        dd($request->all());
 
-        dd($r->all());
+        // monte as regras normalmente
+        $rules = [
+            'training_id'                => 'required|exists:trainings,id',
+            'capacity'                   => 'required|integer|min:1',
+            'groups'                     => 'required|array',
+            'groups.*.start_datetime'    => 'required|date',
+            'groups.*.end_datetime'      => 'required|date|after:groups.*.start_datetime',
+            'groups.*.room_id'           => 'required|exists:rooms,id',
+            'groups.*.instructor_id'     => 'required|exists:employees,id',
+            'groups.*.participant_ids'   => 'required|array|min:1',
+            'groups.*.participant_ids.*' => 'exists:employees,id',
+        ];
 
-        $training = TrainingClass::create([
-            'training_id' => $r->training_id,
-            'room_id' => $r->room_id,
-            'instructor_id' => $r->instructor_id,
-            'external_instructor_name' => $r->external_instructor_name,
-            'external_instructor_email' => $r->external_instructor_email,
-            'capacity' => $r->capacity,
-            'start_date' => $r->start_date,
-            'end_date' => $r->end_date
-        ]);
+        // em vez de $request->validate, use o Validator para inspecionar erros
+        $validator = Validator::make($request->all(), $rules);
 
-        return back()->with('success','Turma criada.');
-    }
+        if ($validator->fails()) {
+            // aqui você vai ver exatamente quais regras não estão passando
+            dd(
+                'Requisição:',
+                $request->all(),
+                'Erros de validação:',
+                $validator->errors()->toArray()
+            );
+        }
 
-    public function randomizeParticipants(TrainingClass $trainingClass)
-    {
-        $need = $trainingClass->capacity - $trainingClass->participants()->count();
-        $cands = Employee::where('business_id', $trainingClass->training->business_id)
-            ->whereNotIn('id', $trainingClass->participants->pluck('id'))
-            ->inRandomOrder()->get();
+        // se caiu aqui, então *todas* as regras passaram
+//        dd('passou');
 
-        $selected = collect();
-        // garante pelo menos 1 por departamento
-        foreach ($cands as $c) {
-            if ($selected->count() >= $trainingClass->capacity) break;
-            if (!$selected->where('department_id', $c->department_id)->count()) {
-                $selected->push($c);
+        $errors = [];
+
+        foreach ($request->groups as $i => $g) {
+            $start = Carbon::parse($g['start_datetime']);
+            $end = Carbon::parse($g['end_datetime']);
+
+            // 1) conflito na bookings?
+            $busyRoom = Booking::where('room_id', $g['room_id'])
+                ->where(function ($q) use ($start, $end) {
+                    $q->whereBetween('start_time', [$start, $end])
+                        ->orWhereBetween('end_time', [$start, $end])
+                        ->orWhere(function ($q2) use ($start, $end) {
+                            $q2->where('start_time', '<', $start)
+                                ->where('end_time', '>', $end);
+                        });
+                })
+                ->exists();
+            if ($busyRoom) {
+                return back()
+                    ->withErrors(["groups.$i.room_id" => "Sala ocupada entre {$start->format('H:i')} e {$end->format('H:i')}"])
+                    ->withInput();
+            }
+
+            // 2) conflito do instrutor?
+            $busyInstr = TrainingClass::where('instructor_id', $g['instructor_id'])
+                ->where(function ($q) use ($start, $end) {
+                    $q->whereBetween('start_date', [$start, $end])
+                        ->orWhereBetween('end_date', [$start, $end])
+                        ->orWhere(function ($q2) use ($start, $end) {
+                            $q2->where('start_date', '<', $start)
+                                ->where('end_date', '>', $end);
+                        });
+                })
+                ->exists();
+            if ($busyInstr) {
+                return back()
+                    ->withErrors(["groups.$i.instructor_id" => "Instrutor ocupado entre {$start->format('H:i')} e {$end->format('H:i')}"])
+                    ->withInput();
             }
         }
-        // preenche o resto aleatoriamente
-        if ($selected->count() < $trainingClass->capacity) {
-            $extra = $cands->diff($selected)->take($trainingClass->capacity - $selected->count());
-            $selected = $selected->merge($extra);
+
+
+        if (!empty($errors)) {
+            return back()->withErrors($errors)->withInput();
         }
-        $trainingClass->participants()->sync($selected->pluck('id'));
-        return back()->with('success', 'Participantes sorteados.');
+
+        // se tudo ok, cria cada turma + vincula participants
+        foreach ($request->groups as $g) {
+            $tc = TrainingClass::create([
+                'training_id' => $request->training_id,
+                'instructor_id' => $g['instructor_id'],
+                'room_id' => $g['room_id'],
+                'capacity' => $request->capacity,
+                'start_date' => Carbon::parse($g['start_datetime'])->toDateString(),
+                'end_date' => $end->toDateString()
+            ]);
+
+            // pivot participants
+            $tc->participants()->attach($g['participant_ids']);
+        }
+
+        // depois de criar a TrainingClass…
+        Booking::create([
+            'user_id' => auth()->id(),
+            'room_id' => $g['room_id'],
+            'title' => "Treinamento #{$tc->id}",
+            'start_time' => $start,
+            'end_time' => $end,
+        ]);
+
+
+        return redirect()
+            ->route('training-class.index')
+            ->with('success', 'Turmas criadas com sucesso.');
     }
 
+
     // 2) Envio de e-mail via template dinâmico
-    public function sendEmail(Request $r, TrainingClass $trainingClass)
+    public function sendEmail(Request $r, $trainingClassId)
     {
         $tpl = $r->input('template');
+
+        $trainingClass = TrainingClass::with('participants.employeeUser.user')->find($trainingClassId);
+
         foreach ($trainingClass->participants as $p) {
             $msg = str_replace(
-                ['{COLABORADOR}', '{TREINAMENTO}', '{DATA_TREINAMENTO}'],
-                [$p->name, $trainingClass->training->title,
-                    \Carbon\Carbon::parse($trainingClass->start_date)->format('d/m/Y')],
+                ['{COLABORADOR}','{TREINAMENTO}','{DATA_TREINAMENTO}'],
+                [
+                    $p->name,
+                    $trainingClass->training->title,
+                    Carbon::parse($trainingClass->start_datetime)
+                        ->format('d/m/Y H:i')
+                ],
                 $tpl
             );
 
-            Mail::to($p->user->email)->queue(new TrainingInvite($msg));
+            try {
+                Mail::to($p->employeeUser->user->email)
+                    ->send(new \App\Mail\TrainingInvite($msg));
+            } catch (\Throwable $e) {
+                // em vez de esconder, mostre o erro:
+                dd("Falha ao enviar para {$p->employeeUser->user->email}", $e->getMessage());
+            }
         }
-        return back()->with('success', 'E-mails enviados.');
+
+
+
+        if (!empty($errors)) {
+            return back()
+                ->with('error', 'Falha ao enviar para: '.implode(', ', $errors));
+        }
+
+        return back()->with('success', 'E‑mails enviados com sucesso.');
     }
 }

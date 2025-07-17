@@ -239,17 +239,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('/training-class', [TrainingClassController::class, 'index'])->name('training-class.index');
     Route::get('/training/training-class/create/{trainingId}', [TrainingClassController::class, 'create'])->name('training-class.create');
+    Route::post('/training/{trainingClassId}/email', [TrainingClassController::class, 'sendEmail'])->name('training.send-email');
 
-//    Route::group(['prefix' => 'training'], function () {
-//        Route::post('/{trainingId}/participants/random', [TrainingClassController::class, 'randomizeParticipants'])->name('training.participant-random');
-//        Route::post('/{trainingId}/email', [TrainingController::class, 'sendEmail'])->name('training.send-email');
-//
-//
-//        Route::resource('/participant', TrainingParticipantController::class)->names('training-participant');
-//    });
-
-
-    /*
+     /*
     |--------------------------------------------------------------------------
     | CHART ROUTES
     |--------------------------------------------------------------------------
