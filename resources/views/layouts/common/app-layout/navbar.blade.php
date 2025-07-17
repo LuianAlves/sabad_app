@@ -43,7 +43,7 @@
                     <a class="nav-link" href="#" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notificações">
                         <i class="fa fa-bell"></i>
                         @if($unreadCount > 0)
-                            <span class="badge bg-danger rounded-pill" id="notificationCountBadge">{{ $unreadCount }}</span>
+                            <span class="badge rounded-pill bg-danger notification-badge ms-2" id="notificationCountBadge">{{ $unreadCount }}</span>
                         @endif
                     </a>
 
@@ -192,7 +192,10 @@
                         badge.style.display = 'inline-block';
                     }
                 } else {
-                    if (badge) badge.style.display = 'none';
+                    if (badge) {
+
+                        badge.remove();
+                    };
                 }
 
                 if (data.count === 0) {
@@ -226,10 +229,13 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    // Remove destaque no item
                     element.classList.remove('fw-bold');
-                    element.style.opacity = '0.6'; // visual que já foi lida
-                    loadNotifications(); // Atualiza lista e badge
+                    element.style.opacity = '0.6';
+
+                    // Aguarda 300ms antes de atualizar lista/badge
+                    setTimeout(() => {
+                        loadNotifications();
+                    }, 300);
                 } else {
                     alert('Erro ao marcar notificação como lida');
                 }
@@ -239,6 +245,7 @@
                 alert('Erro na comunicação com o servidor');
             });
     }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         // Atualiza notificações no navbar a cada 10 segundos

@@ -138,6 +138,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('room', RoomController::class);
 
+    Route::resource('record_controls', RecordControlController::class);
+
     Route::middleware('auth')->group(function () {
         Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
         Route::get('bookings/{room}', [BookingController::class, 'show'])->name('bookings.show');
@@ -156,10 +158,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 
 
-
-
-
-
     Route::middleware('auth')->group(function () {
         Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
         Route::get('/chat/messages/{userId}', [ChatController::class, 'messages'])->name('chat.messages');
@@ -169,12 +167,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 });
 
-
-        Route::resource('recordcontrol', RecordControlController::class);
-
-
-
-});
+    });
 
 
 

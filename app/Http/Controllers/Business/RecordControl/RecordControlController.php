@@ -14,11 +14,34 @@ use Illuminate\Support\Facades\Request;
 class RecordControlController extends Controller
 {
 
-    public function index(Department $department)
+    public function index()
     {
-        $records = RecordControl::where('department_id', $department->id)->with('employee')->get();
-        return view('app.business.record_control.record_controls_index', compact('records', 'department'));
+        $user = auth()->user();
+        $employee = $user->employeeUser->employee ?? null;
+        $department = $employee->department ?? null;
+
+        if (!$department) {
+            abort(403, 'Usuário não está vinculado a nenhum departamento.');
+        }
+
+        // Buscar registros só do departamento do usuário, com os relacionamentos
+        $records = RecordControl::where('department_id', $department->id)
+            ->with('employee.department.company')
+            ->get();
+
+        // Agrupar por empresa e departamento (vai ser só um departamento, mas fica organizado)
+        $grouped = $records->groupBy(function ($item) {
+            return $item->employee->department->company->name ?? 'Sem Empresa';
+        })->map(function ($companyGroup) {
+            return $companyGroup->groupBy(function ($item) {
+                return $item->employee->department->name ?? 'Sem Departamento';
+            });
+        });
+
+        return view('app.business.record_control.record_controls_index', compact('grouped', 'department','records'));
     }
+
+
 
     public function create(Department $department)
     {
@@ -44,4 +67,12 @@ class RecordControlController extends Controller
 
         return redirect()->route('record_controls.index', $department)->with('success', 'Registro adicionado.');
     }
+
+    public function show($id)
+    {
+        $recordcontrol = RecordControl::find($id);
+
+        return view('app.business.record_control.record_controls_show', compact('recordcontrol'));
+    }
+
 }

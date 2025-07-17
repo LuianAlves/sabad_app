@@ -4,9 +4,23 @@
     <form method="POST" action="{{ route('record_controls.store', $department) }}">
         @csrf
 
-        php
-        <input type="hidden" name="employee_id" value="{{ auth()->user()->employeeUser->employee->id ?? '' }}">
-        <input type="hidden" name="department_id" value="{{ $department->id }}">
+
+        @php
+            $user = auth()->user();
+            $employee = $user->employeeUser->employee ?? null;
+            $department = $employee->department ?? null;
+            $company = $department->company ?? null;
+        @endphp
+
+        <p><strong>Funcionário:</strong> {{ $user->name }}</p>
+        <p><strong>Departamento:</strong>
+            {{ $department->name ?? 'Não definido' }} /
+            {{ $company->name ?? 'Não definido' }}
+        </p>
+
+        <input type="hidden" name="employee_id" value="{{ $employee->id ?? '' }}">
+        <input type="hidden" name="department_id" value="{{ $department->id ?? '' }}">
+
 
         <input name="identificacao" class="form-control mb-2" placeholder="Identificação do Registro" required>
         <input name="forma_armazenamento" class="form-control mb-2" placeholder="Forma de Armazenamento" required>

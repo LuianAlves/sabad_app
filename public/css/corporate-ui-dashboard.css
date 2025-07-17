@@ -27578,5 +27578,12 @@ button.swiper-pagination-bullet {
     visibility: visible !important;
     display: inline-flex !important;
 }
+#notificationCountBadge {
+    background-color: #dc3545 !important; /* vermelho Bootstrap padrão, pode usar outro tom */
+    color: #fff !important; /* texto branco */
+    opacity: 1 !important; /* sem transparência */
+    font-weight: bold; /* mais destaque no texto */
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.7); /* sombra leve para destacar */
+}
 
 /*# sourceMappingURL=dashboard-free.css.map */
