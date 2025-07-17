@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRecordControlRequest;
 use App\Http\Requests\UpdateRecordControlRequest;
 use App\Models\Business\Department\Department;
+use App\Models\Business\Employee\Employee;
 use App\Models\RecordControl;
 use Illuminate\Support\Facades\Request;
+
 
 class RecordControlController extends Controller
 {
@@ -15,29 +17,22 @@ class RecordControlController extends Controller
     public function index(Department $department)
     {
         $records = RecordControl::where('department_id', $department->id)->with('employee')->get();
-        return view('app.business.record_control.record_controls.index', compact('records', 'department'));
+        return view('app.business.record_control.record_controls_index', compact('records', 'department'));
     }
 
     public function create(Department $department)
     {
         $employees = Employee::where('department_id', $department->id)->get();
-        return view('record_controls.create', compact('department', 'employees'));
+        return view('app.business.record_control.record_controls_create', compact('department', 'employees'));
     }
 
-    public function store(Request $request, Department $department)
+    public function store(StoreRecordControlRequest $request,  Department $department)
     {
-        $request->validate([
-            'employee_id' => 'required',
-            'identificacao' => 'required',
-            'forma_armazenamento' => 'required',
-            'local_armazenamento' => 'required',
-            'acesso_permitido' => 'required',
-            'tempo_retencao' => 'required',
-            'metodo_manutencao' => 'required',
-        ]);
+        $request->validated();
 
-        RecordControl::create([
-            'department_id' => $department->id,
+        $recordcontrol = RecordControl::create([
+
+            'department_id' => $request->department_id,
             'employee_id' => $request->employee_id,
             'identificacao' => $request->identificacao,
             'forma_armazenamento' => $request->forma_armazenamento,

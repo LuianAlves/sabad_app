@@ -4,20 +4,31 @@ namespace App\Models;
 
 use App\Models\Business\Department\Department;
 use App\Models\Business\Employee\Employee;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class RecordControl extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'department_id',
+        'employee_id',
+        'identificacao',
+        'forma_armazenamento',
+        'local_armazenamento',
+        'acesso_permitido',
+        'tempo_retencao',
+        'metodo_manutencao',
+    ];
 
-    // RecordControl.php
-    public function employee() {
-        return $this->belongsTo(Employee::class);
-    }
-
-    public function department() {
+    // Relacionamento com Department
+    public function department()
+    {
         return $this->belongsTo(Department::class);
     }
 
+    // Relacionamento com Employee
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }
+
