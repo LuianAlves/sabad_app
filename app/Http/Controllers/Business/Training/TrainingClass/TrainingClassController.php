@@ -162,7 +162,7 @@ class TrainingClassController extends Controller
                 [
                     $p->name,
                     $trainingClass->training->title,
-                    Carbon::parse($trainingClass->start_datetime)
+                    Carbon::parse($trainingClass->start_date)
                         ->format('d/m/Y H:i')
                 ],
                 $tpl
