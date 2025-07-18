@@ -25,16 +25,22 @@ class BookingController extends Controller
         $query = Booking::with('user')->where('room_id', $room->id);
 
         if ($request->has('date') && $request->date) {
-            $date = $request->date;
-            $query->whereDate('start_time', $date);
+            $query->whereDate('start_time', $request->date);
         } else {
             $query->where('start_time', '>=', now());
         }
 
         $bookings = $query->orderBy('start_time')->get();
 
-        return view('app.business.booking.bookings_show', compact('room', 'bookings'));
+        $layout = auth()->user()->hasRole('admin')
+            ? 'layouts.templates.app-layout'
+            : 'layouts.templates.user-profile-layout';
+
+        $section = auth()->user()->hasRole('admin') ? 'content' : 'content-user-layout';
+
+        return view('app.business.booking.bookings_show', compact('room', 'bookings', 'layout', 'section'));
     }
+
 
 
 

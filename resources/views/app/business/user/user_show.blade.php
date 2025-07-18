@@ -571,6 +571,35 @@
                     </div>
                 </div>
 
+                <div class="col-12 col-xl-4 mb-4">
+                    <div class="card border shadow-xs h-100">
+                        <div class="card-header pb-0 p-3">
+                            <div class="row mb-sm-0 mb-2">
+                                <div class="col-md-8 col-9">
+                                    <h6 class="mb-0 font-weight-semibold text-lg">Salas de Reunião</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-3">
+                            <ul class="list-group">
+                                <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
+                                    <span class="text-secondary">Aqui você pode verificar a disponibilidade das Salas de Reunião</span>
+
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="position-absolute bottom-0 end-0 p-3">
+                            <a href="{{ route('bookings.index') }}" class="btn btn-sm btn-primary"
+                               style="background-color: #0A0F1F;">
+                                Ver todos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Include:Footer -->
                 @include('layouts.common.footer')
             </div>
