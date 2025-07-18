@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Business\Training\Training;
 
 use App\Http\Controllers\Controller;
-use App\Models\Business\Training\Training;
+use App\Models\Training;
 use Illuminate\Http\Request;
 
 class TrainingController extends Controller

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
 use App\Http\Controllers\Business\Training\Training\TrainingController;
 use App\Http\Controllers\Business\Training\TrainingClass\TrainingClassController;
@@ -140,6 +141,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('extension', ExtensionController::class);
 
     Route::resource('room', RoomController::class);
+
+    Route::resource('record_controls', RecordControlController::class);
 
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [BookingController::class, 'index'])->name('bookings.index');
