@@ -7,6 +7,7 @@ use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
 use App\Http\Requests\Business\Department\StoreDepartmentRequest;
 use App\Http\Requests\Business\Department\UpdateDepartmentRequest;
+use Spatie\Permission\Models\Role;
 
 class DepartmentController extends Controller
 {
@@ -18,15 +19,15 @@ class DepartmentController extends Controller
         return view('app.business.department.department_index', compact('departments', 'companies'));
     }
 
-    
+
     public function create()
     {
         $companies = Company::get();
-        
+
         return view('app.business.department.department_create', compact('companies'));
     }
 
-    
+
     public function store(StoreDepartmentRequest $request)
     {
         $request->validated();
@@ -36,10 +37,12 @@ class DepartmentController extends Controller
             'name' => $request->name
         ]);
 
+        Role::firstOrCreate(['name' => strtolower($department->name)]);
+
         return redirect()->route('department.index');
     }
 
-    
+
     public function show($id)
     {
         $department = Department::find($id);
@@ -47,7 +50,7 @@ class DepartmentController extends Controller
         return view('app.business.department.department_show', compact('department'));
     }
 
-    
+
     public function edit($id)
     {
         $department = Department::where('id', $id)->first();
@@ -56,7 +59,7 @@ class DepartmentController extends Controller
         return view('app.business.department.department_edit', compact('department', 'companies'));
     }
 
-    
+
     public function update(UpdateDepartmentRequest $request, $id)
     {
         $request->validated();
@@ -71,7 +74,7 @@ class DepartmentController extends Controller
         return redirect()->route('department.index');
     }
 
-    
+
     public function destroy($id)
     {
         $department = Department::find($id);

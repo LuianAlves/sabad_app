@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\PermissionController;
+use App\Http\Controllers\Auth\RoleController;
 use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
 use App\Http\Controllers\Business\Training\Training\TrainingController;
@@ -224,7 +226,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/ticket/collaborator/create', [TicketCollaboratorController::class, 'create'])->name('ticket.collaborator.create');
     Route::get('/ticket/collaborator/index', [TicketCollaboratorController::class, 'index'])->name('ticket.collaborator.index');
 
-
     Route::resource('maintenance', MaintenanceController::class);
 
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
@@ -233,7 +234,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // Tasks
     Route::resource('/task', TaskController::class);
-
 
     // Trainings
     Route::resource('/training', TrainingController::class)->names('training');
@@ -244,6 +244,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/training/training-class/create/{trainingId}', [TrainingClassController::class, 'create'])->name('training-class.create');
     Route::post('/training/{trainingClassId}/email', [TrainingClassController::class, 'sendEmail'])->name('training.send-email');
 
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
      /*
     |--------------------------------------------------------------------------
     | CHART ROUTES
