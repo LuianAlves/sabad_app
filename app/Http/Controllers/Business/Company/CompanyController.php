@@ -9,7 +9,7 @@ use App\Http\Requests\Business\Company\UpdateCompanyRequest;
 
 class CompanyController extends Controller
 {
-   
+
     public function index()
     {
         $companies = Company::get();
@@ -17,7 +17,7 @@ class CompanyController extends Controller
         return view('app.business.company.company_index', compact('companies'));
     }
 
-    
+
     public function create()
     {
         $companies = Company::get();
@@ -25,20 +25,22 @@ class CompanyController extends Controller
         return view('app.business.company.company_create', compact('companies'));
     }
 
-    
+
     public function store(StoreCompanyRequest $request)
     {
+        dd($request->all());
+
         $request->validated();
 
         $company = Company::create([
             'name' => $request->name,
-            'cnpj' => $request->cnpj
+            'cnpj' => $request->cpfCnpj
         ]);
 
         return redirect()->route('company.index');
     }
 
-    
+
     public function show($id)
     {
         $company = Company::find($id);
@@ -46,7 +48,7 @@ class CompanyController extends Controller
         return view('app.business.company.company_show', compact('company'));
     }
 
-    
+
     public function edit($id)
     {
         $company = Company::where('id', $id)->first();
@@ -54,7 +56,7 @@ class CompanyController extends Controller
         return view('app.business.company.company_edit', compact('company'));
     }
 
-    
+
     public function update(UpdateCompanyRequest $request, $id)
     {
         $request->validated();
@@ -63,13 +65,13 @@ class CompanyController extends Controller
 
         $company->update([
             'name' => $request->name,
-            'cnpj' => $request->cnpj
+            'cnpj' => $request->cpfCnpj
         ]);
 
         return redirect()->route('company.index');
     }
 
-    
+
     public function destroy($id)
     {
         $company = Company::find($id);
