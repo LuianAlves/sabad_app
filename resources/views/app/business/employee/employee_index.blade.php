@@ -14,6 +14,7 @@
                             <th class="text-secondary text-xs font-weight-bold opacity-7 text-center">Departamento</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 text-center">Nivel Hierárquico
                             </th>
+                            <th class="text-secondary text-xs font-weight-semibold opacity-7 text-center">Perfil</th>
                             <th class="text-secondary text-xs font-weight-semibold opacity-7 text-center">Status</th>
                             <th class="text-center text-secondary text-xs font-weight-semibold opacity-7"></th>
                         </tr>
@@ -58,6 +59,10 @@
 
                                 <td class="text-center">
                                     <p class="text-secondary text-sm mb-0">{{ $employee->hierarchical_level }}</p>
+                                </td>
+
+                                <td class="text-center">
+                                    <p class="text-secondary text-sm mb-0">{{ $employee->employeeUser->user->roles->first()->name }}</p>
                                 </td>
 
                                 <td class="text-center">

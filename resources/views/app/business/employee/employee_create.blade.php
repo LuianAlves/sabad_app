@@ -85,31 +85,21 @@
                         value=""></x-input>
 
                     <x-input-check col="6" set="" title="Usuário é administrador?" id="is_admin"
-                        name="is_admin" checked="" disabled=""></x-input>
+                        name="is_admin" checked="" disabled=""></x-input-check>
 
                         <div class="row my-3" id="permissions-container">
-                            @foreach ($permissions as $entity => $perms)
-                                <div class="col-4">
-                                    <div class="mb-3 border rounded p-3">
-                                        <strong>Permissões de {{ ucfirst($entity) }}</strong>
-                                        <div class="form-check">
-                                            <input class="form-check-input select-all" type="checkbox"
-                                                data-entity="{{ $entity }}" id="all-{{ $entity }}">
-                                            <label class="form-check-label" for="all-{{ $entity }}">All</label>
-                                        </div>
+                            <div class="col-6">
+                                <div class="mb-3 border rounded p-3">
+                                    <strong>Perfis</strong>
 
-                                        @foreach ($perms as $permission)
-                                            <div class="form-check ms-3">
-                                                <input class="form-check-input perm-{{ $entity }}" type="checkbox"
-                                                    name="permissions[]" value="{{ $permission->name }}"
-                                                    id="{{ $permission->name }}">
-                                                <label class="form-check-label"
-                                                    for="{{ $permission->name }}">{{ ucfirst(explode(' ', $permission->name)[0]) }}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                    @foreach ($roles as $role)
+                                        <div class="form-check ms-3">
+                                            <input class="form-check-input" type="checkbox" name="role" value="{{ $role->name }}" id="{{ $role->name }}">
+                                            <label class="form-check-label" for="{{ $role->name }}">{{ ucfirst(explode(' ', $role->name)[0]) }}</label>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                 </x-form>
             </div>
