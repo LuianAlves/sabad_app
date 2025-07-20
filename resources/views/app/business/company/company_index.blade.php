@@ -21,12 +21,10 @@
                                     <p class="text-dark fw-bold text-sm mb-0">{{ $company->name }}</p>
                                 </td>
 
-                                {{-- Departamento --}}
                                 <td>
                                     <p class="text-dark text-sm mb-0">{{ $company->cnpj }}</p>
                                 </td>
 
-                                {{-- Botões de ações --}}
                                 <td>
                                     <x-table-button route="company" :id="$company->id"></x-table-button>
                                 </td>

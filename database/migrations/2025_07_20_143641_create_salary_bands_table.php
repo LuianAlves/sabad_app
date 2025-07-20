@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_participants', function (Blueprint $table) {
+        Schema::create('salary_bands', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('training_class_id')->constrained('training_classes')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('hierarchical_level_id')->constrained('hierarchical_levels')->onDelete('cascade');
+
+            $table->string('band');           // ex: “I”, “II”, “III”
+            $table->decimal('salary', 12, 2);
+
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_participants');
+        Schema::dropIfExists('salary_bands');
     }
 };

@@ -15,7 +15,7 @@
             <a class="opacity-5 text-dark" href="{{ route('dashboard.index') }}">{{ __('breadcrumbs.dashboard') }}</a>
         </li>
         <li class="breadcrumb-item text-sm">
-            <a class="opacity-5 text-dark" href="{{ route($resource . '.index') }}">{{ $title }}</a>
+{{--            <a class="opacity-5 text-dark" href="{{ route($resource . '.index') }}">{{ $title }}</a>--}}
         </li>
         <!-- <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ $final }}</li> -->
     </ol>

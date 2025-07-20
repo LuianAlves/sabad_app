@@ -11,11 +11,15 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        $user = User::firstOrCreate([
-            'name' => 'Teste admin',
-            'email' => 'teste@teste.com',
-            'password' => Hash::make('teste123'),
-            'is_active' => true,
-        ])->assignRole('admin');
+        $user = User::updateOrCreate(
+            ['email' => 'teste@teste.com'],
+            [
+                'name'      => 'Teste admin',
+                'password'  => Hash::make('teste123'),
+                'is_active' => true,
+            ]
+        );
+
+        $user->syncRoles(['admin']);
     }
 }

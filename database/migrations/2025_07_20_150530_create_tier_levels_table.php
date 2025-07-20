@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_participants', function (Blueprint $table) {
+        Schema::create('tier_levels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('training_class_id')->constrained('training_classes')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('hierarchical_level_id')->constrained('hierarchical_levels')->onDelete('cascade');
+
+            $table->string('name');           // ex: "Junior", "Pleno", "Senior"
+            $table->unsignedTinyInteger('order'); // 1=Junior, 2=Pleno, 3=Senior
+
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_participants');
+        Schema::dropIfExists('tier_levels');
     }
 };

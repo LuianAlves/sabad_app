@@ -7,13 +7,11 @@
                 <x-card-header title="Nova Empresa" action="cadastrar"></x-card-header>
 
                 <x-form route="store">
-                  <div class="row">
-                      <x-input col="6" set="" type="text" title="Nome da empresa" id="name" name="name" value="" placeholder="Bongas Bra ..." disabled=""></x-input>
-                      <x-input col="6" set="" type="text" title="CNPJ" id="cnpj" name="cnpj" value="" placeholder="00.000.000/0001-00" disabled=""></x-input>
-                  </div>
+                    @include('app.business.company.company_form')
                 </x-form>
-
             </div>
         </div>
     </div>
+
+    <script type="module" src="{{ asset('js/common/mask_input.js') }}"></script>
 @endsection

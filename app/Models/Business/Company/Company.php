@@ -5,6 +5,8 @@ namespace App\Models\Business\Company;
 use App\Contracts\Auditable;
 use App\Models\Business\Chip\Chip;
 use App\Models\Business\Room\Room;
+use App\Models\HierarchicalLevel;
+use App\Models\Union;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Business\Chip\PhoneOperator\PhoneOperator;
@@ -17,6 +19,7 @@ class Company extends Model implements Auditable
 
     protected $fillable = [
         'name',
+        'union_id',
         'cnpj'
     ];
 
@@ -46,5 +49,15 @@ class Company extends Model implements Auditable
     public function rooms()
     {
         return $this->hasMany(Room::class);
+    }
+
+    public function union()
+    {
+        return $this->belongsTo(Union::class);
+    }
+
+    public function hierarchicalLevels()
+    {
+        return $this->hasMany(HierarchicalLevel::class, 'company_id');
     }
 }

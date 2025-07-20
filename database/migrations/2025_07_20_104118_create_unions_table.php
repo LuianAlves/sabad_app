@@ -4,17 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('training_participants', function (Blueprint $table) {
+        Schema::create('unions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('training_class_id')->constrained('training_classes')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+
+            $table->string('name')->unique();
+            $table->decimal('current_adjustment_percent', 5, 2)->default(0);
+
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_participants');
+        Schema::dropIfExists('unions');
     }
 };

@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_participants', function (Blueprint $table) {
+        Schema::create('hierarchical_levels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('training_class_id')->constrained('training_classes')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+
+            $table->string('name');
+            $table->unsignedTinyInteger('order');
+
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_participants');
+        Schema::dropIfExists('hierarchical_levels');
     }
 };
