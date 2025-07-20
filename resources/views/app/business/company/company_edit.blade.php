@@ -7,18 +7,7 @@
                 <x-card-header title="Editar Empresa" action="Atualizar"></x-card-header>
 
                  <x-form route="update" :id="$company->id">
-
-                    <div class="row">
-                        {{-- Empresa --}}
-                        <x-input col="6" set="" type="text" title="Nome do Departamento" id="name"
-                            name="name" value="{{ old('name', $company->name ) }}" placeholder="" />
-
-
-                        {{-- Nome do Departamento --}}
-                        <x-input col="6" set="" type="text" title="Nome do Departamento" id="cnpj"
-                            name="cnpj" value="{{ old('cnpj', $company->cnpj) }}" placeholder="" />
-                    </div>                    
-                              
+                     @include('app.business.company.company_form')
                 </x-form>
 
             </div>

@@ -37,7 +37,10 @@ class DepartmentController extends Controller
             'name' => $request->name
         ]);
 
-        Role::firstOrCreate(['name' => strtolower($department->name)]);
+        Role::firstOrCreate([
+            'name' => strtolower($department->name),
+            'guard_name' => 'web'
+        ]);
 
         return redirect()->route('department.index');
     }

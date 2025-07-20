@@ -3,6 +3,7 @@
 namespace App\Models\Business\Employee;
 
 use App\Models\Business\Training\TrainingClass;
+use App\Models\HierarchicalLevel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -98,4 +99,8 @@ class Employee extends Model implements Auditable
         return $this->hasMany(TrainingClass::class, 'instructor_id', 'id');
     }
 
+    public function hierarchicalLevel()
+    {
+        return $this->belongsTo(HierarchicalLevel::class);
+    }
 }

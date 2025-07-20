@@ -44,10 +44,18 @@
                             <div class="form-group">
                                 <label for="hierarchical_level" class="form-control-label">Nível Hierárquico</label>
                                 <select class="form-control" id="hierarchical_level" name="hierarchical_level" required>
-                                    @foreach (['Estagiário', 'Assistente', 'Analista', 'Supervisor', 'Coordenador', 'Gerente', 'Diretor'] as $level)
-                                        <option value="{{ $level }}"
-                                            {{ old('hierarchical_level') == $level ? 'selected' : '' }}>{{ $level }}
-                                        </option>
+                                    <option value="">Selecione o cargo</option>
+                                    @foreach($levels as $level)
+                                        <optgroup label="{{ $level->name }}">
+                                            @foreach($level->tierLevels as $tier)
+                                                @foreach($tier->salaryBands as $band)
+                                                    <option value="{{ $level->id }}"
+                                                        {{ old('hierarchical_level_id', $employee->hierarchical_level_id ?? '') == $level->id ? 'selected' : '' }}>
+                                                        &nbsp;&nbsp;{{ $tier->name }} – Faixa {{ $band->band }}
+                                                    </option>
+                                                @endforeach
+                                            @endforeach
+                                        </optgroup>
                                     @endforeach
                                 </select>
                             </div>

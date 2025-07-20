@@ -9,6 +9,7 @@ use App\Http\Requests\Business\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Business\Employee\UpdateEmployeeRequest;
 
 // Models
+use App\Models\HierarchicalLevel;
 use App\Models\User;
 use App\Models\Business\User\EmployeeUser;
 use App\Models\Business\Employee\Employee;
@@ -22,10 +23,10 @@ use App\Models\Business\Device\DeviceControl\DeviceControl;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
-
     public function index()
     {
         $employees = Employee::with('employeeUser.user', 'department.company')->get();
@@ -38,12 +39,23 @@ class EmployeeController extends Controller
         $departments = Department::get();
         $companies = Company::with('departments.employees')->get();
         $licenses = License::get();
+        $levels = HierarchicalLevel::orderBy('order')
+            ->with([
+                'tierLevels' => fn($q)=> $q->orderBy('order')
+                    ->with(['salaryBands'=>fn($q2)=> $q2->orderBy('band')])
+            ])
+            ->get();
 
         $permissions = Permission::all()->groupBy(function ($permission) {
-            // return explode(' ', $permission->name)[1];       
+             return explode(' ', $permission->name)[1];
         });
 
-        return view('app.business.employee.employee_create', compact('companies', 'licenses', 'permissions'));
+        $roles = Role::all();
+
+//        dd($roles);
+
+
+        return view('app.business.employee.employee_create', compact('levels', 'companies', 'licenses', 'permissions'));
     }
 
 
@@ -55,7 +67,7 @@ class EmployeeController extends Controller
 
         if ($request->hasFile('image')) {
             $userImage = $request->file('image');
-            
+
             $imageData = file_get_contents($userImage->getRealPath());
 
             $image = imagecreatefromstring($imageData);
@@ -76,60 +88,13 @@ class EmployeeController extends Controller
             }
         }
 
-        // $arrayName = explode(' ', $request->name);
-
-        // $department = Department::findOrFail($request->department_id);
-
-        // $firstName = $arrayName[0]; // fabio
-
-        // $arrayLastName = array_key_last($arrayName); // 1
-        // $lastName = $arrayName[$arrayLastName]; // berges
-
-        // $subFirstName = substr($firstName, 0, 2); // fa
-        // $subLastName = substr($lastName, -2); // es
-
-        // $companyCnpj = $department->company->cnpj;
-
-        // $cnpj = substr($companyCnpj, -2); // 
-
-        // $dp = substr($department->name, 0, 3); // Adm
-        // $department = strtoupper($dp); // ADM
-
-        // $email = explode('@', $request->email)[0]; //custos
-
-        // $subFirstEmail = substr($email, 0, 2); // cu
-        // $subFirstEmail = ucfirst($subFirstEmail); // Cu
-
-        // $subLastEmail = substr($email, -2); // os
-
-        // dd(
-        //     $arrayName,
-        //     $subFirstName,
-        //     $subLastName,
-        //     $cnpj,
-        //     $dp,
-        //     $department,
-        //     $firstName,
-        //     $lastName,
-        //     $email,
-        //     $subFirstEmail,
-        //     $subLastEmail,
-        //     "O departmento $department",
-        //     "Padrão 01: #!{$subFirstName}{$cnpj}{$subLastName}#!",
-        //     "Padrão 02: #!{$subFirstName}00{$cnpj}{$subLastName}#!",
-        //     "Padrão 03: #!{$subFirstName}MISB{$subLastName}#!",
-        //     "Padrão 04: #!{$subFirstName}{$department}{$subLastName}#!",
-        //     "Padrão 04: #!{$subFirstEmail}{$department}{$subLastEmail}#!",
-        // );
-
-
         $firstName = explode(' ', $request->name)[0];
         $password = ucfirst($firstName) . '@@MISB@@';
 
         $employee = Employee::create([
             'department_id' => $request->department_id,
             'name' => $request->name,
-            'hierarchical_level' => $request->hierarchical_level,
+            'hierarchical_level_id' => $request->hierarchical_level_id,
             'hired_in' => $request->hired_in,
             'fired_in' => $request->fired_in,
             'status' => $request->status,
