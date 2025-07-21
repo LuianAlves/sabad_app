@@ -29,7 +29,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with('employeeUser.user', 'department.company')->get();
+        $employees = Employee::with('employeeUser.user.roles', 'department.company')->get();
 
         return view('app.business.employee.employee_index', compact('employees'));
     }
@@ -46,18 +46,15 @@ class EmployeeController extends Controller
             ])
             ->get();
 
-        $permissions = Permission::all()->groupBy(function ($permission) {
-             return explode(' ', $permission->name)[1];
-        });
-
-        $roles = Role::all();
-
-//        dd($roles);
+//        $permissions = Permission::all()->groupBy(function ($permission) {
+//             return explode(' ', $permission->name)[1];
+//        });
 
 
-        return view('app.business.employee.employee_create', compact('levels', 'companies', 'licenses', 'permissions'));
+        $roles = Role::with('permissions')->get();
+
+        return view('app.business.employee.employee_create', compact('roles', 'levels', 'companies', 'licenses'));
     }
-
 
     public function store(StoreEmployeeRequest $request)
     {
@@ -123,12 +120,13 @@ class EmployeeController extends Controller
         if ($isAdmin) {
             $user->assignRole('admin');
         } else {
-            $user->assignRole('user');
+            $user->assignRole($request->role);
 
-            if ($request->has('permissions')) {
-                $permissions = Permission::whereIn('name', $request->permissions)->get();
-                $user->syncPermissions($permissions);
-            }
+//            if ($request->has('permissions')) {
+//                $permissions = Permission::whereIn('name', $request->permissions)->get();
+//
+//                $user->syncPermissions($permissions);
+//            }
         }
 
         EmployeeUser::create([
