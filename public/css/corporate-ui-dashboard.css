@@ -21698,8 +21698,8 @@ fieldset:disabled .btn {
 }
 
 .form-switch .form-check-input:checked {
-  border-color: rgba(30, 41, 59, 0.95);
-  background-color: rgba(30, 41, 59, 0.95);
+  border-color: rgba(76, 145, 198, 0);
+  background-color: #78B6E7;
 }
 
 .form-select {
