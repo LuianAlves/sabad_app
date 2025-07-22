@@ -9,7 +9,7 @@ use App\Http\Controllers\Business\Training\TrainingClass\TrainingClassController
 use App\Http\Controllers\Business\Training\TrainingParticipant\TrainingParticipantController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SalaryBandController;
-use App\Http\Controllers\TierLevelController;
+use App\Http\Controllers\CostController;
 use App\Http\Controllers\UnionAdjustmentController;
 use App\Http\Controllers\UnionController;
 use Illuminate\Support\Facades\Route;
@@ -150,6 +150,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('record_controls', RecordControlController::class);
 
+    Route::resource('cost', CostController::class);
+    Route::get('cost-report', [CostController::class, 'report'])->name('cost.report');
+
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [BookingController::class, 'index'])->name('bookings.index');
         Route::get('/{room}/create', [BookingController::class, 'create'])->name('bookings.create');
@@ -255,7 +258,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('union', UnionController::class);
 
     Route::resource('tier_levels.salary_bands', SalaryBandController::class)->shallow();
-    Route::resource('hierarchical_levels.tier_levels', TierLevelController::class)->shallow();
+    Route::resource('hierarchical_levels.tier_levels', CostController::class)->shallow();
 
     // mostra a estrutura salarial
     Route::get('company/{company}/company_structure', [CompanyController::class,'structure'])->name('companies.company_structure');

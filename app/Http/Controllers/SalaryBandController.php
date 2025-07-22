@@ -23,6 +23,7 @@ class SalaryBandController extends Controller
 
     public function create(TierLevel $tierLevel)
     {
+
         return view(
             'app.business.hierarchical_level.salary_band.salary_band_create',
             compact('tierLevel')

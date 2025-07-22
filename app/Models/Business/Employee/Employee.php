@@ -2,8 +2,10 @@
 
 namespace App\Models\Business\Employee;
 
-use App\Models\Business\Training\TrainingClass;
+
 use App\Models\HierarchicalLevel;
+use App\Models\SalaryBand;
+use App\Models\TrainingClass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +31,7 @@ class Employee extends Model implements Auditable
     protected $fillable = [
         'department_id',
         'name',
-        'hierarchical_level',
+        'hierarchical_level_id',
         'hired_in',
         'fired_in',
         'status'
@@ -66,13 +68,12 @@ class Employee extends Model implements Auditable
         return $this->hasOne(EmployeeUser::class, 'employee_id');
     }
 
-    public function deviceControl() {
-        return $this->hasOne(DeviceControl::class, 'device_controls');
+    public function deviceControl()
+    {
+        return $this->hasOne(DeviceControl::class, 'employee_id'); // ✅ CORRETO
     }
 
-    public function heritageControl() {
-        return $this->hasOne(HeritageControl::class, 'device_controls');
-    }
+
 
     public function ticket()
     {
@@ -103,4 +104,10 @@ class Employee extends Model implements Auditable
     {
         return $this->belongsTo(HierarchicalLevel::class);
     }
+
+    public function salaryBand()
+    {
+        return $this->belongsTo(SalaryBand::class);
+    }
+
 }

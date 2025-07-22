@@ -3,6 +3,7 @@
 namespace App\Models\Business\Department;
 
 use App\Contracts\Auditable;
+use App\Models\Business\Heritage\HeritageControl\HeritageControl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,12 +27,12 @@ class Department extends Model implements Auditable
         return $this->name ?? "Departamento #{$this->id}";
     }
 
-    public function company() 
+    public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function employees() 
+    public function employees()
     {
         return $this->hasMany(Employee::class);
     }
@@ -42,6 +43,11 @@ class Department extends Model implements Auditable
 
     public function device() {
         return $this->belongsTo(Device::class);
+    }
+
+    public function heritageControls()
+    {
+        return $this->hasMany(HeritageControl::class, 'department_id');
     }
 
 }
