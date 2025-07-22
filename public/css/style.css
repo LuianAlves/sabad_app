@@ -2,6 +2,10 @@
   font-size: 14px !important;
 }
 
+.nav-item .icon i.fi-1 {
+    font-size: 10px !important;
+}
+
 .nav-item .nav-link-text {
   margin-top: 3px !important;
 }
