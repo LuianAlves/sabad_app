@@ -13,18 +13,20 @@ class Input extends Component
     public $type;
     public $title;
     public $id;
+    public $step;
     public $name;
     public $placeholder;
     public $value;
     public $disabled;
 
-    public function __construct($col, $type, $title, $name, $id, $set = null, $placeholder = null, $value = null, bool $disabled = false)
+    public function __construct($col, $type, $title, $name, $id, $step = null, $set = null, $placeholder = null, $value = null, bool $disabled = false)
     {
         $this->col = $col;
         $this->type = $type;
         $this->title = $title;
         $this->name = $name;
         $this->id = $id;
+        $this->step = $step;
         $this->set = $set;
         $this->placeholder = $placeholder;
         $this->value = $value;

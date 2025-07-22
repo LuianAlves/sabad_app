@@ -15,12 +15,11 @@
                     class="text-info">L</span>u</span>
         </a>
     </div>
-    <div class="collapse navbar-collapse px-4  w-auto " id="sidenav-collapse-main">
+    <div class="collapse navbar-collapse px-4 w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {{ $current == 'dashboard' ? 'active' : '' }}" href="{{ route('dashboard.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                    <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-table-columns fs-5"></i>
                     </div>
                     <span class="nav-link-text ms-1">Dashboard</span>
@@ -28,11 +27,9 @@
             </li>
 
             <!-------- Entidades -------->
-            <li class="nav-item mt-2">
-                <div
-                    class="d-flex align-items-center nav-link {{ in_array($current, ['company', 'user', 'union', 'department', 'employee']) ? 'active' : '' }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+            <li class="nav-item">
+                <div class="d-flex align-items-center nav-link {{ in_array($current, ['company', 'user', 'union', 'department', 'employee']) ? 'active' : '' }}">
+                    <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
                     </div>
                     <span class="nav-link-text ms-1">Entidades</span>
@@ -42,8 +39,7 @@
             <!--Users-->
             <li class="nav-item border-start">
                 <a class="nav-link p-0 {{ $current == 'user' ? 'active' : '' }}" href="{{ route('user.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                    <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fas fa-users text-white fi-1"></i>
                     </div>
                     <span class="nav-link-text ms-1">Usuários</span>

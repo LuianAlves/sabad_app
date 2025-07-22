@@ -3,7 +3,7 @@
          <label class="form-control-label" for="{{ $id }}">{{ $title }}</label>
          <div class="input-group">
              <input type="{{ $type }}" class="form-control" name="{{ $name }}" id="{{ $id }}"
-                 value="{{ $value }}" placeholder="{{ $placeholder }}" {{ $disabled ? ' disabled' : '' }}>
+                 value="{{ $value }}" placeholder="{{ $placeholder }}" {{ $disabled ? ' disabled' : '' }} step="{{$step}}">
          </div>
      </div>
  </div>
