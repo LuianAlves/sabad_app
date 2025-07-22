@@ -10,9 +10,9 @@
                         <div class="col-4 mb-3">
                             <div class="card bg-gradient-default" style="border: 1px solid rgba(206,206,206,0.36);">
                                 <div class="card-body">
-                                    <h3 class="card-title text-info text-gradient">{{ strtoupper($role->name) }}</h3>
+                                    <h6 class="card-title text-info text-gradient">{{ strtoupper($role->name) }}</h6>
                                     <blockquote class="blockquote text-white mb-0">
-                                        <p class="text-dark ms-3">
+                                        <p class="text-dark ms-3" style="font-size: 13.5px;">
                                             Existem <b>{{ $role->users ? $role->users->count() : 0 }}</b> usuários com esse perfil no
                                             sistema.
                                         </p>
@@ -36,16 +36,15 @@
                         @method('PUT')
 
                         <!-- Modal -->
-                        <div class="modal fade" id="modal-{{ $role->id }}" tabindex="-1"
-                             aria-labelledby="modalLabel-{{ $role->id }}" aria-hidden="true"
-                             style="z-index: 9999 !important;">
+                        <div class="modal fade" id="modal-{{ $role->id }}" role="dialog" tabindex="-1" aria-labelledby="modalLabel-{{ $role->id }}" aria-hidden="true" style="z-index: 9999 !important;">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="modalLabel-{{ $role->id }}">Permissões
                                             de {{ strtoupper($role->name) }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Fechar"></button>
+                                        <a href="#" type="button" class="" data-bs-dismiss="modal" aria-label="Fechar">
+                                            <i class="fa-solid fa-xmark text-dark fs-5"></i>
+                                        </a>
                                     </div>
 
                                     <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
@@ -103,10 +102,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Salvar</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                            Fechar
-                                        </button>
+                                        <button type="submit" class="btn btn-sm btn-warning">Salvar</button>
                                     </div>
                                 </div>
                             </div>
