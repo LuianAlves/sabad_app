@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('salary_bands', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hierarchical_level_id')->constrained('hierarchical_levels')->onDelete('cascade');
+            $table->foreignId('tier_level_id')->constrained('tier_levels')->onDelete('cascade');
 
             $table->string('band');           // ex: “I”, “II”, “III”
             $table->decimal('salary', 12, 2);

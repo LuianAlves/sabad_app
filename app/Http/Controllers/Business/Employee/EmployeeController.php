@@ -10,6 +10,7 @@ use App\Http\Requests\Business\Employee\UpdateEmployeeRequest;
 
 // Models
 use App\Models\HierarchicalLevel;
+use App\Models\SalaryBand;
 use App\Models\User;
 use App\Models\Business\User\EmployeeUser;
 use App\Models\Business\Employee\Employee;
@@ -46,14 +47,7 @@ class EmployeeController extends Controller
             ])
             ->get();
 
-//        $permissions = Permission::all()->groupBy(function ($permission) {
-//             return explode(' ', $permission->name)[1];
-//        });
-
-
         $roles = Role::with('permissions')->get();
-
-//        dd($departments, $companies, $licenses, $levels, $roles);
 
         return view('app.business.employee.employee_create', compact('roles', 'levels', 'companies', 'licenses'));
     }
@@ -90,15 +84,22 @@ class EmployeeController extends Controller
         $firstName = explode(' ', $request->name)[0];
         $password = ucfirst($firstName) . '@@MISB@@';
 
+
+//        dd($request->all());
+
         $employee = Employee::create([
             'department_id' => $request->department_id,
             'name' => $request->name,
-            'hierarchical_level_id' => $request->hierarchical_level_id,
+            'hierarchical_level_id' => $request->level_id,
+            'tier_level_id' => $request->tier_id,
+            'salary_band_id' => $request->salary_band_id,
             'hired_in' => $request->hired_in,
             'fired_in' => $request->fired_in,
             'status' => $request->status,
             'created_at' => Carbon::now()
         ]);
+
+//        dd($request->all(), $employee);
 
         Email::create([
             'employee_id' => $employee->id,
@@ -123,12 +124,6 @@ class EmployeeController extends Controller
             $user->assignRole('admin');
         } else {
             $user->assignRole($request->role);
-
-//            if ($request->has('permissions')) {
-//                $permissions = Permission::whereIn('name', $request->permissions)->get();
-//
-//                $user->syncPermissions($permissions);
-//            }
         }
 
         EmployeeUser::create([

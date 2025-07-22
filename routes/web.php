@@ -7,9 +7,11 @@ use App\Http\Controllers\Business\Room\RoomController;
 use App\Http\Controllers\Business\Training\Training\TrainingController;
 use App\Http\Controllers\Business\Training\TrainingClass\TrainingClassController;
 use App\Http\Controllers\Business\Training\TrainingParticipant\TrainingParticipantController;
+use App\Http\Controllers\HierarchicalLevelController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SalaryBandController;
 use App\Http\Controllers\CostController;
+use App\Http\Controllers\TierLevelController;
 use App\Http\Controllers\UnionAdjustmentController;
 use App\Http\Controllers\UnionController;
 use Illuminate\Support\Facades\Route;
@@ -258,7 +260,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::resource('union', UnionController::class);
 
     Route::resource('tier_levels.salary_bands', SalaryBandController::class)->shallow();
-    Route::resource('hierarchical_levels.tier_levels', CostController::class)->shallow();
+    Route::resource('hierarchical_levels.tier_levels', TierLevelController::class)->shallow();
+
+    Route::get('/levels/{level}/tiers', [HierarchicalLevelController::class, 'getTiers'])->name('getTiers');
+    Route::get('/tiers/{tier}/salary-bands', [HierarchicalLevelController::class, 'getSalaryBands'])->name('getSalaryBands');
+
 
     // mostra a estrutura salarial
     Route::get('company/{company}/company_structure', [CompanyController::class,'structure'])->name('companies.company_structure');
