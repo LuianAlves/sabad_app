@@ -50,10 +50,10 @@
                         $employee = $emp->employeeUser?->employee;
                         $department = $employee?->department;
 
-                        $device = $employee?->deviceControl?->estimated_price ?? 0;
+                        $device = $employee?->deviceControl?->estimated_price               ?? 0;
                         $heritage = $department?->heritageControls?->sum('estimated_price') ?? 0;
-                        $salary = $employee?->salaryBand?->salary ?? 0;
-                        $services = $department?->services?->sum('price') ?? 0;
+                        $salary   = $employee->salaryBand?->salary                          ?? 0;
+                        $services = $department?->services?->sum('price')                   ?? 0;
 
                         $total = $device + $heritage + $salary + $services;
                     @endphp
