@@ -33,6 +33,8 @@ class Employee extends Model implements Auditable
         'department_id',
         'name',
         'hierarchical_level_id',
+        'tier_level_id',
+        'salary_band_id',
         'hired_in',
         'fired_in',
         'status'
