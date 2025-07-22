@@ -79,7 +79,7 @@
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Cargo:</span>
-                                    {{ auth()->user()->employeeUser->employee->hierarchical_level }}
+                                    {{ auth()->user()->employeeUser->employee->department->company->hierarchical_level }}
 
                                 </li>
 

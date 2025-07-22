@@ -51,8 +51,9 @@
                                                 @foreach($tier->salaryBands as $band)
                                                     <option value="{{ $level->id }}"
                                                         {{ old('hierarchical_level_id', $employee->hierarchical_level_id ?? '') == $level->id ? 'selected' : '' }}>
-                                                        &nbsp;&nbsp;{{ $tier->name }} – Faixa {{ $band->band }}
+                                                        {{ collect(explode(' ', $level->company->name ?? ''))->take(2)->implode(' ') }} - {{ $level->name }} - {{ $band->band }}
                                                     </option>
+
                                                 @endforeach
                                             @endforeach
                                         </optgroup>

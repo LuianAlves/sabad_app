@@ -5,6 +5,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Business\Company\Company;
 use App\Models\Business\Department\Department;
+use App\Models\Business\Device\DeviceControl\DeviceControl;
+use App\Models\Business\Heritage\HeritageControl\HeritageControl;
+use App\Models\Business\Service\Service;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -148,5 +151,22 @@ class User extends Authenticatable implements Auditable
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function heritageControl()
+    {
+        return $this->hasOne(HeritageControl::class);
+    }
+
+    public function salaryBand()
+    {
+        return $this->belongsTo(SalaryBand::class);
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class);
+    }
+
+
 
 }

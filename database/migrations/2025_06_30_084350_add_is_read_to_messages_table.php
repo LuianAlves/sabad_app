@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-//            $table->boolean('is_read')->default(false);
-        });
+        if (!Schema::hasColumn('messages', 'is_read')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->boolean('is_read')->default(false)->after('message');
+            });
+        }
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('messages', 'is_read')) {
+            Schema::table('messages', function (Blueprint $table) {
+                $table->dropColumn('is_read');
+            });
+        }
     }
 };
