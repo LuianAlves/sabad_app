@@ -23290,7 +23290,7 @@ hr.horizontal.gray-light {
 }
 
 .navbar-vertical.bg-white .navbar-nav>.nav-item.border-start {
-  border-color: rgba(30, 41, 59, 0.5) !important;
+  border-color: #e5e5e5a1 !important;
 }
 
 .navbar-vertical.bg-white .navbar-nav>.nav-item.border-start .nav-link.active {
