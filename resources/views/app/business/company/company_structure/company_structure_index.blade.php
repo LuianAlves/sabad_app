@@ -1,5 +1,28 @@
+{{--@extends('layouts.templates.app-layout')--}}
+{{--@section('content')--}}
+{{--    <h1>Estrutura Salarial – {{ $company->name }}</h1>--}}
+{{--    <form method="POST" action="{{ route('companies.applyAdjustment', $company) }}">--}}
+{{--        @csrf--}}
+{{--        <button type="submit">--}}
+{{--            Aplicar Dissídio ({{ $company->union->current_adjustment_percent ?? 0 }}%)--}}
+{{--        </button>--}}
+{{--    </form>--}}
 
+{{--    <table>--}}
+{{--        <thead>--}}
+{{--        <tr>--}}
+{{--            <th>Nível</th>--}}
+{{--            <th>Tier</th>--}}
+{{--            <th>Faixa</th>--}}
+{{--            <th>Salário</th>--}}
+{{--            <th>Ações</th>--}}
+{{--        </tr>--}}
+{{--        </thead>--}}
+{{--        <tbody>--}}
 
+{{--        </tbody>--}}
+{{--    </table>--}}
+{{--@endsection--}}
 @extends('layouts.templates.app-layout')
 @section('content')
     <div class="row">
@@ -27,10 +50,13 @@
                                        placeholder="Pesquisar ..">
                             </div>
 
-                            <a href="{{route('companies.applyAdjustment', $company)}}" type="button" class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0">
-                                <span class="btn-inner--text">Dissídio {{ $company->union->current_adjustment_percent ?? 0 }}%</span>
-                            </a>
+                            <form method="POST" action="{{ route('companies.applyAdjustment', $company) }}">
+                                @csrf
 
+                                <button class="btn btn-sm btn-warning btn-icon d-flex align-items-center mb-0" type="submit">
+                                    <span class="btn-inner--text">Dissídio {{ $company->union->current_adjustment_percent ?? 0 }}%</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
