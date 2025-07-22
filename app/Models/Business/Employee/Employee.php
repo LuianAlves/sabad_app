@@ -5,6 +5,7 @@ namespace App\Models\Business\Employee;
 
 use App\Models\HierarchicalLevel;
 use App\Models\SalaryBand;
+use App\Models\TierLevel;
 use App\Models\TrainingClass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -105,9 +106,13 @@ class Employee extends Model implements Auditable
         return $this->belongsTo(HierarchicalLevel::class);
     }
 
+    public function tierLevel()
+    {
+        return $this->belongsTo(TierLevel::class);
+    }
+
     public function salaryBand()
     {
         return $this->belongsTo(SalaryBand::class);
     }
-
 }

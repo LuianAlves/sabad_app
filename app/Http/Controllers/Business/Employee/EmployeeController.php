@@ -53,6 +53,8 @@ class EmployeeController extends Controller
 
         $roles = Role::with('permissions')->get();
 
+//        dd($departments, $companies, $licenses, $levels, $roles);
+
         return view('app.business.employee.employee_create', compact('roles', 'levels', 'companies', 'licenses'));
     }
 

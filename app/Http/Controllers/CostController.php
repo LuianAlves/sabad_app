@@ -18,6 +18,7 @@ class CostController extends Controller
     public function index()
     {
         $costs = Cost::with(['service', 'deviceControl', 'heritageControl', 'salaryBand'])->get();
+
         return view('app.business.cost.cost_index', compact('costs'));
     }
 
@@ -74,8 +75,10 @@ class CostController extends Controller
                 'employeeUser.employee.department.company',
                 'employeeUser.employee.deviceControl',
                 'employeeUser.employee.department.heritageControls',
+                'employeeUser.employee.department.services',
+                'employeeUser.employee.hierarchicalLevel',
+                'employeeUser.employee.tierLevel',
                 'employeeUser.employee.salaryBand',
-                'employeeUser.employee.department.services' // ✅ necessário para somar os preços
             ])
                 ->whereHas('employeeUser.employee.department.company', function ($query) use ($selectedCompany) {
                     $query->where('id', $selectedCompany);
@@ -91,8 +94,6 @@ class CostController extends Controller
             'selectedCompany', 'selectedDepartment'
         ));
     }
-
-
 
     /**
      * Display the specified resource.
