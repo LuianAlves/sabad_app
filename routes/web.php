@@ -266,7 +266,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     // aplicar o dissídio
     Route::post('company/{company}/apply-adjustment', [CompanyController::class,'applyAdjustment'])->name('companies.applyAdjustment');
 
-
     /*
     |--------------------------------------------------------------------------
     | CHART ROUTES
