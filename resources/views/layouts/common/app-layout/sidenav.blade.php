@@ -32,7 +32,7 @@
                     <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Entidades</span>
+                    <span class="nav-link-text font-weight-bold ms-1">Entidades</span>
                 </div>
             </li>
 
@@ -101,7 +101,7 @@
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Infraestrutura</span>
+                    <span class="nav-link-text font-weight-bold ms-1">Infraestrutura</span>
                 </div>
             </li>
 
@@ -192,7 +192,7 @@
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Operacional</span>
+                    <span class="nav-link-text font-weight-bold ms-1">Operacional</span>
                 </div>
             </li>
 
@@ -240,7 +240,7 @@
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Controles</span>
+                    <span class="nav-link-text font-weight-bold ms-1">Controles</span>
                 </div>
             </li>
 
@@ -348,7 +348,7 @@
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Sistema</span>
+                    <span class="nav-link-text font-weight-bold ms-1">Sistema</span>
                 </div>
             </li>
 
