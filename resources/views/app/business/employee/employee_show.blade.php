@@ -1,5 +1,6 @@
 @php
-    $completeName = $employee->name;
+
+$completeName = $employee->name;
 
     $array = explode(' ', $completeName);
 
@@ -44,28 +45,15 @@
                         </div>
 
                         <div class="col-4 offset-8 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3 text-sm-end">
-                            <a href="javascript:;" class="btn btn-sm btn-white m-0">Voltar</a>
-                            <a href="javascript:;" class="btn btn-sm btn-warning m-0">Salvar alterações</a>
+                            <a href="{{ route('employee.index') }}" class="btn btn-sm btn-white m-0">Voltar</a>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row my-3 py-3">
-            @role('admin') 
-                é um admin            
-            @endrole
-
-            @role('user')
-                <p>é um usuario</p>
-            @endrole
-            
-            @can('delete users')
-                <p>pode deletar</p>
-            @endcan
-
             <!-- Permissions -->
             <div class="col-12 col-xl-4">
                 <div class="card border shadow-xs h-100" style="max-height: 450px; overflow-y: auto;">
@@ -150,7 +138,8 @@
                                 {{ $employee->phoneNumber ? $employee->phoneNumber : 'Não informado' }}
                             </li>
                             <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                <span class="text-secondary">Cargo:</span> &nbsp; {{ $employee->hierarchical_level }}
+                                <span class="text-secondary">Cargo:</span> &nbsp; {{ $employee?->hierarchicalLevel?->name ?? 'Não definido' }}
+
                             </li>
                             <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                 <span class="text-secondary">Empresa:</span> &nbsp;

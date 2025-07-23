@@ -55,9 +55,9 @@ class Employee extends Model implements Auditable
         return $this->belongsTo(Department::class);
     }
 
-    public function companies()
+    public function company()
     {
-        return $this->hasMany(Company::class);
+        return $this->belongsTo(Company::class);
     }
 
     public function emails()

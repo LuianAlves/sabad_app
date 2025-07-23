@@ -58,7 +58,9 @@
                                 </td>
 
                                 <td class="text-center">
-                                    <p class="text-secondary text-sm mb-0">{{ $employee->hierarchical_level }}</p>
+                                    <p class="text-secondary text-sm mb-0">{{ $employee?->hierarchicalLevel?->name ?? 'Não definido' }}
+
+                                    </p>
                                 </td>
 
                                 <td class="text-center">
