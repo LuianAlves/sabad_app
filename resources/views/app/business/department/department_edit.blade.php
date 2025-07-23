@@ -26,9 +26,9 @@
 
                         {{-- Nome do Departamento --}}
                         <x-input col="6" set="" type="text" title="Nome do Departamento" id="name"
-                            name="name" value="{{ old($department->name ) }}" placeholder="Ex: RH" />
-                    </div>                    
-                              
+                            name="name" value="{{ old('name', $department->name) }}" placeholder="Ex: RH" />
+                    </div>
+
                 </x-form>
 
             </div>

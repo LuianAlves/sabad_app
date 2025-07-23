@@ -6,8 +6,8 @@
 
         <div class="container">
             <div class="card card-body py-2 bg-transparent shadow-none">
-                <div class="row">
-                    <div class="col-auto">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12 text-center">
                         <div
                             class="avatar avatar-2xl rounded-circle position-relative mt-n7 border border-gray-100 border-4">
                             @if (isset($user) && $user->image)
@@ -68,20 +68,23 @@
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Telefone:</span>
-                                    @if (optional(auth()->user()->employeeUser->employee->chipControl)->number)
-                                        {{ auth()->user()->employeeUser->employee->chipControl->ddd }}
-                                        {{ auth()->user()->employeeUser->employee->chipControl->number }}
+                                    @php
+                                        $chip = auth()->user()?->employeeUser?->employee?->chipControl;
+                                    @endphp
+
+                                    @if (!empty($chip?->number))
+                                        {{ $chip->ddd ?? '' }} {{ $chip->number }}
                                     @else
                                         <span class="text-muted">Não informado</span>
                                     @endif
-
                                 </li>
+
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Cargo:</span>
-                                    {{ auth()->user()->employeeUser->employee->department->company->hierarchical_level }}
-
+                                    {{ auth()->user()?->employeeUser?->employee?->hierarchicalLevel?->name ?? 'Não informado' }}
                                 </li>
+
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Empresa:</span>

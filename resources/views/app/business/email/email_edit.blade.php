@@ -37,7 +37,6 @@
                                                         {{ $license->name }}
                                                     </option>
                                                 @endforeach
-                                        </optgroup>
                                 </select>
 
                         {{-- E-mail --}}
@@ -51,7 +50,7 @@
                         <label for="alias[]">Alias</label>
                         <input type="text" name="alias[]" class="form-control" value="{{ old('alias.0', json_decode($email->alias)[0] ?? '') }}" placeholder="Ex: alias1@empresa.com">
 
- 
+
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="is_active" class="form-control-label">Status</label>

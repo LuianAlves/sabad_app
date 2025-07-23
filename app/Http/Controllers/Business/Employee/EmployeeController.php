@@ -42,8 +42,8 @@ class EmployeeController extends Controller
         $licenses = License::get();
         $levels = HierarchicalLevel::orderBy('order')
             ->with([
-                'tierLevels' => fn($q)=> $q->orderBy('order')
-                    ->with(['salaryBands'=>fn($q2)=> $q2->orderBy('band')])
+                'tierLevels' => fn($q) => $q->orderBy('order')
+                    ->with(['salaryBands' => fn($q2) => $q2->orderBy('band')])
             ])
             ->get();
 
@@ -109,7 +109,7 @@ class EmployeeController extends Controller
             'created_at' => Carbon::now()
         ]);
 
-        $isAdmin = (bool) $request->is_admin;
+        $isAdmin = (bool)$request->is_admin;
 
         $user = User::create([
             'name' => $request->name,
@@ -156,10 +156,30 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        $employee = Employee::with('department.company')->findOrFail($id);
-        $departments = Department::with('company')->get();
+        $employee = Employee::with([
+            'department.company',
+            'employeeUser.user.roles',
+        ])->findOrFail($id);
 
-        return view('app.business.employee.employee_edit', compact('employee', 'departments'));
+        $departments = Department::with('company')->get();
+        $companies = Company::with('departments')->get();
+        $licenses = License::all();
+        $levels = HierarchicalLevel::orderBy('order')
+            ->with([
+                'tierLevels' => fn($q) => $q->orderBy('order')
+                    ->with(['salaryBands' => fn($q2) => $q2->orderBy('band')])
+            ])
+            ->get();
+        $roles = Role::all();
+
+        return view('app.business.employee.employee_edit', compact(
+            'employee',
+            'departments',
+            'companies',
+            'licenses',
+            'levels',
+            'roles'
+        ));
     }
 
 
@@ -167,18 +187,68 @@ class EmployeeController extends Controller
     {
         $request->validated();
 
-        $employee = Employee::find($id);
+        $employee = Employee::with('employeeUser.user')->findOrFail($id);
 
+        // Atualiza imagem se enviada
+        $imagemBase64 = $employee->employeeUser->user->image;
+        if ($request->hasFile('image')) {
+            $userImage = $request->file('image');
+            $imageData = file_get_contents($userImage->getRealPath());
+            $image = imagecreatefromstring($imageData);
+
+            if ($image !== false) {
+                $w = 250;
+                $h = 250;
+                $resizedImage = imagescale($image, $w, $h);
+                ob_start();
+                imagejpeg($resizedImage);
+                $rawImage = ob_get_clean();
+                $imagemBase64 = base64_encode($rawImage);
+                imagedestroy($resizedImage);
+                imagedestroy($image);
+            }
+        }
+
+        // Atualiza o funcionário
         $employee->update([
-            'department_id' => $request->department_id,
-            'name' => $request->name,
-            'hierarchical_level' => $request->hierarchical_level,
-            'hired_in' => $request->hired_in,
-            'fired_in' => $request->fired_in,
-            'status' => $request->status
+            'department_id'         => $request->department_id,
+            'name'                  => $request->name,
+            'hierarchical_level_id' => $request->level_id,
+            'tier_level_id'         => $request->tier_id,
+            'salary_band_id'        => $request->salary_band_id,
+            'hired_in'              => $request->hired_in,
+            'fired_in'              => $request->fired_in,
+            'status'                => $request->status,
         ]);
 
-        return redirect()->route('employee.index');
+        // Atualiza e-mail
+        Email::updateOrCreate(
+            ['employee_id' => $employee->id],
+            [
+                'license_id' => $request->license_id,
+                'user'       => $request->name,
+                'email'      => $request->email,
+            ]
+        );
+
+        // Atualiza usuário vinculado
+        $user = $employee->employeeUser->user;
+        $user->update([
+            'name'  => $request->name,
+            'email' => $request->email,
+            'image' => $imagemBase64,
+        ]);
+
+        // Atualiza permissões
+        $user->syncRoles([]); // Remove tudo
+
+        if ((bool)$request->is_admin) {
+            $user->assignRole('admin');
+        } elseif ($request->role) {
+            $user->assignRole($request->role);
+        }
+
+        return redirect()->route('employee.index')->with('success', 'Funcionário atualizado com sucesso!');
     }
 
     public function destroy($id)
@@ -188,4 +258,5 @@ class EmployeeController extends Controller
 
         return redirect()->route('employee.index');
     }
+
 }

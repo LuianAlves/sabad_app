@@ -31,6 +31,14 @@ class UnionController extends Controller
         return redirect()->route('union.index');
     }
 
+    Public function show($id)
+    {
+        $union = Union::find($id);
+
+        return view('app.business.unions.union.union_show', compact('union'));
+
+    }
+
     public function edit(Union $union)
     {
         return view('app.business.unions.union.union_edit', compact('union'));

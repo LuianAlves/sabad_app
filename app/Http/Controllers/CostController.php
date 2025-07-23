@@ -75,7 +75,7 @@ class CostController extends Controller
                 'employeeUser.employee.department.company',
                 'employeeUser.employee.deviceControl',
                 'employeeUser.employee.department.heritageControls',
-                'employeeUser.employee.department.services',
+//                'employeeUser.employee.department.services',
                 'employeeUser.employee.hierarchicalLevel',
                 'employeeUser.employee.tierLevel',
                 'employeeUser.employee.salaryBand',

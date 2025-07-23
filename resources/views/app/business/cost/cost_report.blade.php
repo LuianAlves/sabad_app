@@ -40,7 +40,7 @@
                     <th>Dispositivo</th>
                     <th>Patrimônio</th>
                     <th>Salário</th>
-                    <th>Serviços</th>
+{{--                    <th>Serviços</th>--}}
                     <th>Total</th>
                 </tr>
                 </thead>
@@ -50,12 +50,22 @@
                         $employee = $emp->employeeUser?->employee;
                         $department = $employee?->department;
 
-                        $device = $employee?->deviceControl?->estimated_price               ?? 0;
-                        $heritage = $department?->heritageControls?->sum('estimated_price') ?? 0;
-                        $salary   = $employee->salaryBand?->salary                          ?? 0;
-                        $services = $department?->services?->sum('price')                   ?? 0;
+                        $device = $employee?->deviceControl?->estimated_price ?? 0;
 
-                        $total = $device + $heritage + $salary + $services;
+                        // Total de patrimônios do departamento
+                        $heritageTotal = $department?->heritageControls?->sum('estimated_price') ?? 0;
+
+                        // Total de funcionários do departamento (evitando divisão por zero)
+                        $employeeCount = $department?->employees?->count() ?: 1;
+
+                        // Média por funcionário
+                        $heritage = $heritageTotal / $employeeCount;
+
+                        $salary = $employee->salaryBand?->salary ?? 0;
+                    //                        $services = $department?->services?->sum('price')                   ?? 0;
+
+                        $total = $device + $heritage + $salary;
+                    //                         + $services
                     @endphp
 
                     <tr>
@@ -63,7 +73,7 @@
                         <td>R$ {{ number_format($device, 2, ',', '.') }}</td>
                         <td>R$ {{ number_format($heritage, 2, ',', '.') }}</td>
                         <td>R$ {{ number_format($salary, 2, ',', '.') }}</td>
-                        <td>R$ {{ number_format($services, 2, ',', '.') }}</td>
+{{--                        <td>R$ {{ number_format($services, 2, ',', '.') }}</td>--}}
                         <td><strong>R$ {{ number_format($total, 2, ',', '.') }}</strong></td>
                     </tr>
                 @endforeach

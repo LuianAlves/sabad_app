@@ -60,4 +60,6 @@ class Company extends Model implements Auditable
     {
         return $this->hasMany(HierarchicalLevel::class, 'company_id');
     }
+
+
 }
