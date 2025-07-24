@@ -81,7 +81,7 @@ class ServiceController extends Controller
 
     public function show($id)
     {
-        $service = Service::findOrFail($id);
+        $service = Service::with('department')->findOrFail($id);
 
         return view('app.business.service.service_show', compact('service'));
     }
@@ -89,8 +89,9 @@ class ServiceController extends Controller
     public function edit($id)
     {
         $service = Service::findOrFail($id);
+        $departments = Department::all();
 
-        return view('app.business.service.service_edit', compact('service'));
+        return view('app.business.service.service_edit', compact('service', 'departments'));
     }
 
     public function update(UpdateServiceRequest $request, $id)

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Business\Heritage;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Business\Heritage\HeritageBrand\HeritageBrand;
+use App\Models\Business\Heritage\HeritageModel\HeritageModel;
+use App\Models\Business\Heritage\HeritageType\HeritageType;
 use Illuminate\Http\Request;
 
 // Requests
@@ -44,23 +47,45 @@ class HeritageController extends Controller
         return redirect()->route('heritage.index');
     }
 
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $heritage = Heritage::with(['heritageType', 'heritageBrand', 'heritageModel'])->findOrFail($id);
+
+        return view('app.business.heritage.heritage_show', compact('heritage'));
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $heritage = Heritage::findOrFail($id);
+
+        $heritageTypes = HeritageType::all();
+        $heritageBrands = HeritageBrand::all();
+        $heritageModels = HeritageModel::all();
+
+        return view('app.business.heritage.heritage_edit', compact(
+            'heritage',
+            'heritageTypes',
+            'heritageBrands',
+            'heritageModels'
+        ));
+
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateHeritageRequest $request, $id)
     {
-        //
+        $heritage = Heritage::findOrFail($id);
+
+        $validated = $request->validated(); // Aqui funciona sem erro
+
+        $heritage->update($validated);
+
+        return redirect()->route('heritage.index')->with('success', 'Patrimônio atualizado com sucesso!');
     }
 
     public function destroy(string $id)
     {
-        //
+        $heritage = Heritage::find($id);
+        $heritage->delete();
+        return redirect()->route('heritage.index');
     }
 }

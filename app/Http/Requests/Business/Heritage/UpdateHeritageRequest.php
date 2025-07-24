@@ -14,15 +14,13 @@ class UpdateHeritageRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+            return [
+                'heritage_type_id' => 'required|exists:heritage_types,id',
+                'heritage_brand_id' => 'required|exists:heritage_brands,id',
+                'heritage_model_id' => 'required|exists:heritage_models,id',
+            ];
+
     }
 }
