@@ -187,7 +187,7 @@
             <!-------- Operacional -------->
             <li class="nav-item mt-2">
                 <div
-                    class="d-flex align-items-center nav-link {{ in_array($current, ['task', 'tickets', 'bookings']) ? 'active' : '' }}">
+                    class="d-flex align-items-center nav-link {{ in_array($current, ['tasks', 'tickets', 'bookings']) ? 'active' : '' }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
@@ -209,8 +209,8 @@
 
             <!--Tasks-->
             <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link p-0 {{ $current == 'task' ? 'active' : '' }}"
-                   href="{{ route('task.index') }}">
+                <a class="nav-link p-0 {{ $current == 'tasks' ? 'active' : '' }}"
+                   href="{{ route('tasks.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-tasks fi-1"></i>

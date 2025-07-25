@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",
         "maatwebsite/excel": "*",
+        "ramsey/uuid": "^4.9",
         "spatie/eloquent-sortable": "^4.4",
         "spatie/laravel-permission": "^6.18"
     },

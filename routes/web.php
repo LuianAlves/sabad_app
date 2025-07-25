@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\Task\SubTaskController;
+use App\Http\Controllers\Api\Task\TaskDocumentController;
 use App\Http\Controllers\Auth\PermissionController;
 use App\Http\Controllers\Auth\RoleController;
 use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
+use App\Http\Controllers\Business\Task\Kanban\KanbanController;
+use App\Http\Controllers\Business\Task\TaskShareController;
+use App\Http\Controllers\Business\Task\TaskStatusController;
 use App\Http\Controllers\Business\Training\Training\TrainingController;
 use App\Http\Controllers\Business\Training\TrainingClass\TrainingClassController;
 use App\Http\Controllers\Business\Training\TrainingParticipant\TrainingParticipantController;
@@ -76,9 +81,8 @@ use App\Http\Controllers\Business\Maintenance\MaintenanceController;
 use App\Http\Controllers\Business\Tickets\TicketStatusController;
 
 // Task
-use App\Http\Controllers\Business\Task\TaskController;
-use App\Http\Controllers\Business\Task\KanbanController;
-use App\Http\Controllers\Business\Task\TaskStatusController;
+use App\Http\Controllers\Business\Task\TaskController as WebTaskController;
+use App\Http\Controllers\Api\Task\TaskController as ApiTaskController;
 
 // Logs
 use App\Http\Controllers\Log\ActivityLogController;
@@ -241,9 +245,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('/collaborator', CollaboratorController::class);
 
-    // Tasks
-    Route::resource('/task', TaskController::class);
-
     // Trainings
     Route::resource('/training', TrainingController::class)->names('training');
 
@@ -267,10 +268,50 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 
     // mostra a estrutura salarial
-    Route::get('company/{company}/company_structure', [CompanyController::class,'structure'])->name('companies.company_structure');
+    Route::get('company/{company}/company_structure', [CompanyController::class, 'structure'])->name('companies.company_structure');
 
     // aplicar o dissídio
-    Route::post('company/{company}/apply-adjustment', [CompanyController::class,'applyAdjustment'])->name('companies.applyAdjustment');
+    Route::post('company/{company}/apply-adjustment', [CompanyController::class, 'applyAdjustment'])->name('companies.applyAdjustment');
+
+    // TasksStatus
+    Route::get('/task_status', [TaskStatusController::class, 'index'])->name('task_status.index');
+    Route::resource('/task-status-api', \App\Http\Controllers\Api\Task\TaskStatusController::class)->names('task-statuses-api');
+
+    // Tasks
+    Route::get('/tasks', [WebTaskController::class, 'index'])->name('tasks.index');
+    Route::prefix('tasks-api')->group(function () {
+        Route::get('/', [ApiTaskController::class, 'index']);
+        Route::post('/', [ApiTaskController::class, 'store']);
+        Route::get('{id}', [ApiTaskController::class, 'show']);
+        Route::put('{id}', [ApiTaskController::class, 'update']);
+        Route::delete('{id}', [ApiTaskController::class, 'destroy']);
+        Route::post('reorder', [ApiTaskController::class, 'reorder']);
+    });
+
+    // SubTasks
+    Route::prefix('tasks-api/{task}/subtasks')->group(function () {
+        Route::get('/', [SubTaskController::class, 'index']);
+        Route::post('/', [SubTaskController::class, 'store']);
+        Route::put('{subtask}', [SubTaskController::class, 'update']);
+        Route::delete('{subtask}', [SubTaskController::class, 'destroy']);
+    });
+
+
+    // TaskDocuments
+    Route::prefix('tasks-api/{task}')->group(function () {
+        Route::post('documents', [TaskDocumentController::class, 'storeForTask']);
+        Route::get('documents', [TaskDocumentController::class, 'listForTask']);
+        Route::post('subtasks/{subtask}/documents', [TaskDocumentController::class, 'storeForSubtask']);
+        Route::get('subtasks/{subtask}/documents', [TaskDocumentController::class, 'listForSubtask']);
+    });
+    Route::delete('documents/{id}', [TaskDocumentController::class, 'destroy']);
+
+
+    // Task Share
+    Route::post('/tasks/{task}/share', [TaskShareController::class,'share'])->middleware('can:update,task')->name('tasks.share');
+
+    // Kanban
+    Route::get('/kanban', [KanbanController::class, 'index'])->name('kanban.index');
 
     /*
     |--------------------------------------------------------------------------
