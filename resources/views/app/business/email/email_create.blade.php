@@ -42,11 +42,11 @@
 
                         {{-- E-mail --}}
                         <x-input col="6" set="" type="text" title="E-mail" id="email"
-                            name="email" value="{{ old('email') }}" placeholder="" />
+                            name="email" value="" placeholder="" />
 
                         {{-- Password --}}
-                        <x-input col="6" set="" type="text" title="Password" id="password"
-                            name="password" value="{{ old('password') }}" placeholder="" />
+                        <x-input col="6" set="" type="text" title="password" id="password"
+                            name="password" value="" placeholder="" />
 
                         <label for="alias[]">Alias</label>
                         <input type="text" name="alias[]" class="form-control" placeholder="Ex: alias1@empresa.com">

@@ -5,7 +5,7 @@
             <div class="card border shadow-xs mb-4" style="height: calc(100vh - 17.5vh) !important;">
 
                 <x-card-header title="Nova licença" action="cadastrar"></x-card-header>
-            
+
                 <x-form route="store">
                     <div class="row">
                         <x-select col="6" set="" title="Serviço" id="service_id" name="service_id" disabled="">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="row">
                         <x-input col="4" set="" type="date" title="Contratado em" id="contracted_in" name="contracted_in" value="" placeholder="" disabled=""></x-input>
-                        <x-input col="6" set="" type="text" title="Valor da licença" id="price" name="price" value="" placeholder="R$ 0.00" disabled=""></x-input>
+                        <x-input col="6" set="" type="text" title="Valor da licença" id="price_per_unit" name="price_per_unit" value="" placeholder="R$ 0.00" disabled=""></x-input>
                     </div>
                     <div class="row">
                         <label>Recorrência</label>
@@ -40,12 +40,12 @@
                             <div class="form-check mx-3">
                                 <input class="form-check-input" type="radio" name="recurrence" id="yearly" value="yearly">
                                 <label class="custom-control-label" for="yearly">Anual</label>
-                            </div>    
+                            </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="recurrence" id="lifetime" value="lifetime">
                                 <label class="custom-control-label" for="lifetime">Vitalício</label>
-                            </div>  
-                        </div>                  
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <x-input col="3" set="" type="number" title="Dia de pagamento" id="payment_day" name="payment_day" value="" placeholder="05, 10 ..." disabled=""></x-input>
