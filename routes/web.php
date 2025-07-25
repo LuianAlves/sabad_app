@@ -267,10 +267,25 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
 
     // mostra a estrutura salarial
-    Route::get('company/{company}/company_structure', [CompanyController::class,'structure'])->name('companies.company_structure');
+    Route::get('company/{company}/company_structure', [CompanyController::class, 'structure'])->name('companies.company_structure');
 
     // aplicar o dissídio
-    Route::post('company/{company}/apply-adjustment', [CompanyController::class,'applyAdjustment'])->name('companies.applyAdjustment');
+    Route::post('company/{company}/apply-adjustment', [CompanyController::class, 'applyAdjustment'])->name('companies.applyAdjustment');
+
+    /* --->| Tasks |<--- */
+    Route::group(['prefix' => 'task', 'middleware' => 'can:task_view'], function () {
+        Route::get('/', [TaskController::class, 'indexView'])->name('task.index');
+        Route::post('/update-position', [TaskController::class, 'updateView'])->name('task.update');
+
+        Route::group(['prefix' => 'task-status', 'middleware' => 'can:status_task_view'], function () {
+            Route::get('/', [TaskStatusController::class, 'index'])->name('task-status.index');
+            Route::post('/update-position', [TaskStatusController::class, 'update'])->name('task-status.update');
+        });
+    });
+
+    Route::resource('/task-api', TaskController::class)->except('create');
+    Route::resource('/task-status-api', TaskStatusController::class)->except('create');
+
 
     /*
     |--------------------------------------------------------------------------
