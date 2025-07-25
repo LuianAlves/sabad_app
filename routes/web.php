@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PermissionController;
 use App\Http\Controllers\Auth\RoleController;
 use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
+use App\Http\Controllers\Business\Task\Kanban\KanbanController;
 use App\Http\Controllers\Business\Task\TaskShareController;
 use App\Http\Controllers\Business\Task\TaskStatusController;
 use App\Http\Controllers\Business\Training\Training\TrainingController;
@@ -308,6 +309,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // Task Share
     Route::post('/tasks/{task}/share', [TaskShareController::class,'share'])->middleware('can:update,task')->name('tasks.share');
+
+    // Kanban
+    Route::get('/kanban', [KanbanController::class, 'index'])->name('kanban.index');
 
     /*
     |--------------------------------------------------------------------------
