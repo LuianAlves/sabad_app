@@ -1,298 +1,232 @@
-<x-app-layout>
-    @section('content')
-        <div class="row">
-            <div class="col-12">
-                <x-breadcrumb title="Quadro de tarefas" current="Tarefas"></x-breadcrumb>
+@extends('layouts.templates.app-layout')
 
-                <div class="top-right-button-container d-flex align-items-center align-content-center">
-                    <a href="{{route('task-status.index')}}" class="btn btn-primary mx-2">NOVO STATUS</a>
-                </div>
+@section('content')
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-semibold mb-4">Gerenciar Tarefas</h1>
+        <button id="btnNewTask" class="px-4 py-2 bg-blue-600 text-white rounded mb-4">Nova Tarefa</button>
 
-                <div class="separator mb-4"></div>
-            </div>
-        </div>
+        <table class="min-w-full bg-white shadow rounded" id="tasksTable">
+            <thead>
+            <tr class="bg-gray-100">
+                <th class="px-4 py-2">Ordem</th>
+                <th class="px-4 py-2">name</th>
+                <th class="px-4 py-2">Descrição</th>
+                <th class="px-4 py-2">Vencimento</th>
+                <th class="px-4 py-2">Prioridade</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Responsáveis</th>
+                <th class="px-4 py-2">Ações</th>
+            </tr>
+            </thead>
+            <tbody id="tasksTableBody"></tbody>
+        </table>
+    </div>
 
-        <div class="scroll" id="main-board">
-            <div class="row sortable-statuses">
-                @foreach($statuses as $status)
-                    <div class="col-md-3" data-status-id="{{ $status->id }}">
-                        <div class="card mb-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="card-header text-uppercase d-flex align-items-center">
-                                    <div class="status-tag">
-                                        <i class="bi bi-record-circle" style="color: {{$status->color}}"></i>
-                                        <strong>{{ $status->task_status }}</strong>
-                                    </div>
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <ul class="sortable-tasks list-unstyled" data-status-id="{{ $status->id }}">
-                                    @foreach($status->tasks as $task)
-                                        @php
-                                            $priority = $task->priority;
-                                            $date = $task->date == "" ? '...' : $task->date;
+    @include('app.business.task.task_modal')
+@endsection
 
-                                            switch ($priority) {
-                                                case 'high':
-                                                    $priority = 'Alta';
-                                                    $priorityColor = 'red';
-                                                break;
-
-                                                case 'medium':
-                                                    $priority = 'Normal';
-                                                    $priorityColor = 'green';
-                                                break;
-
-                                                case 'low':
-                                                    $priority = 'Baixa';
-                                                    $priorityColor = 'grey';
-                                                break;
-                                            }
-
-                                        @endphp
-
-                                        <li class="mb-2" data-task-id="{{ $task->id }}">
-                                            <div class="card" style="box-shadow: 1px 1px 5px rgba(0,0,0,0.42);">
-                                                <div class="card-header d-flex justify-content-between align-items-center">
-                                                    <h6 class="card-title m-0">{{ $task->task }}</h6>
-
-                                                    {{-- Dropdown Options Task --}}
-                                                    <div class="btn-group float-right float-none-xs">
-                                                        <a href="#" class="dropdown-toggle" type="button"
-                                                           data-toggle="dropdown" aria-haspopup="true"
-                                                           aria-expanded="false">
-                                                            <i class="bi bi-three-dots" style="font-size: 18px;"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu">
-                                                            <button class="dropdown-item"
-                                                                    data-task-id="{{ $task->id }}">
-                                                                <i class="bi bi-pencil-square text-primary"></i>
-                                                                <span class="mx-2">Renomear Tarefa</span>
-                                                            </button>
-                                                            <button class="dropdown-item deletebtn"
-                                                                    data-task-id="{{ $task->id }}">
-                                                                <i class="bi bi-trash3 text-secondary"></i>
-                                                                <span class="mx-2">Excluir Tarefa</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body" style="padding: 5px 15px">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <ul>
-                                                            <li class="list-status-task">
-                                                                <i class="bi bi-record-circle-fill"
-                                                                   style="color: {{$status->color}}"></i>
-                                                                <strong>{{ $status->task_status }}</strong>
-                                                            </li>
-                                                            <li class="list-status-task">
-                                                                <i class="bi bi-calendar-week"></i>
-                                                                <strong>{{$date}}</strong>
-                                                            </li>
-                                                            <li class="list-status-task">
-                                                                <i class="bi bi-flag-fill"
-                                                                   style="color: {{$priorityColor}};"></i>
-                                                                <strong>{{$priority}}</strong>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                                <div class="d-flex align-items-center add-new-task">
-                                    <input type="text" class="form-control order-1" id="inputAddTask"
-                                           placeholder="Nova tarefa">
-                                    <button class="add-task order-0">+</button>
-                                </div>
-                                <div class="card add-task-card" style="display: none;">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <label for="task-title">Título</label>
-                                                <input type="text" id="task-title" class="form-control">
-                                            </div>
-                                            <div class="col-12 my-3">
-                                                <label for="task-date">Vencimento</label>
-                                                <input type="date" id="task-date" class="form-control">
-                                            </div>
-                                            <div class="col-12">
-                                                <label for="task-priority">Prioridade</label>
-                                                <select id="task-priority" class="form-control">
-                                                    <option value="low">Baixa</option>
-                                                    <option value="medium">Normal</option>
-                                                    <option value="high">Alta</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12 mt-3 d-flex flex-column">
-                                                <button class="btn btn-primary save-task"
-                                                        style="border-radius: 7.5px; padding: 5px 12.5px;">
-                                                    <strong>Salvar</strong>
-                                                    <i class="bi bi-save mx-2"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-
-        <script>
-            var route = "{{ route('task-api.index') }}"
-        </script>
-
-        <script type="module" src="{{ asset('assets/js/common/task.js') }}"></script>
-    @endsection
-</x-app-layout>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        function initializeTaskButtons() {
-            document.querySelectorAll('.add-task').forEach(button => {
-                button.addEventListener('click', function () {
-                    const card = this.closest('.card-body').querySelector('.add-task-card');
-                    card.style.display = 'block';
-                    card.style.top = `${this.offsetTop + this.offsetHeight}px`;
-                    card.style.left = `${this.offsetLeft}px`;
+    async function request(url, options = {}) {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        options.headers = {
+            'X-CSRF-TOKEN': token,
+            'Accept': 'application/json',
+            ...options.headers
+        };
+        const response = await fetch(url, options);
+        if (!response.ok) throw response;
+        return response.json();
+    }
 
-                    // Fecha o card ao clicar fora dele
-                    document.addEventListener('click', function (event) {
-                        if (!card.contains(event.target) && event.target !== button) {
-                            card.style.display = 'none';
-                        }
-                    }, {once: true});
+    document.addEventListener('DOMContentLoaded', () => {
+        const apiUrl = '{{ url("/tasks-api") }}';
+        const statuses = @json($statuses);
+        const users = @json($users);
+        const tbody = document.getElementById('tasksTableBody');
+        const modal = document.getElementById('taskModal');
+        const form = document.getElementById('taskForm');
 
-                    // Lógica para salvar a tarefa
-                    card.querySelector('.save-task').addEventListener('click', function () {
-                        const title = card.querySelector('#task-title').value;
-                        const date = card.querySelector('#task-date').value;
-                        const priority = card.querySelector('#task-priority').value;
-                        const statusId = button.closest('[data-status-id]').dataset.statusId;
-
-                        fetch('/projects/task-api', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                            body: JSON.stringify({
-                                task: title,
-                                date: date,
-                                priority: priority,
-                                task_status_id: statusId
-                            })
-                        }).then(response => response.json()).then(task => {
-                            var task = task.data;
-
-                            let li = document.createElement('li');
-                            li.className = 'mb-2';
-                            li.dataset.taskId = task.id;
-                            li.innerHTML = `
-                            <li class="mb-2" data-task-id="${task.id}">
-                                            <div class="card" style="box-shadow: 1px 1px 5px rgba(0,0,0,0.42);">
-                                                <div
-                                                    class="card-header d-flex justify-content-between align-items-center">
-                                                    <h6 class="card-title m-0">${task.task}</h6>
-                                                    <div class="btn-group float-right float-none-xs">
-                                                        <a href="#" class="dropdown-toggle" type="button"
-                                                           data-toggle="dropdown" aria-haspopup="true"
-                                                           aria-expanded="false">
-                                                            <i class="bi bi-three-dots" style="font-size: 18px;"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu">
-                                                            <button class="dropdown-item"
-                                                                    data-task-id="${task.id}">
-                                                                <i class="bi bi-pencil-square text-primary"></i>
-                                                                <span class="mx-2">Renomear Tarefa</span>
-                                                            </button>
-                                                            <button class="dropdown-item deletebtn"
-                                                                    data-task-id="${task.id}">
-                                                                <i class="bi bi-trash3 text-secondary"></i>
-                                                                <span class="mx-2">Excluir Tarefa</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body" style="padding: 5px 15px">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <ul>
-                                                            <li class="list-status-task">
-                                                                <i class="bi bi-record-circle-fill"
-                                                                   style="color: ${task.status.color}"></i>
-                                                                <strong>${task.status.task_status}</strong>
-                                                            </li>
-                                                            <li class="list-status-task">
-                                                                <i class="bi bi-calendar-week"></i>
-                                                                <strong>${task.date}</strong>
-                                                            </li>
-                                                            <li class="list-status-task">
-                                                                <i class="bi bi-flag-fill"
-                                                                   style="color: ${task.priority_color};"></i>
-                                                                <strong>${task.priority}</strong>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                        `;
-                            button.closest('.card-body').querySelector('.sortable-tasks').appendChild(li);
-                            card.style.display = 'none';
-                        });
-                    });
+        // Drag & drop
+        Sortable.create(tbody, {
+            handle: '.drag-handle',
+            onEnd: async () => {
+                const orderData = Array.from(tbody.children).map((row, index) => ({
+                    id: row.dataset.id,
+                    order: index
+                }));
+                await request(`${apiUrl}/reorder`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({order: orderData})
                 });
+            }
+        });
+
+        function populate() {
+            const statusSelect = document.getElementById('task_status_id');
+
+            statusSelect.innerHTML = '<option value="">Selecione status</option>';
+            statuses.forEach(s => statusSelect.insertAdjacentHTML('beforeend', `<option value="${s.task_status_id}">${s.name}</option>`));
+
+            const usersSelect = document.getElementById('responsible');
+
+            usersSelect.innerHTML = '';
+            users.forEach(u => usersSelect.insertAdjacentHTML('beforeend', `<option value="${u.id}">${u.name}</option>`));
+        }
+
+        request(apiUrl).then(tasks => tasks.forEach(renderRow));
+
+        document.getElementById('btnNewTask').onclick = () => {
+            form.reset();
+            document.getElementById('task_id').value = '';
+            document.getElementById('order').value = 0;
+            populate();
+            document.getElementById('modalTitle').innerText = 'Nova Tarefa';
+
+            loadSubtasks(taskId)
+
+            modal.classList.remove('hidden');
+        };
+        document.getElementById('btnCancelTask').onclick = () => modal.classList.add('hidden');
+
+        form.onsubmit = async e => {
+            e.preventDefault();
+            const id = document.getElementById('task_id').value;
+            const data = new FormData(form);
+            if (id) await request(`${apiUrl}/${id}`, {method: 'PUT', body: data});
+            else await request(apiUrl, {method: 'POST', body: data});
+            window.location.reload();
+        };
+
+        function renderRow(task) {
+            const names = task.responsible.map(id => users.find(u => u.id === id)?.name || id).join(', ');
+            const tr = document.createElement('tr');
+            tr.dataset.id = task.task_id;
+            tr.innerHTML = `
+            <td class="border px-4 py-2 drag-handle cursor-move">${task.order}</td>
+            <td class="border px-4 py-2">${task.name}</td>
+            <td class="border px-4 py-2">${task.description || ''}</td>
+            <td class="border px-4 py-2">${task.due_date || ''}</td>
+            <td class="border px-4 py-2">${task.priority}</td>
+            <td class="border px-4 py-2">${task.status.name}</td>
+            <td class="border px-4 py-2">${names}</td>
+            <td class="border px-4 py-2">
+                <button onclick="editTask('${task.task_id}')" class="text-blue-600 mr-2">Editar</button>
+                <button onclick="deleteTask('${task.task_id}')" class="text-red-600">Excluir</button>
+            </td>
+        `;
+            tbody.appendChild(tr);
+        }
+
+        window.editTask = async id => {
+            const t = await request(`${apiUrl}/${id}`);
+
+            document.getElementById('task_id').value = t.task_id;
+            document.getElementById('order').value = t.order;
+            document.getElementById('name').value = t.name;
+            document.getElementById('description').value = t.description;
+            document.getElementById('due_date').value = t.due_date;
+            document.getElementById('priority').value = t.priority;
+            populate();
+            document.getElementById('task_status_id').value = t.task_status_id;
+            Array.from(document.getElementById('responsible').options).forEach(o => o.selected = t.responsible.includes(parseInt(o.value)));
+            document.getElementById('modalTitle').innerText = 'Editar Tarefa';
+
+            loadSubtasks(id);
+            loadDocs(id);
+
+            modal.classList.remove('hidden');
+        };
+
+        window.deleteTask = async id => {
+            if (!confirm('Deseja excluir?')) return;
+            await request(`${apiUrl}/${id}`, {method: 'DELETE'});
+            window.location.reload();
+        };
+
+        let currentTaskId;
+        const subtasksList = document.getElementById('subtasksList');
+        const subtaskForm = document.getElementById('subtaskForm');
+        const subtaskModal = document.getElementById('subtaskModal');
+        const subtaskTitle = document.getElementById('subtaskModalTitle');
+
+        btnNewSubtask.onclick = () => {
+            subtaskForm.reset();
+            subtaskTitle.innerText = 'Nova Subtarefa';
+            subtaskModal.classList.remove('hidden');
+        };
+        btnCancelSubtask.onclick = () => subtaskModal.classList.add('hidden');
+
+        async function loadSubtasks(taskId) {
+            currentTaskId = taskId;
+            subtasksList.innerHTML = '';
+            const list = await request(`${apiUrl}/${taskId}/subtasks`);
+            list.forEach(st => {
+                const li = document.createElement('li');
+                li.textContent = st.nome;
+                const btnDel = document.createElement('button');
+                btnDel.textContent = '✕';
+                btnDel.className = 'ml-2 text-red-600';
+                btnDel.onclick = async () => {
+                    await request(`${apiUrl}/${taskId}/subtasks/${st.subtask_id}`, {method: 'DELETE'});
+                    loadSubtasks(taskId);
+                };
+                li.appendChild(btnDel);
+                subtasksList.appendChild(li);
             });
         }
 
-        // UPDATE TASK POSITION
-        function initializeTaskSortable() {
-            document.querySelectorAll('.sortable-tasks').forEach(sortable => {
-                new Sortable(sortable, {
-                    group: 'shared',
-                    animation: 150,
-                    onEnd: function (evt) {
-                        let tasks = [];
-                        evt.to.querySelectorAll('li').forEach((li, index) => {
-                            tasks.push({
-                                id: li.dataset.taskId,
-                                position: index,
-                                task_status_id: evt.to.dataset.statusId
-                            });
-                        });
-                        fetch('/projects/task/update-position', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                            body: JSON.stringify({tasks})
-                        });
-                    }
-                });
+        subtaskForm.onsubmit = async e => {
+            e.preventDefault();
+            const data = new FormData(subtaskForm);
+            await request(`${apiUrl}/${currentTaskId}/subtasks`, {method: 'POST', body: data});
+            subtaskModal.classList.add('hidden');
+            loadSubtasks(currentTaskId);
+        };
+
+        const docsList     = document.getElementById('docsList');
+        const docFileInput = document.getElementById('docFile');
+        const btnUploadDoc = document.getElementById('btnUploadDoc');
+        let activeTaskId;
+
+        async function loadDocs(taskId) {
+            docsList.innerHTML='';
+            const docs = await request(`/tasks-api/${taskId}/documents`);
+            docs.forEach(d => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="${d.url}" target="_blank">${d.nome_arquivo}</a>
+                        <button data-id="${d.documento_id}" class="ml-2 text-red-600 doc-delete">✕</button>`;
+                docsList.appendChild(li);
+            });
+            document.querySelectorAll('.doc-delete').forEach(btn => btn.onclick = async () => {
+                const id = btn.dataset.id;
+                await request(`/documents/${id}`,{method:'DELETE'});
+                loadDocs(activeTaskId);
             });
         }
 
-        // UPDATE STATUS POSITION
-        function initializeStatusSortable() {
-            new Sortable(document.querySelector('.sortable-statuses'), {
-                group: 'statuses',
-                animation: 150,
-                onEnd: function (evt) {
-                    let statuses = [];
-                    document.querySelectorAll('.sortable-statuses > [data-status-id]').forEach((col, index) => {
-                        statuses.push({id: col.dataset.statusId, position: index});
-                    });
-                    fetch('/projects/task/task-status/update-position', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                        body: JSON.stringify({statuses})
-                    });
-                }
-            });
-        }
+        btnUploadDoc.onclick = async () => {
+            if (!docFileInput.files.length) return;
+            const form = new FormData();
+            form.append('file', docFileInput.files[0]);
+            await request(`/tasks-api/${activeTaskId}/documents`, { method: 'POST', body: form });
+            docFileInput.value='';
+            loadDocs(activeTaskId);
+        };
 
-        initializeTaskButtons();
-        initializeTaskSortable();
-        initializeStatusSortable();
+        btnShare.onclick = async () => {
+            const userId = document.getElementById('share_user').value;
+            const role   = document.getElementById('share_role').value;
+            await fetch(`/tasks/${activeTaskId}/share`,{
+                method:'POST',
+                headers:{'X-CSRF-TOKEN':CSRF,'Content-Type':'application/json'},
+                body:JSON.stringify({user_id:userId,role})
+            });
+
+            alert('Compartilhado!');
+        };
+
+        populate();
     });
 </script>

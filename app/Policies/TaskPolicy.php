@@ -19,9 +19,9 @@ class TaskPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Task $task): bool
+    public function view(User $user, Task $task)
     {
-        return false;
+        return $task->permissionsTask()->where('user_id', $user->id)->whereIn('role', ['owner', 'editor', 'reader'])->exists();
     }
 
     /**
@@ -35,17 +35,17 @@ class TaskPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Task $task): bool
+    public function update(User $user, Task $task)
     {
-        return false;
+        return $task->permissionsTask()->where('user_id', $user->id)->whereIn('role', ['owner', 'editor'])->exists();
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Task $task): bool
+    public function delete(User $user, Task $task)
     {
-        return false;
+        return $task->permissionsTask()->where('user_id', $user->id)->where('role', 'owner')->exists();
     }
 
     /**
