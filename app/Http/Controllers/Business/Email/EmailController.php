@@ -18,21 +18,21 @@ class EmailController extends Controller
 {
     public function index()
     {
-        $emails = Email::with('employee.department.company')->get();   
+        $emails = Email::with('employee.department.company')->get();
 
         return view('app.business.email.email_index', compact('emails'));
     }
-    
+
     public function create()
     {
-        
+
         $companies = Company::with('employees.department.company')->get();
         $licenses = License::get();
-        
+
 
         return view('app.business.email.email_create', compact('companies', 'licenses'));
     }
-    
+
     public function store(StoreEmailRequest $request)
     {
         $request->validated();
@@ -45,26 +45,26 @@ class EmailController extends Controller
             'alias' => json_encode($request->alias),
             'is_active' => $request->is_active,
             'created_at' => Carbon::now()
-        
+
         ]);
 
-        
+
         return redirect()->route('email.index');
     }
-    
+
     public function show($id)
     {
         $email = Email::find($id);
 
-        return view('app.business.email.email.show', compact('email'));
+        return view('app.business.email.email_show', compact('email'));
     }
 
-    
+
     public function edit($id)
     {
         $email = Email::where('id', $id)->find($id);
         $companies = Company::with('employees.department.company')->get();
-        $licenses = License::get();          
+        $licenses = License::get();
 
         return view('app.business.email.email_edit', compact('email', 'companies', 'licenses'));
     }
@@ -77,14 +77,18 @@ class EmailController extends Controller
 
         $email->update([
             'employee_id' => $request->employee_id,
+            'license_id' => $request->license_id,
             'email' => $request->email,
             'password' => $request->password,
+            'alias' => json_encode($request->alias),
+            'is_active' => $request->is_active,
+            'created_at' => Carbon::now()
 
         ]);
 
         return redirect()->route('email.index');
     }
-    
+
     public function destroy($id)
     {
         $email = Email::find($id);

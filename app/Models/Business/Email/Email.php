@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Email extends Model implements Auditable
 {
-    
+
     use HasFactory;
 
     protected $fillable = [
