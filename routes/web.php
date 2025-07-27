@@ -296,7 +296,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::delete('{subtask}', [SubTaskController::class, 'destroy']);
     });
 
-
     // TaskDocuments
     Route::prefix('tasks-api/{task}')->group(function () {
         Route::post('documents', [TaskDocumentController::class, 'storeForTask']);
