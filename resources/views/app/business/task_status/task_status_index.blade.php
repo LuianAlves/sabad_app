@@ -15,8 +15,7 @@
                 <th class="px-4 py-2">Ações</th>
             </tr>
             </thead>
-            <tbody id="statusesTableBody">
-            <!-- Linhas preenchidas via AJAX -->
+            <tbody id="statusesTableBody" class="cursor-move">
             </tbody>
         </table>
     </div>
@@ -24,6 +23,7 @@
     @include('app.business.task_status.task_status_modal')
 @endsection
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
     // Helper para requests usando Fetch API
     async function request(url, options = {}) {
@@ -80,10 +80,14 @@
 
     function renderStatusRow(status) {
         const tr = document.createElement('tr');
+        tr.dataset.id = status.task_status_id; // <- NECESSÁRIO para drag
+        tr.classList.add('draggable-row');     // opcional para visual
         tr.innerHTML = `
         <td class="border px-4 py-2">${status.order}</td>
         <td class="border px-4 py-2">${status.name}</td>
-        <td class="border px-4 py-2"><span style="background:${status.color};" class="px-2 py-1 rounded text-white">${status.color}</span></td>
+        <td class="border px-4 py-2">
+            <span style="background:${status.color};" class="px-2 py-1 rounded text-white">${status.color}</span>
+        </td>
         <td class="border px-4 py-2">
             <button onclick="editStatus('${status.task_status_id}')" class="text-blue-600 mr-2">Editar</button>
             <button onclick="deleteStatus('${status.task_status_id}')" class="text-red-600">Excluir</button>
@@ -115,4 +119,28 @@
             console.error('Erro ao excluir status:', err);
         }
     }
+
+    function enviarNovaOrdemStatus(statusIds) {
+        fetch('/task-status/reorder', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ statuses: statusIds })
+        })
+            .then(res => res.json())
+            .then(data => console.log('Ordem atualizada:', data.message))
+            .catch(err => console.error('Erro ao reordenar:', err));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new Sortable(document.getElementById('statusesTableBody'), {
+            animation: 150,
+            onEnd: () => {
+                const novaOrdem = Array.from(document.querySelectorAll('#statusesTableBody tr')).map(el => el.dataset.id);
+                enviarNovaOrdemStatus(novaOrdem);
+            }
+        });
+    });
 </script>

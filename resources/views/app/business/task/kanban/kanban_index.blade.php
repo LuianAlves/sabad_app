@@ -622,12 +622,25 @@
 
         .kanban-board {
             display: flex;
-            gap: 16px;
+            align-items: self-start;
+            height: calc(100vh - 225px) !important;
+            gap: 30px;
             overflow-x: auto;
             padding: 16px;
             scroll-behavior: smooth;
             cursor: grab;
             user-select: none;
+            scrollbar-width: thin;
+            scrollbar-color: #ccc transparent;
+        }
+
+        .kanban-board::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .kanban-board::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
         }
 
         .kanban-board.grabbing {
@@ -646,6 +659,11 @@
             border-radius: 8px;
             padding: 12px;
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .drag-shadow {
+            opacity: 0.6;
+            border: 2px dashed #aaa;
         }
 
         .kanban-header {
@@ -740,6 +758,10 @@
             border-radius: 16px;
             font-size: 12px;
             cursor: pointer;
+        }
+
+        .card-item-responsavel {
+            background: rgba(241, 241, 241, 0) !important;
         }
 
         .card-item.disabled {
@@ -876,7 +898,7 @@
         }
     </style>
 
-    <div class="row">
+    <div class="row d-none">
         <x-select col="2" set="" title="Prioridade" name="filterPriority" id="filterPriority">
             <option value="">Todas</option>
             <option value="low">Baixa</option>
@@ -898,7 +920,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row d-none">
         <div class="col-6">
             <div class="form-group">
                 <label for="filterResponsible">Responsável</label>
@@ -911,7 +933,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row d-none">
         <div class="col-4">
             <button id="btnClearFilters" class="btn btn-sm btn-outline-danger">Limpar</button>
             <button id="btnApplyFilters" class="btn btn-sm btn-warning">Filtrar</button>
@@ -921,74 +943,81 @@
     <hr>
 
     <div class="kanban-board">
-        @foreach ($statuses as $status)
-            <div class="kanban-column" id="col-{{ $status->task_status_id }}"
-                 data-status-id="{{ $status->task_status_id }}"
-                 style="background: {{ $status->cor_hex ?? $status->color }}05" ;>
-                <div class="kanban-header">
-                    <div class="kanban-title" style="background-color: {{ $status->cor_hex ?? $status->color }};">
-                        <i class="fa-regular fa-clock"></i> {{ strtoupper($status->name) }}
-                    </div>
-                    <div id="count-{{ $status->task_status_id }}">{{$status->tasks_count ?? 0}}</div>
-                    <div>⋯</div>
-                    <div>+</div>
-                </div>
-
-                <div class="kanban-tasks" id="tasks-{{ $status->task_status_id }}">
-                    <!-- Aqui vão ser inseridos os cards via JS -->
-                </div>
-
-
-                <div class="task-form" id="taskForm-{{ $status->task_status_id }}">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <input type="text" placeholder="Nome da tarefa..." style="flex: 1;">
-                        <button class="save-btn create-task-btn" data-status-id="{{ $status->task_status_id }}">
-                            Salvar <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </button>
-                    </div>
-
-                    <div class="form-line"
-                         onclick="toggleDropdown('responsavelDropdown-{{ $status->task_status_id }}')">
-                        <i class="fa-regular fa-user"></i> Adicionar responsável
-                    </div>
-                    <div id="responsavelDropdown-{{ $status->task_status_id }}" class="dropdown">
-                        <input type="text" placeholder="Busque ou insira o e-mail...">
-                        <div class="dropdown-item">
-                            <div class="avatar">S</div>
-                            Eu
+            @foreach ($statuses as $status)
+                <div class="kanban-column" id="col-{{ $status->task_status_id }}"
+                     data-status-id="{{ $status->task_status_id }}"
+                     style="background: {{ $status->cor_hex ?? $status->color }}05" ;>
+                    <div class="kanban-header">
+                        <div class="kanban-title" style="background-color: {{ $status->cor_hex ?? $status->color }};">
+                            <i class="fa-regular fa-clock"></i> {{ strtoupper($status->name) }}
                         </div>
-                        <div class="dropdown-item">
-                            <div class="avatar">DN</div>
-                            Douglas Nordi
+                        <div style="font-size: 12px; font-weight: 500; color: #cecece;"
+                             id="count-{{ $status->task_status_id }}">{{$status->tasks_count ?? 0}}</div>
+                        <div>⋯</div>
+                        <div>+</div>
+                    </div>
+
+                    <div class="kanban-tasks" id="tasks-{{ $status->task_status_id }}">
+                        <!-- Aqui vão ser inseridos os cards via JS -->
+                    </div>
+
+                    <div class="task-form" id="taskForm-{{ $status->task_status_id }}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <input type="text" placeholder="Nome da tarefa..." style="flex: 1;">
+                            <button class="save-btn create-task-btn" data-status-id="{{ $status->task_status_id }}">
+                                Salvar <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </button>
+                        </div>
+
+                        <div class="form-line"
+                             onclick="toggleDropdown('responsavelDropdown-{{ $status->task_status_id }}')">
+                            <i class="fa-regular fa-user"></i> Adicionar responsável
+                        </div>
+                        <div id="responsavelDropdown-{{ $status->task_status_id }}" class="dropdown">
+                            <input type="text" placeholder="Busque ou insira o e-mail...">
+                            <div class="dropdown-item">
+                                <div class="avatar">S</div>
+                                Eu
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="avatar">DN</div>
+                                Douglas Nordi
+                            </div>
+                        </div>
+
+                        <div class="form-line" onclick="toggleDropdown('dataDropdown-{{ $status->task_status_id }}')">
+                            <i class="fa-regular fa-calendar-days"></i> Adicionar datas
+                        </div>
+                        <div id="dataDropdown-{{ $status->task_status_id }}" class="dropdown">
+                            <input id="datepicker-{{ $status->task_status_id }}" placeholder="Data de vencimento"
+                                   readonly>
+                        </div>
+
+                        <div class="form-line"
+                             onclick="toggleDropdown('prioridadeDropdown-{{ $status->task_status_id }}')">
+                            <i class="fa-regular fa-flag"></i> Adicionar prioridade
+                        </div>
+                        <div id="prioridadeDropdown-{{ $status->task_status_id }}" class="dropdown priority-menu">
+                            <div class="priority-item"><i class="fa-solid fa-flag" style="color:#e74c3c;"></i> Urgente
+                            </div>
+                            <div class="priority-item"><i class="fa-solid fa-flag" style="color:#f39c12;"></i> Alta
+                            </div>
+                            <div class="priority-item"><i class="fa-solid fa-flag" style="color:#3498db;"></i> Normal
+                            </div>
+                            <div class="priority-item"><i class="fa-solid fa-flag" style="color:#bdc3c7;"></i> Baixa
+                            </div>
+                            <hr>
+                            <div class="priority-item"><i class="fa-solid fa-ban"></i> Limpar</div>
                         </div>
                     </div>
 
-                    <div class="form-line" onclick="toggleDropdown('dataDropdown-{{ $status->task_status_id }}')">
-                        <i class="fa-regular fa-calendar-days"></i> Adicionar datas
-                    </div>
-                    <div id="dataDropdown-{{ $status->task_status_id }}" class="dropdown">
-                        <input id="datepicker-{{ $status->task_status_id }}" placeholder="Data de vencimento" readonly>
-                    </div>
-
-                    <div class="form-line" onclick="toggleDropdown('prioridadeDropdown-{{ $status->task_status_id }}')">
-                        <i class="fa-regular fa-flag"></i> Adicionar prioridade
-                    </div>
-                    <div id="prioridadeDropdown-{{ $status->task_status_id }}" class="dropdown priority-menu">
-                        <div class="priority-item"><i class="fa-solid fa-flag" style="color:#e74c3c;"></i> Urgente</div>
-                        <div class="priority-item"><i class="fa-solid fa-flag" style="color:#f39c12;"></i> Alta</div>
-                        <div class="priority-item"><i class="fa-solid fa-flag" style="color:#3498db;"></i> Normal</div>
-                        <div class="priority-item"><i class="fa-solid fa-flag" style="color:#bdc3c7;"></i> Baixa</div>
-                        <hr>
-                        <div class="priority-item"><i class="fa-solid fa-ban"></i> Limpar</div>
+                    <div class="kanban-footer" onclick="toggleForm('taskForm-{{ $status->task_status_id }}')">+
+                        Adicionar
+                        Tarefa
                     </div>
                 </div>
-
-                <div class="kanban-footer" onclick="toggleForm('taskForm-{{ $status->task_status_id }}')">+ Adicionar
-                    Tarefa
-                </div>
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
 
     <!-- Dropdown: Responsável -->
     <div id="dropdown-global-responsavel" class="dropdown-kanban" style="display:none; position:absolute;">
@@ -1256,23 +1285,65 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // 1) SORTABLE DAS TASKS
             statuses.forEach(s => {
-                const el = document.getElementById(`col-${s.task_status_id}`);
+                const el = document.getElementById(`tasks-${s.task_status_id}`);
                 if (!el) return;
+
                 Sortable.create(el, {
-                    group: 'kanban',
+                    group: 'tasks',
                     animation: 150,
                     onEnd: async ({item, to}) => {
-                        const id = item.dataset.taskId;
                         const newStatus = to.closest('.kanban-column').dataset.statusId;
-                        await request(`${apiUrl}/${id}`, {
+                        const taskId = item.dataset.taskId;
+
+                        const taskIds = Array.from(to.querySelectorAll('.kanban-task-card')).map(t => t.dataset.taskId);
+
+                        await request(`${apiUrl}/${taskId}`, {
                             method: 'PUT',
                             headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({task_status_id: newStatus})
+                            body: JSON.stringify({
+                                task_status_id: newStatus,
+                                order: taskIds.indexOf(taskId)
+                            })
                         });
+
+                        for (let i = 0; i < taskIds.length; i++) {
+                            if (taskIds[i] === taskId) continue;
+                            await request(`${apiUrl}/${taskIds[i]}`, {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({order: i})
+                            });
+                        }
                     }
                 });
             });
+
+            // 2) SORTABLE DOS STATUS
+            new Sortable(document.querySelector('.kanban-board'), {
+                animation: 150,
+                ghostClass: 'drag-shadow',
+                handle: '.kanban-column',
+                draggable: '.kanban-column', // <- ESSENCIAL: só colunas são arrastáveis
+                onEnd: function () {
+                    const novaOrdem = Array.from(document.querySelectorAll('.kanban-column'))
+                        .map(col => col.dataset.statusId);
+
+                    fetch('/task-status/reorder', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({statuses: novaOrdem})
+                    })
+                        .then(res => res.json())
+                        .then(data => console.log('Ordem de status atualizada:', data.message))
+                        .catch(err => console.error('Erro ao reordenar status:', err));
+                }
+            });
+
             document.getElementById('btnApplyFilters').onclick = loadTasks;
             document.getElementById('btnClearFilters').onclick = () => {
                 document.getElementById('filterResponsible').value = null;
@@ -1282,6 +1353,7 @@
                 document.getElementById('filterAttachments').checked = false;
                 loadTasks();
             };
+
             loadTasks();
         });
 
@@ -1300,12 +1372,13 @@
 
     <script>
         const board = document.querySelector('.kanban-board');
-
         let isMouseDown = false;
         let startX;
         let scrollLeft;
 
+        // só ativa o scroll horizontal se clicar fora de uma coluna
         board.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.kanban-column')) return; // ⛔ ignora se clicou numa coluna
             isMouseDown = true;
             board.classList.add('grabbing');
             startX = e.pageX - board.offsetLeft;
@@ -1323,10 +1396,10 @@
         });
 
         board.addEventListener('mousemove', (e) => {
-            if (!isMouseDown) return; // só scrolla se estiver clicado
+            if (!isMouseDown) return;
             e.preventDefault();
             const x = e.pageX - board.offsetLeft;
-            const walk = (x - startX) * 1.5; // ajuste de sensibilidade
+            const walk = (x - startX) * 1.5;
             board.scrollLeft = scrollLeft - walk;
         });
     </script>
