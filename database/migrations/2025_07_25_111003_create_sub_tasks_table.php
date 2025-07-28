@@ -20,10 +20,10 @@ return new class extends Migration
             $table->uuid('task_status_id');
             $table->foreign('task_status_id')->references('task_status_id')->on('task_statuses')->onDelete('cascade');
 
-            $table->unsignedBigInteger('responsible');
-            $table->foreign('responsible')->references('id')->on('users')->onDelete('cascade');
+            $table->json('responsible')->nullable();
 
             $table->string('name');
+
             $table->date('due_date')->nullable();
             $table->json('attachments')->nullable();
 

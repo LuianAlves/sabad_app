@@ -18,7 +18,7 @@ class SubTask extends Model
 
     protected $casts = [
         'attachments' => 'array',
-        'responsible' => 'integer'
+        'responsible' => 'array'
     ];
 
     protected static function boot()

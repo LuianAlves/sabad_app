@@ -164,18 +164,28 @@
 
         <div class="form-line" onclick="toggleDropdown('dropdown-global-responsavel')">
             <div id="selected-subtask-users" class="selected-users">
-                <div class="avatar dashed-icon" title="Adicionar responsável">+</div>
+                <div class="avatar responsible-subtask-icon dashed-icon" title="Adicionar responsável">+</div>
             </div>
         </div>
 
-        <div class="form-line" onclick="toggleDropdown('subtask-data')">
-            <i class="fa-regular fa-calendar-days"></i> Adicionar datas
+        <div class="form-line" onclick="toggleSubtaskDate()">
+            <div id="subtask-date-box" class="selected-date">
+                <i class="fa-regular fa-calendar-days due-date-icon dashed-icon" title="Data de vencimento"></i>
+            </div>
         </div>
+
         <div id="subtask-data" class="dropdown">
             <input id="subtask-datepicker" placeholder="Data de vencimento" readonly>
         </div>
-    </div>
 
+        <div class="form-line" onclick="document.getElementById('subtask-file-input').click()">
+            <i class="fa-solid fa-paperclip dashed-icon"></i>
+            <div id="attachment-count-badge" class="avatar" style="margin-left: 6px; display: none;">0</div>
+            <span style="margin-left: 6px;">Itens anexados</span>
+        </div>
+
+        <input type="file" id="subtask-file-input" multiple style="display: none;" onchange="handleSubtaskFiles(this)">
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
@@ -215,6 +225,8 @@
             dropdownResponsible.style.zIndex = '9999'; // com "I" maiúsculo
         }
 
+        let flatpickrInstance = null;
+
         // Subtarefa - icon add on task
         function openSubtaskDropdown(taskId) {
             activeTaskId = taskId;
@@ -239,8 +251,22 @@
             dropdown.style.left = `${left}px`;
             dropdown.style.display = 'flex';
 
-            flatpickr("#subtask-datepicker", {
-                locale: flatpickr.l10ns.pt
+            if (flatpickrInstance) {
+                flatpickrInstance.destroy();
+            }
+
+            flatpickrInstance = flatpickr("#subtask-datepicker", {
+                locale: flatpickr.l10ns.pt,
+                dateFormat: "d-m-Y",
+                allowInput: true,
+                onChange: function (selectedDates, dateStr) {
+                    if (!selectedDates.length) return;
+
+                    subtaskDateValue = dateStr;
+
+                    const badge = document.getElementById('subtask-date-box');
+                    badge.innerHTML = `<i class="fa-regular fa-calendar-days dashed-icon"></i> ${formatFriendlyDate(selectedDates[0])}`;
+                }
             });
 
             setTimeout(() => document.getElementById('subtask-name').focus(), 100);
@@ -253,11 +279,13 @@
         // Add subtasks
         async function submitSubtask() {
             const name = document.getElementById('subtask-name').value.trim();
-            const dueDate = document.getElementById('subtask-datepicker').value;
-            const responsible = document.getElementById('subtask-responsible-id').value;
+            const rawDate = subtaskDateValue;
+            const dueDate = formatDateToMySQL(rawDate);
+            const responsibleValue = document.getElementById('subtask-responsible-id').value;
+            const responsible = responsibleValue ? JSON.parse(responsibleValue) : [];
             const statusId = document.getElementById('subtask-status-id').value;
 
-            if (!name || !responsible) {
+            if (!name || responsible.length === 0) {
                 alert('Preencha o nome da subtarefa e selecione o responsável.');
                 return;
             }
@@ -269,6 +297,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         name,
                         due_date: dueDate,
@@ -277,11 +306,49 @@
                     })
                 });
 
-                if (!res.ok) throw await res.json();
+                if (!res.ok) {
+                    const error = await res.text();
+                    console.error('Erro detalhado da API:', error);
+                    throw new Error('Erro na API');
+                }
 
-                closeAllDropdowns();
+                const subtask = await res.json();
+
+                // 🔽 Upload dos arquivos se houver
+                if (subtaskSelectedFiles.length > 0) {
+                    for (const file of subtaskSelectedFiles) {
+                        const formData = new FormData();
+                        formData.append('file', file);
+
+                        await fetch(`/tasks-api/${activeTaskId}/subtasks/${subtask.subtask_id}/documents`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: formData
+                        });
+                    }
+                }
+
+                subtaskSelectedFiles = [];
+
+                document.getElementById('subtask-name').value = '';
+                document.getElementById('subtask-responsible-id').value = '';
+
+                if (flatpickrInstance) {
+                    flatpickrInstance.clear();
+                }
+                document.getElementById('subtask-date-box').innerHTML = '<i class="fa-regular fa-calendar-days dashed-icon"></i>';
+
+                document.getElementById('selected-subtask-users').innerHTML = '<div class="avatar dashed-icon" title="Adicionar responsável">+</div>';
+                document.getElementById('attachment-count-badge').innerHTML = '0'; // ou 0, se for número
+
+                document.querySelectorAll('#dropdown-subtask').forEach(el => {
+                    el.style.display = 'none';
+                });
+
                 console.log('Subtarefa criada com sucesso');
-                // você pode chamar um loadSubtasks() ou exibir na interface
+
             } catch (err) {
                 console.error('Erro ao salvar subtarefa:', err);
                 alert('Erro ao salvar subtarefa.');
@@ -307,7 +374,6 @@
         }
 
         let selectedResponsibles = [];
-
 
         // select responsible subtask dropdown
         function selectSubtaskResponsible(userId, userName) {
@@ -346,7 +412,7 @@
             avatar.setAttribute('data-user-id', userId);
             avatar.title = userName;
 
-            container.insertBefore(avatar, container.querySelector('.dashed-icon'));
+            container.insertBefore(avatar, container.querySelector('#selected-subtask-users .dashed-icon'));
 
             // Atualiza o campo hidden com o primeiro responsável (ou com todos, se for array depois)
             document.getElementById('subtask-responsible-id').value = userId;
@@ -357,11 +423,86 @@
 
         // abrir dropdown responsible
         document.addEventListener('click', function (e) {
-            const target = e.target.closest('.dashed-icon');
+            const target = e.target.closest('#selected-subtask-users .dashed-icon');
+
             if (target) {
                 toggleDropdown('dropdown-global-responsavel', target);
             }
         });
+
+        // select due date subtask
+        let subtaskDateValue = null;
+
+        function toggleSubtaskDate() {
+            const input = document.getElementById('subtask-datepicker');
+            const dropdown = document.getElementById('subtask-data');
+
+            if (!dropdown) return;
+
+            const rect = input.getBoundingClientRect();
+
+            dropdown.style.top = `${rect.bottom + window.scrollY - 35}px`;
+            dropdown.style.left = `${rect.left + window.scrollX + 50}px`;
+            dropdown.style.display = 'block';
+
+            input.focus();
+        }
+
+        function formatFriendlyDate(date) {
+            const hoje = new Date();
+            const amanha = new Date();
+            amanha.setDate(amanha.getDate() + 1);
+
+            const isHoje = date.toDateString() === hoje.toDateString();
+            const isAmanha = date.toDateString() === amanha.toDateString();
+
+            if (isHoje) return 'Hoje';
+            if (isAmanha) return 'Amanhã';
+
+            const dias = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+            const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+            const diaSemana = dias[date.getDay()];
+            const mes = meses[date.getMonth()];
+            const dia = String(date.getDate()).padStart(2, '0');
+
+            return `${dia} ${diaSemana}/${mes}.`;
+        }
+
+        function formatDateToMySQL(dateStr) {
+            const [day, month, year] = dateStr.split('-');
+            return `${year}-${month}-${day}`;
+        }
+
+        // upload file subtask
+        let subtaskSelectedFiles = [];
+
+        function handleSubtaskFiles(input) {
+            const files = Array.from(input.files);
+            const badge = document.getElementById('attachment-count-badge');
+
+            subtaskSelectedFiles.push(...files);
+
+            // Atualiza o contador
+            badge.textContent = subtaskSelectedFiles.length;
+            badge.style.display = 'inline-block';
+
+            // Limpa o input pra permitir adicionar o mesmo arquivo novamente se quiser
+            input.value = '';
+        }
+
+        // load subtasks
+        function toggleSubtaskView(taskId) {
+            const container = document.getElementById(`subtasks-${taskId}`);
+            const icon = document.querySelector(`[data-toggle-subtask="${taskId}"] i`);
+
+            if (!container || !icon) return;
+
+            const isHidden = container.classList.toggle('hidden');
+
+            icon.classList.toggle('fa-chevron-down', isHidden);
+            icon.classList.toggle('fa-chevron-up', !isHidden);
+        }
 
         async function request(url, options = {}) {
             const token = document.querySelector('meta[name="csrf-token"]').content;
@@ -449,9 +590,14 @@
                 return date.toLocaleDateString('pt-BR', {weekday: 'short'}).toLowerCase();
             }
 
+            console.log(tasks);
+
             tasks.forEach(task => {
                 const taskContainer = document.getElementById(`tasks-${task.task_status_id}`);
                 if (!taskContainer) return;
+
+                task.sub_tasks = task.sub_tasks || [];
+
                 const cardHtml = `<div class="kanban-task-card" data-task-id="${task.task_id}">
                                     <div class="card-header">
                                         <div class="card-title" title="${task.name}">${task.name}</div>
@@ -469,7 +615,7 @@
                                     </div>
                                     <div class="card-footer">
                                         ${(task.assignees && task.assignees.length > 0) ? `
-                                            <div class="card-item card-item-responsavel" onclick="editResponsible('${task.task_id}')">
+                                            <div class="card-item card-item-responsavel p-0 mb-1" onclick="editResponsible('${task.task_id}')">
                                                 <div class="avatar">${getInitials(task.assignees[0]?.name)}</div>
                                             </div>` :
                                             `<div class="card-item disabled card-item-responsavel" onclick="editResponsible('${task.task_id}')">
@@ -490,14 +636,67 @@
                                                 <i class="fa-regular fa-flag"></i>
                                             </div>`}
                                     </div>
-                                </div>`;
+                                        ${(task.sub_tasks?.length || 0) > 0 ? `
+                                        <div class="subtask-toggle text-xs cursor-pointer font-weight-semibold text-gray-500 hover:text-gray-800 flex items-center mt-1" onclick="toggleSubtaskView('${task.task_id}')" data-toggle-subtask="${task.task_id}">
+                                            <i class="fa-solid fa-chevron-down mr-1"></i>
+                                            ${task.sub_tasks.length} subtarefa${task.sub_tasks.length > 1 ? 's' : ''}
+                                        </div>` : ''}
+                                </div>
+
+                            ${(task.sub_tasks?.length || 0) > 0 ? `
+                                <div id="subtasks-${task.task_id}" class="subtasks-container hidden mt-1"></div>
+                            ` : ''}`;
                 taskContainer.insertAdjacentHTML('beforeend', cardHtml);
+
+                renderSubtasks(task.sub_tasks, task.task_id);
 
                 const cnt = document.getElementById(`count-${task.task_status_id}`);
                 if (cnt) cnt.innerText = parseInt(cnt.innerText || '0') + 1;
             });
 
             attachCardHandlers();
+        }
+
+        function renderSubtasks(subtasks, taskId) {
+            const container = document.getElementById(`subtasks-${taskId}`);
+            if (!container) return;
+
+            container.innerHTML = ''; // Limpa antes
+
+            console.log(subtasks)
+
+            subtasks.forEach(sub => {
+                const card = document.createElement('div');
+                card.className = 'kanban-task-card subtask-card';
+                card.innerHTML = `
+                                    <div class="card-header">
+                                        <div class="card-title" title="${sub.name}">${sub.name}</div>
+                                        <div class="card-actions">
+                                            <button class="btn-icon" onclick="" data-bs-toggle="tooltip" data-bs-placement="top" title="Concluído">
+                                                <i class="fa-solid fa-check-double"></i>
+                                            </button>
+                                            <button class="btn-icon" onclick="" data-bs-toggle="tooltip" data-bs-placement="top" title="Nova subtarefa">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                            <button class="btn-icon" onclick="" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar subtarefa">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="card-item disabled card-item-responsavel" onclick="">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <div class="card-item disabled card-item-date" onclick="">
+                                             <i class="fa-regular fa-calendar-days"></i>
+                                        </div>
+                                        <div class="card-item disabled card-item-priority" onclick="">
+                                             <i class="fa-regular fa-flag"></i>
+                                         </div>
+                                    </div>
+                                `;
+                container.appendChild(card);
+            });
         }
 
         // Icon Chevron -> next status
@@ -510,8 +709,8 @@
             const token = document.querySelector('meta[name="csrf-token"]').content;
             fetch(`/tasks-api/${taskId}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
-                body: JSON.stringify({ task_status_id: nextStatusId })
+                headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': token},
+                body: JSON.stringify({task_status_id: nextStatusId})
             }).then(() => loadTasks());
         }
 
@@ -737,7 +936,6 @@
             });
         }
 
-        // Fecha o form se clicar fora
         document.addEventListener('click', function (e) {
             const form = document.getElementById('floating-task-form');
             if (!form.contains(e.target) && !e.target.closest('.kanban-footer')) {
@@ -748,6 +946,7 @@
         function closeAllDropdowns() {
             document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
             document.querySelectorAll('.dropdown-kanban').forEach(d => d.style.display = 'none');
+
             const floatingForm = document.getElementById('floating-task-form');
             if (floatingForm) floatingForm.style.display = 'none';
         }

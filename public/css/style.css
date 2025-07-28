@@ -372,7 +372,7 @@ body {
     border-radius: 5px !important;
 }
 
-.selected-users {
+.selected-users, .selected-date {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -396,6 +396,8 @@ body {
     border: 1px dashed #ccc;
     color: #888 !important;
     cursor: pointer;
+    padding: 5px;
+    border-radius: 50% !important;
 }
 
 .avatar-list {
@@ -424,6 +426,35 @@ body {
     align-items: center;
     gap: 6px;
     font-size: 14px;
+}
+
+.attachments-preview {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.attachment-item {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.attachment-item i {
+    color: #888;
+}
+
+.subtask-card {
+    margin-left: 12px;
+    margin-top: 4px;
+    padding: 10px;
+    border-left: 3px solid #ccc;
+    border-radius: 6px;
+}
+
+.subtasks-container.hidden {
+    display: none;
 }
 
 /* END: KANBAN - TASKS */
