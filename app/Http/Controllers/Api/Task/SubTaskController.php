@@ -22,7 +22,6 @@ class SubTaskController extends Controller
 
         return response()->json($subtasks);
     }
-
     public function store(StoreSubTaskRequest $request, string $taskId): JsonResponse
     {
         $data = $request->validated();
