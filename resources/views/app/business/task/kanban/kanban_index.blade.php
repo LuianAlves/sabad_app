@@ -76,18 +76,22 @@
                         </button>
                     </div>
 
-                    <div class="form-line" onclick="toggleDropdown('floating-responsavel')">
-                        <i class="fa-regular fa-user"></i> Adicionar responsável
-                    </div>
-                    <div id="floating-responsavel" class="dropdown">
-                        <input type="text" placeholder="Busque ou insira o e-mail...">
-                        <div class="dropdown-item">
-                            <div class="avatar">S</div>
-                            Eu
+                    <!-- Dropdown de responsáveis -->
+                    <div class="form-line">
+                        <i class="fa-regular fa-user"></i> Responsável
+                        <div id="selected-floating-users" class="selected-users">
+                            <div class="avatar dashed-icon" title="Adicionar responsável">+</div>
                         </div>
-                        <div class="dropdown-item">
-                            <div class="avatar">DN</div>
-                            Douglas Nordi
+                        <input type="hidden" id="floating-responsible-id">
+
+                        <div id="dropdown-floating-responsavel" class="dropdown-kanban" style="display:none; position:absolute;">
+                            <input type="text" placeholder="Buscar responsável..." class="form-control mb-1">
+                            @foreach($users as $u)
+                                    <div class="dropdown-item" onclick="selectFloatingResponsible({{ $u->id }}, '{{ $u->name }}')">
+                                        <div class="avatar">{{ strtoupper(substr($u->name, 0, 2)) }}</div>
+                                        {{ $u->name }}
+                                    </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -209,21 +213,23 @@
         }
 
         function toggleDropdown(dropdownId, trigger) {
-            closeAllDropdowns();
+            // closeAllDropdowns(); // ativa novamente o fechamento global
 
             const dropdown = document.getElementById(dropdownId);
-            const dropdownResponsible = document.getElementById('dropdown-global-responsavel');
-
             if (!dropdown || !trigger) return;
 
             const rect = trigger.getBoundingClientRect();
 
-            dropdown.style.top = `${rect.bottom + window.scrollY - 25}px`;
-            dropdown.style.left = `${rect.left + window.scrollX - 75}px`;
-            dropdown.style.display = 'block';
+            dropdown.style.top = `${rect.bottom + window.scrollY + 5}px`;
 
-            dropdownResponsible.style.zIndex = '9999'; // com "I" maiúsculo
+            const dropdownWidth = dropdown.offsetWidth || 200; // fallback se ainda não renderizou
+            const left = rect.left + window.scrollX - 5;
+            dropdown.style.left = `${left}px`;
+
+            dropdown.style.zIndex = '9999';
+            dropdown.style.display = 'block';
         }
+
 
         let flatpickrInstance = null;
 
@@ -397,28 +403,25 @@
             document.getElementById('dropdown-global-responsavel').style.display = 'none';
         }
 
-        // select responsible task dropdown
-        function selectResponsible(userId, userName) {
+        // select responsible task
+        function selectFloatingResponsible(userId, userName) {
             if (selectedResponsibles.includes(userId)) return;
 
             selectedResponsibles.push(userId);
 
-            const container = document.getElementById('selected-subtask-users');
+            const container = document.getElementById('selected-floating-users');
 
             const avatar = document.createElement('div');
-
             avatar.className = 'avatar';
             avatar.innerText = getInitials(userName);
             avatar.setAttribute('data-user-id', userId);
             avatar.title = userName;
 
-            container.insertBefore(avatar, container.querySelector('#selected-subtask-users .dashed-icon'));
+            container.insertBefore(avatar, container.querySelector('.dashed-icon'));
 
-            // Atualiza o campo hidden com o primeiro responsável (ou com todos, se for array depois)
-            document.getElementById('subtask-responsible-id').value = userId;
+            document.getElementById('floating-responsible-id').value = JSON.stringify(selectedResponsibles);
 
-            // Fecha o dropdown após seleção
-            document.getElementById('dropdown-global-responsavel').style.display = 'none';
+            document.getElementById('dropdown-floating-responsavel').style.display = 'none';
         }
 
         // abrir dropdown responsible
@@ -429,6 +432,15 @@
                 toggleDropdown('dropdown-global-responsavel', target);
             }
         });
+
+        // clique no "+" para abrir o dropdown do floating
+        document.addEventListener('click', function (e) {
+            const trigger = e.target.closest('#selected-floating-users .dashed-icon');
+            if (trigger) {
+                toggleDropdown('dropdown-floating-responsavel', trigger);
+            }
+        });
+
 
         // select due date subtask
         let subtaskDateValue = null;
@@ -675,7 +687,7 @@
                                             <button class="btn-icon" onclick="" data-bs-toggle="tooltip" data-bs-placement="top" title="Concluído">
                                                 <i class="fa-solid fa-check-double"></i>
                                             </button>
-                                            <button class="btn-icon" onclick="" data-bs-toggle="tooltip" data-bs-placement="top" title="Nova subtarefa">
+                                            <button class="btn-icon" onclick="openSubtaskDropdown('${taskId}', this)" data-bs-toggle="tooltip" data-bs-placement="top" title="Nova subtarefa">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                             <button class="btn-icon" onclick="" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar subtarefa">
@@ -871,9 +883,7 @@
         }
 
         document.addEventListener('click', function (e) {
-            if (!e.target.closest('.dropdown') && !e.target.closest('.card-item')) {
-                document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
-            }
+            closeAllDropdowns(e);
         });
 
         function openFloatingForm(statusId, triggerElement) {
@@ -919,7 +929,7 @@
                 task_status_id: statusId,
                 name: name,
                 due_date: dueDate,
-                responsible: [{{ auth()->id() }}],
+                responsible: JSON.parse(document.getElementById('floating-responsible-id').value || '[]'),
                 priority: "medium"
             };
 
@@ -938,12 +948,28 @@
 
         document.addEventListener('click', function (e) {
             const form = document.getElementById('floating-task-form');
-            if (!form.contains(e.target) && !e.target.closest('.kanban-footer')) {
+
+            const isInsideForm = form.contains(e.target);
+            const isAddBtn = e.target.closest('.kanban-footer');
+
+            // não fecha se clicou dentro do form ou nos dropdowns internos
+            if (!isInsideForm && !isAddBtn && !e.target.closest('.dropdown')) {
                 form.style.display = 'none';
             }
         });
 
-        function closeAllDropdowns() {
+        function closeAllDropdowns(e = null) {
+            if (e) {
+                const isInsideDropdown = e.target.closest('.dropdown, .dropdown-kanban');
+                const isTrigger = e.target.closest('.form-line, .card-item, .dashed-icon, .kanban-footer');
+                const isFloatingForm = e.target.closest('#floating-task-form');
+                const isFloatingDropdown = e.target.closest('#dropdown-floating-responsavel');
+
+                if (isInsideDropdown || isTrigger || isFloatingForm || isFloatingDropdown) {
+                    return; // não fecha
+                }
+            }
+
             document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
             document.querySelectorAll('.dropdown-kanban').forEach(d => d.style.display = 'none');
 
