@@ -9,11 +9,6 @@
                 <input type="text" id="name" name="name" class="w-full border px-3 py-2 rounded" required>
             </div>
             <div class="mb-4">
-                <label for="order" class="block text-gray-700">Ordem</label>
-                <input type="number" id="order" name="order" class="w-full border px-3 py-2 rounded" min="0" value="0"
-                       required>
-            </div>
-            <div class="mb-4">
                 <label for="color" class="block text-gray-700">Cor (hex)</label>
                 <input type="color" id="color" name="color" class="w-full border px-3 py-2 rounded" value="#CCCCCC"
                        required>

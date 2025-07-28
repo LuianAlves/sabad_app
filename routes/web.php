@@ -80,6 +80,9 @@ use App\Http\Controllers\Business\Tickets\TicketCollaboratorController;
 use App\Http\Controllers\Business\Maintenance\MaintenanceController;
 use App\Http\Controllers\Business\Tickets\TicketStatusController;
 
+// TaskStatus
+
+
 // Task
 use App\Http\Controllers\Business\Task\TaskController as WebTaskController;
 use App\Http\Controllers\Api\Task\TaskController as ApiTaskController;
@@ -275,6 +278,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // TasksStatus
     Route::get('/task_status', [TaskStatusController::class, 'index'])->name('task_status.index');
+    Route::patch('/task-status/reorder', [\App\Http\Controllers\Api\Task\TaskStatusController::class, 'reorder']);
     Route::resource('/task-status-api', \App\Http\Controllers\Api\Task\TaskStatusController::class)->names('task-statuses-api');
 
     // Tasks
@@ -295,7 +299,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::put('{subtask}', [SubTaskController::class, 'update']);
         Route::delete('{subtask}', [SubTaskController::class, 'destroy']);
     });
-
 
     // TaskDocuments
     Route::prefix('tasks-api/{task}')->group(function () {

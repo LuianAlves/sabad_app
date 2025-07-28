@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTaskStatusRequest;
 use App\Http\Requests\UpdateTaskStatusRequest;
 use App\Models\TaskStatus;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
@@ -19,7 +20,13 @@ class TaskStatusController extends Controller
 
     public function store(StoreTaskStatusRequest $request): JsonResponse
     {
-        $status = TaskStatus::create($request->validated());
+        $data = $request->validated();
+
+        $lastOrder = TaskStatus::max('order') ?? 0;
+
+        $data['order'] = is_null($lastOrder) ? 0 : $lastOrder + 1;
+
+        $status = TaskStatus::create($data);
 
         return response()->json($status, 201);
     }
@@ -46,4 +53,16 @@ class TaskStatusController extends Controller
         $status->delete();
         return response()->json(null, 204);
     }
+
+    public function reorder(Request $request): JsonResponse
+    {
+        $statuses = $request->input('statuses');
+
+        foreach ($statuses as $index => $id) {
+            TaskStatus::where('task_status_id', $id)->update(['order' => $index]);
+        }
+
+        return response()->json(['message' => 'Ordem atualizada com sucesso']);
+    }
+
 }

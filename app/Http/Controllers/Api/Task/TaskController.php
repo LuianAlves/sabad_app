@@ -45,7 +45,7 @@ class TaskController extends Controller
         }
 
         $tasks = $query
-            ->with(['status','documents'])
+            ->with(['status', 'subtasks', 'documents'])
             ->orderBy('order')
             ->get()
             ->map(function($task){
@@ -77,6 +77,7 @@ class TaskController extends Controller
                     'due_date'            => optional($task->due_date)->toDateString(),
                     'assignees'           => $assignees,
                     'attachments_count'   => $task->documents->count(),
+                    'sub_tasks' => $task->subtasks
                 ];
             });
 

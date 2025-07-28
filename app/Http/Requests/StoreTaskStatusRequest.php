@@ -14,7 +14,6 @@ class StoreTaskStatusRequest extends FormRequest
     {
         return [
             'name'  => 'required|string|max:255',
-            'order' => 'required|integer|min:0',
             'color' => ['required','string','regex:/^#[A-Fa-f0-9]{6}$/'],
         ];
     }
