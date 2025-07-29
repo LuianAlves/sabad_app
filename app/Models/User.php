@@ -92,9 +92,9 @@ class User extends Authenticatable implements Auditable
 
     public function canAuthenticate()
     {
-        if ($this->hasRole('admin')) {
-            return true;
-        }
+//        if ($this->hasRole('admin')) {
+//            return true;
+//        }
 
         // if (!$this->is_active) {
         //     session()->flash('error', 'Sua conta não está ativa.');

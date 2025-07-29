@@ -34,36 +34,33 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-    $user = Auth::user();
+            $user = Auth::user();
 
-    /** @var \App\Models\User $user */
-    if ($user->canAuthenticate()) {
+            /** @var \App\Models\User $user */
+            if ($user->canAuthenticate()) {
 
-        if ($request->hasSession()) {
-            $request->session()->regenerateToken();
+                if ($request->hasSession()) {
+                    $request->session()->regenerateToken();
+                }
+
+                // Redirecionamento baseado em role
+                if ($user->hasRole('admin')) {
+                    return redirect()->route('dashboard.index');
+                } else {
+                    return redirect()->route('user.show', $user->id);
+                }
+            }
+
+            // caso o usuário não possa autenticar
+            Auth::logout();
+
+            if ($request->hasSession()) {
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
+
+            return back()->with('error', 'Acesso negado.');
         }
-
-        // Redirecionamento baseado em role
-        if ($user->hasRole('admin')) {
-            return redirect()->route('dashboard.index'); // Ex: /dashboard
-        } elseif ($user->hasRole('user')) {
-            return redirect()->route('user.show', $user->id); // Ex: /user/{id}
-        } else {
-            return redirect('/'); // fallback
-        }
-    }
-
-    // caso o usuário não possa autenticar
-    Auth::logout();
-
-    if ($request->hasSession()) {
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-    }
-
-    return back()->with('error', 'Acesso negado.');
-}
-
 
 
         return back()->withErrors([
@@ -141,16 +138,16 @@ class AuthController extends Controller
 
     // app/Http/Controllers/Auth/LoginController.php
 
-protected function redirectTo()
-{
-    $user = Auth::User();
+    protected function redirectTo()
+    {
+        $user = Auth::User();
 
-    if ($user->role == 'admin') {
-        return '/dashboard';
+        if ($user->role == 'admin') {
+            return '/dashboard';
+        }
+
+        return '/collaborator';
     }
-
-    return '/collaborator';
-}
 
 
 }
