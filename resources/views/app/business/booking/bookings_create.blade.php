@@ -8,9 +8,8 @@
     $user = auth()->user();
 @endphp
 
-@extends($layout)
-
-@section($section)
+@extends('layouts.templates.app-layout')
+@section('content')
 
     @unless($isAdmin)
         {{-- Cabeçalho do perfil para usuários com role "user" --}}

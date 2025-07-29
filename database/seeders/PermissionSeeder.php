@@ -13,10 +13,10 @@ class PermissionSeeder extends Seeder
         $entities = [
             'users', 'companies', 'domains', 'departaments', 'employees',
             'emails', 'services', 'services control', 'certificates',
-            'devices', 'licenses', 'device control', 'tickets', 'tasks', 'maintenances', 'heritages'
+            'devices', 'licenses', 'device control', 'tickets', 'tasks', 'maintenances', 'heritages', 'rooms'
         ];
 
-        $actions = ['view', 'create', 'edit', 'delete'];
+        $actions = ['view', 'create', 'edit', 'delete', 'show'];
 
         foreach ($entities as $entity) {
             foreach ($actions as $action) {

@@ -68,6 +68,7 @@
             @endcan
 
             <!--Companies-->
+
             @can('view companies')
                 <li class="nav-item border-start my-0 pt-2">
                     <a class="nav-link p-0 {{ $current == 'company' ? 'active' : '' }}"
@@ -80,6 +81,18 @@
                     </a>
                 </li>
             @endcan
+
+
+            <li class="nav-item border-start my-0 pt-2">
+                <a class="nav-link p-0 {{ $current == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                        <i class="fas fa-building text-white fi-1"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Empresas</span>
+                </a>
+            </li>
+
 
             <!--Departments-->
             @can('view departments')
