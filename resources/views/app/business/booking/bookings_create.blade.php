@@ -1,17 +1,11 @@
 @php
-    $isAdmin = auth()->user()->hasRole('admin');
-    $layout = $isAdmin
-        ? 'layouts.templates.app-layout'
-        : 'layouts.templates.user-profile-layout';
 
-    $section = $isAdmin ? 'content' : 'content-user-layout';
     $user = auth()->user();
 @endphp
 
-@extends('layouts.templates.app-layout')
-@section('content')
+@extends('layouts.templates.user-profile-layout')
+@section('content-user-layout')
 
-    @unless($isAdmin)
         {{-- Cabeçalho do perfil para usuários com role "user" --}}
         <div class="pt-7 pb-6 bg-cover bg-info"></div>
 
@@ -38,7 +32,6 @@
                 </div>
             </div>
         </div>
-    @endunless
 
     <div class="container">
         <h1>Novo Agendamento para: {{ $room->name }}</h1>

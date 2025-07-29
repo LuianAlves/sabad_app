@@ -155,13 +155,18 @@
                     Abrir chamado
                 </a>
             </li>
-            {{-- @can('view device control')
-                <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
-                    <a href="../pages/profile.html" class="nav-link text-white p-0">
-                        Gestão do departamento
+
+            <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
+                <div class="dropdown">
+                    <a href="javascript:;" class="nav-link text-white p-0 dropdown-toggle " data-bs-toggle="dropdown" id="access">
+                        Acessos
                     </a>
-                </li>
-            @endcan --}}
+                    <ul class="dropdown-menu" aria-labelledby="access">
+                        @include('layouts.common.user-profile-layout.access_dropdowm')
+                    </ul>
+                </div>
+            </li>
+
             <li class="nav-item border-radius-sm px-3 py-3 me-2  d-flex align-items-center">
                 <a href="{{ route('logout') }}" class="nav-link text-white p-0">
                     Deslogar

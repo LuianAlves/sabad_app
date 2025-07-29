@@ -236,9 +236,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::resource('/', HeritageModelController::class)->except('show')->names('heritage_model');
             Route::get('search', [HeritageModelController::class, 'search'])->name('heritage_model.search');
         });
-
-        Route::resource('control', HeritageControlController::class)->names('heritage_control');
     });
+    Route::resource('heritagecontrol', HeritageControlController::class)->names('heritage_control');
 
     Route::resource('license', LicenseController::class);
 

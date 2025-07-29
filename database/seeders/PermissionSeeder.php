@@ -11,9 +11,12 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $entities = [
-            'users', 'companies', 'domains', 'departaments', 'employees',
-            'emails', 'services', 'services control', 'certificates',
-            'devices', 'licenses', 'device control', 'tickets', 'tasks', 'maintenances', 'heritages', 'rooms'
+            'entities', 'users', 'unions', 'companies', 'departments', 'employees',
+            'infrastructure', 'heritages', 'rooms', 'services', 'devices', 'emails', 'extension', 'chips', 'licenses',
+            'operational', 'tickets', 'tasks', 'booking',
+            'controls', 'domains', 'certificates', 'maintenances', 'service_controls', 'device_controls', 'chip_controls', 'heritage_controls', 'record_controls',
+            'system', 'notifications', 'roles', 'permissions'
+
         ];
 
         $actions = ['view', 'create', 'edit', 'delete', 'show'];
