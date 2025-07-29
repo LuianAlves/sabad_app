@@ -8,7 +8,7 @@
 
             <div class="mb-4">
                 <label for="sub_name" class="block text-gray-700">Nome</label>
-                <input type="text" id="sub_name" name="name" class="w-full border px-3 py-2 rounded" required>
+                <input type="text" id="sub_name" name="name" class="w-full border px-3 py-2 rounded" >
             </div>
 
             <div class="mb-4">

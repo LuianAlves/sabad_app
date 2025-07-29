@@ -19,7 +19,8 @@
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {{ $current == 'dashboard' ? 'active' : '' }}" href="{{ route('dashboard.index') }}">
-                    <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                    <div
+                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-table-columns fs-5"></i>
                     </div>
                     <span class="nav-link-text ms-1">Dashboard</span>
@@ -27,70 +28,86 @@
             </li>
 
             <!-------- Entidades -------->
-            <li class="nav-item">
-                <div class="d-flex align-items-center nav-link {{ in_array($current, ['company', 'user', 'union', 'department', 'employee']) ? 'active' : '' }}">
-                    <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-circle-notch fi-1"></i>
+            @can('view entities')
+                <li class="nav-item">
+                    <div
+                        class="d-flex align-items-center nav-link {{ in_array($current, ['company', 'user', 'union', 'department', 'employee']) ? 'active' : '' }}">
+                        <div
+                            class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-circle-notch fi-1"></i>
+                        </div>
+                        <span class="nav-link-text font-weight-bold ms-1">Entidades</span>
                     </div>
-                    <span class="nav-link-text font-weight-bold ms-1">Entidades</span>
-                </div>
-            </li>
+                </li>
+            @endcan
 
-            <!--Users-->
-            <li class="nav-item border-start">
-                <a class="nav-link p-0 {{ $current == 'user' ? 'active' : '' }}" href="{{ route('user.index') }}">
-                    <div class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <i class="fas fa-users text-white fi-1"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Usuários</span>
-                </a>
-            </li>
+            @can('view users')
+                <!--Users-->
+                <li class="nav-item border-start">
+                    <a class="nav-link p-0 {{ $current == 'user' ? 'active' : '' }}" href="{{ route('user.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-users text-white fi-1"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Usuários</span>
+                    </a>
+                </li>
+            @endcan
 
             <!--Unions-->
-            <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link p-0 {{ $current == 'union' ? 'active' : '' }}" href="{{ route('union.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-scale-balanced fi-1"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sindicatos</span>
-                </a>
-            </li>
+            @can('view unions')
+                <li class="nav-item border-start my-0 pt-2">
+                    <a class="nav-link p-0 {{ $current == 'union' ? 'active' : '' }}" href="{{ route('union.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-scale-balanced fi-1"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sindicatos</span>
+                    </a>
+                </li>
+            @endcan
 
             <!--Companies-->
-            <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link p-0 {{ $current == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <i class="fas fa-building text-white fi-1"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Empresas</span>
-                </a>
-            </li>
+            @can('view companies')
+                <li class="nav-item border-start my-0 pt-2">
+                    <a class="nav-link p-0 {{ $current == 'company' ? 'active' : '' }}"
+                       href="{{ route('company.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-building text-white fi-1"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Empresas</span>
+                    </a>
+                </li>
+            @endcan
 
             <!--Departments-->
-            <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link p-0 {{ $current == 'department' ? 'active' : '' }}"
-                   href="{{ route('department.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <i class="fas fa-sitemap text-white fi-1"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Departamentos</span>
-                </a>
-            </li>
+            @can('view departments')
+                <li class="nav-item border-start my-0 pt-2">
+                    <a class="nav-link p-0 {{ $current == 'department' ? 'active' : '' }}"
+                       href="{{ route('department.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-sitemap text-white fi-1"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Departamentos</span>
+                    </a>
+                </li>
+            @endcan
 
             <!--Employees-->
-            <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link p-0 {{ $current == 'employee' ? 'active' : '' }}"
-                   href="{{ route('employee.index') }}">
-                    <div
-                        class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
-                        <i class="fas fa-id-badge text-white fi-1"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Funcionários</span>
-                </a>
-            </li>
+            @can('view employees')
+                <li class="nav-item border-start my-0 pt-2">
+                    <a class="nav-link p-0 {{ $current == 'employee' ? 'active' : '' }}"
+                       href="{{ route('employee.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
+                            <i class="fas fa-id-badge text-white fi-1"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Funcionários</span>
+                    </a>
+                </li>
+            @endcan
             <!-------- END: Entidades -------->
 
             <!-------- Infraestrutura -------->
