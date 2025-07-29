@@ -58,6 +58,7 @@
             </li>
 
             <!--Companies-->
+
             <li class="nav-item border-start my-0 pt-2">
                 <a class="nav-link p-0 {{ $current == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}">
                     <div

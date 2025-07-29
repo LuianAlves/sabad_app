@@ -12,7 +12,7 @@ class RoleController extends Controller
     public function index() {
         $roles = Role::with(['permissions'])->where('guard_name', 'web')->get();
 
-        $knownActions = ['view', 'create', 'edit', 'delete'];
+        $knownActions = ['view', 'create', 'edit', 'delete', 'show'];
 
         $permissions = Permission::all()->groupBy(function ($permission) use ($knownActions) {
             $parts = explode(' ', $permission->name);

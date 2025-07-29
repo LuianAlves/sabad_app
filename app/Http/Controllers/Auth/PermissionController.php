@@ -18,7 +18,7 @@ class PermissionController extends Controller
     }
 
     public function store(Request $request) {
-        Permission::create(['name' => $request->name]);
+        Permission::create(['name' => $request->name,  'guard_name' => 'web']);
         return redirect()->route('permissions.index');
     }
 
