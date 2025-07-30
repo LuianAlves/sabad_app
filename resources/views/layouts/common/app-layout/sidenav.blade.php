@@ -275,10 +275,10 @@
             <!-------- END: Operacional -------->
 
             <!-------- Controles -------->
-            @canany(['view certificate', 'view domain', 'view maintenance', 'view servicecontrols', 'view device_controls', 'view chipcontrols', 'view heritage_controls', 'view record_controls'])
+            @canany(['view certificates', 'view domains', 'view maintenances', 'view service_control', 'view device_control', 'view chip_control', 'view heritage_control', 'view record_controls'])
             <li class="nav-item mt-2">
                 <div
-                    class="d-flex align-items-center nav-link {{ in_array($current, ['certificate', 'domain', 'maintenance', 'servicecontrol', 'device_control', 'chipcontrol', 'heritage_control', 'record_control']) ? 'active' : '' }}">
+                    class="d-flex align-items-center nav-link {{ in_array($current, ['certificate', 'domain', 'maintenance', 'service_control', 'device_control', 'chip_control', 'heritage_control', 'record_control']) ? 'active' : '' }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-circle-notch fi-1"></i>
@@ -330,10 +330,10 @@
             @endcan
 
             <!--ServiceControl-->
-            @can('view servicescontrol')
+            @can('view service_control')
             <li class="nav-item border-start my-0 pt-2">
-                <a class="nav-link p-0 {{ $current == 'servicecontrol' ? 'active' : '' }}"
-                   href="{{ route('servicecontrol.index') }}">
+                <a class="nav-link p-0 {{ $current == 'service_control' ? 'active' : '' }}"
+                   href="{{ route('service_controls.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fas fa-tasks text-white fi-1"></i>
@@ -344,7 +344,7 @@
             @endcan
 
             <!--DeviceControl-->
-            @can('view device_controls')
+            @can('view device_control')
             <li class="nav-item border-start my-o pt-2">
                 <a class="nav-link p-0 {{ $current == 'device_control' ? 'active' : '' }}"
                    href="{{ route('device_control.index') }}">
@@ -358,10 +358,10 @@
             @endcan
 
             <!--ChipControl-->
-            @can('view chipcontrols')
+            @can('view chip_control')
             <li class="nav-item border-start my-o pt-2">
-                <a class="nav-link p-0 {{ $current == 'chipcontrol' ? 'active' : '' }}"
-                   href="{{ route('chipcontrol.index') }}">
+                <a class="nav-link p-0 {{ $current == 'chip_control' ? 'active' : '' }}"
+                   href="{{ route('chip_controls.index') }}">
                     <div
                         class="icon icon-shape icon-sm px-0 text-center d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-microchip fi-1"></i>
@@ -372,7 +372,7 @@
             @endcan
 
             <!--HeritageControl-->
-            @can('view heritage_controls')
+            @can('view heritage_control')
                 <li class="nav-item border-start my-o pt-2">
                     <a class="nav-link p-0 {{ $current == 'heritage_control' ? 'active' : '' }}"
                        href="{{ route('heritage_control.index') }}">
@@ -401,7 +401,7 @@
             <!-------- END: Controles -------->
 
             <!-------- Sistema -------->
-{{--            @canany([])--}}
+            @canany(['view notifications', 'view activity-log', 'view roles', 'view permissions'])
             <li class="nav-item mt-2">
                 <div
                     class="d-flex align-items-center nav-link {{ in_array($current, ['notifications', 'activity-log', 'roles', 'permissions']) ? 'active' : '' }}">
@@ -412,7 +412,9 @@
                     <span class="nav-link-text font-weight-bold ms-1">Sistema</span>
                 </div>
             </li>
+            @endcanany
 
+            @can('view notifications')
             <li class="nav-item border-start my-0 pt-2">
                 <a class="nav-link p-0 {{ $current == 'notifications' ? 'active' : '' }}"
                    href="{{ route('notifications.create') }}">
@@ -423,7 +425,9 @@
                     <span class="nav-link-text ms-1">Notificações</span>
                 </a>
             </li>
+            @endcan
 
+            @can('view roles')
             <li class="nav-item border-start my-0 pt-2">
                 <a class="nav-link p-0 {{ $current == 'roles' ? 'active' : '' }}" href="{{ route('roles.index') }}">
                     <div
@@ -433,7 +437,9 @@
                     <span class="nav-link-text ms-1">Permissões</span>
                 </a>
             </li>
+            @endcan
 
+            @can('view activity-log')
             <li class="nav-item border-start my-0 pt-2">
                 <a class="nav-link p-0 {{ $current == 'activity-log' ? 'active' : '' }}"
                    href="{{ route('activity-log.index') }}">
@@ -444,6 +450,7 @@
                     <span class="nav-link-text ms-1">Logs do sistema</span>
                 </a>
             </li>
+            @endcan
             <!-------- END: Sistema -------->
         </ul>
     </div>

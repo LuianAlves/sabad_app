@@ -14,8 +14,8 @@ class PermissionSeeder extends Seeder
             'entities', 'users', 'unions', 'companies', 'departments', 'employees',
             'infrastructure', 'heritages', 'rooms', 'services', 'devices', 'emails', 'extension', 'chips', 'licenses',
             'operational', 'tickets', 'tasks', 'booking',
-            'controls', 'domains', 'certificates', 'maintenances', 'service_controls', 'device_controls', 'chip_controls', 'heritage_controls', 'record_controls',
-            'system', 'notifications', 'roles', 'permissions'
+            'controls', 'domains', 'certificates', 'maintenances', 'service_control', 'device_control', 'chip_control', 'heritage_control', 'record_controls',
+            'system', 'notifications', 'roles', 'permissions', 'activity-log'
 
         ];
 

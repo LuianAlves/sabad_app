@@ -153,13 +153,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('email', EmailController::class);
 
-    Route::resource('servicecontrol', UserController::class);
+    Route::resource('service_controls', UserController::class);
 
     Route::resource('certificate', CertificateController::class);
 
     Route::resource('operator', PhoneOperatorController::class);
 
-    Route::resource('chipcontrol', ChipControlController::class);
+    Route::resource('chip_controls', ChipControlController::class);
 
     Route::resource('chip', ChipController::class);
 
@@ -237,7 +237,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('search', [HeritageModelController::class, 'search'])->name('heritage_model.search');
         });
     });
-    Route::resource('heritagecontrol', HeritageControlController::class)->names('heritage_control');
+    Route::resource('heritage_control', HeritageControlController::class)->names('heritage_control');
 
     Route::resource('license', LicenseController::class);
 

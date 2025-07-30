@@ -150,21 +150,17 @@
                     Área do funcionário
                 </a>
             </li>
+
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
-                <a href="{{ route('ticket.collaborator.index') }}" class="nav-link text-white p-0">
-                    Abrir chamado
+                <a href="{{ route('dashboard.index') }}" class="nav-link text-white p-0">
+                    Acessos
                 </a>
             </li>
 
             <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
-                <div class="dropdown">
-                    <a href="javascript:;" class="nav-link text-white p-0 dropdown-toggle " data-bs-toggle="dropdown" id="access">
-                        Acessos
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="access">
-                        @include('layouts.common.user-profile-layout.access_dropdowm')
-                    </ul>
-                </div>
+                <a href="{{ route('ticket.collaborator.index') }}" class="nav-link text-white p-0">
+                    Abrir chamado
+                </a>
             </li>
 
             <li class="nav-item border-radius-sm px-3 py-3 me-2  d-flex align-items-center">
