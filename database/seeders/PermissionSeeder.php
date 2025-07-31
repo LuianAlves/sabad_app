@@ -16,7 +16,6 @@ class PermissionSeeder extends Seeder
             'operational', 'tickets', 'tasks', 'booking',
             'controls', 'domains', 'certificates', 'maintenances', 'service_control', 'device_control', 'chip_control', 'heritage_control', 'record_controls',
             'system', 'notifications', 'roles', 'permissions', 'activity-log'
-
         ];
 
         $actions = ['view', 'create', 'edit', 'delete', 'show'];
