@@ -6,17 +6,16 @@
 
         <div class="container">
             <div class="card card-body py-2 bg-transparent shadow-none">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-12 text-center">
-                        <div
-                            class="avatar avatar-2xl rounded-circle position-relative mt-n7 border border-gray-100 border-4">
-                            @if (isset($user) && $user->image)
-                                <img src="{{ 'data:image/png;base64,' . $user->image }}" alt="profile_image"
-                                     class="w-100">
-                            @else
-                                <img src="{{ asset('img/profile/image_profile.webp') }}" alt="profile_image"
-                                     class="w-100">
-                            @endif
+
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <div class="d-flex justify-content-center">
+                            <div class="avatar avatar-2xl rounded-circle position-relative mt-n7 border border-gray-100 border-4 overflow-hidden">
+                                @if (isset($user) && $user->image)
+                                    <img src="{{ 'data:image/png;base64,' . $user->image }}" alt="profile_image" class="w-100 h-100 object-fit-cover">
+                                @else
+                                    <img src="{{ asset('img/profile/image_profile.webp') }}" alt="profile_image" class="w-100 h-100 object-fit-cover">
+                                @endif
                         </div>
                     </div>
                     <div class="col-auto my-auto">

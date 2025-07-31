@@ -131,7 +131,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('user', UserController::class);
 
-    Route::resource('/company', CompanyController::class);
+//    Route::resource('company', CompanyController::class);
+
+    Route::prefix('company')->group(function () {
+        Route::get('/', [CompanyController::class, 'index'])->name('company.index')->middleware('can:view companies');
+        Route::get('/create', [CompanyController::class, 'create'])->name('company.create')->middleware('can:create companies');
+        Route::post('/store', [CompanyController::class, 'store'])->name('company.store')->middleware('can:create companies');
+        Route::get('/{company}/show', [CompanyController::class, 'show'])->name('company.show')->middleware('can:show companies');
+        Route::get('/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit')->middleware('can:edit companies');
+        Route::put('/{company}/update', [CompanyController::class, 'update'])->name('company.update')->middleware('can:edit companies');
+        Route::delete('/{company}/destroy', [CompanyController::class, 'destroy'])->name('company.destroy')->middleware('can:delete companies');
+    });
 
     Route::resource('domain', DomainController::class);
 
@@ -143,13 +153,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('email', EmailController::class);
 
-    Route::resource('servicecontrol', UserController::class);
+    Route::resource('service_controls', UserController::class);
 
     Route::resource('certificate', CertificateController::class);
 
     Route::resource('operator', PhoneOperatorController::class);
 
-    Route::resource('chipcontrol', ChipControlController::class);
+    Route::resource('chip_controls', ChipControlController::class);
 
     Route::resource('chip', ChipController::class);
 
@@ -227,9 +237,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::resource('/', HeritageModelController::class)->except('show')->names('heritage_model');
             Route::get('search', [HeritageModelController::class, 'search'])->name('heritage_model.search');
         });
-
-        Route::resource('control', HeritageControlController::class)->names('heritage_control');
     });
+    Route::resource('heritage_control', HeritageControlController::class)->names('heritage_control');
 
     Route::resource('license', LicenseController::class);
 
