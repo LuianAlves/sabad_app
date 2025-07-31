@@ -208,6 +208,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::resource('control', DeviceControlController::class)->names('device_control');
     });
     Route::resource('heritage', HeritageController::class);
+
     // Heritages
     Route::group(['prefix' => 'heritage'], function () {
         Route::resource('/', HeritageController::class)->names('heritage');

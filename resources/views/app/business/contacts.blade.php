@@ -1,13 +1,13 @@
 <x-user-profile-layout>
     @section('content-user-layout')
         <div class="pt-7 pb-6 bg-info"></div>
-            
+
         <div class="container">
             <div class="card card-body py-2 bg-transparent shadow-none">
                 <div class="row">
                     <div class="col-auto">
                         {{-- <div class="avatar avatar-2xl rounded-circle position-relative mt-n7 border border-gray-100 border-4">
-                            
+
                             @if (isset($user) && $user->image)
                             <img src="{{ 'data:image/png;base64,' . $user->image }}" alt="profile_image" class="w-100">
                             @else
@@ -57,8 +57,8 @@
                                 {{-- Indicador de nova mensagem --}}
                                 <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill"
                                     id="count-message-{{ $contact->id }}"
-                                    style="z-index: 10; font-size: 1rem; min-width: 20px; height: 20px; 
-             display: flex; align-items: center; justify-content: center; 
+                                    style="z-index: 10; font-size: 1rem; min-width: 20px; height: 20px;
+             display: flex; align-items: center; justify-content: center;
              background-color: #dc3545 !important; /* vermelho bootstrap bg-danger */
              color: white;
              box-shadow: 0 0 6px rgba(220, 53, 69, 0.7); /* sombra vermelha */
