@@ -2,10 +2,11 @@
     @section('content-user-layout')
         <div class="pt-7
                 pb-6 bg-cover bg-info"
-            ></div>
+        ></div>
 
         <div class="container">
             <div class="card card-body py-2 bg-transparent shadow-none">
+
                 <div class="row justify-content-center">
                     <div class="col-auto">
                         <div class="d-flex justify-content-center">
@@ -35,8 +36,6 @@
 
         <div class="container my-3 py-3">
             <div class="row">
-
-
                 <div class="col-12 col-xl-4 mb-4">
                     <div class="card border shadow-xs h-100">
                         <div class="card-header pb-0 p-3">
@@ -61,7 +60,7 @@
 
                                     {{ explode(' ', auth()->user()->name)[1] }}
 
-                                     {{ explode(' ', auth()->user()->name)[1] }}
+                                    {{ explode(' ', auth()->user()->name)[1] }}
 
 
                                 </li>
@@ -88,8 +87,7 @@
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Empresa:</span>
-                                    {{ auth()->user()->employeeUser->employee->department->company->name }}
-
+                                    {{ auth()->user()?->employeeUser?->employee?->department->company->name }}
                                 </li>
 
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
@@ -159,27 +157,27 @@
                                     <div class="avatar avatar-sm rounded-circle me-2">
                                         @if ($team->employeeUser?->user?->image)
                                             <img src="{{ 'data:image/png;base64,' . $team->employeeUser->user->image }}"
-                                                alt="{{ $team->getDisplayName() }}" class="w-100">
+                                                 alt="{{ $team->getDisplayName() }}" class="w-100">
                                         @else
                                             <img src="{{ asset('img/profile/image_profile.webp') }}"
-                                                alt="{{ $team->getDisplayName() }}" class="w-100">
+                                                 alt="{{ $team->getDisplayName() }}" class="w-100">
                                         @endif
                                     </div>
                                     <div class="d-flex align-items-start flex-column justify-content-center">
                                         <h6 class="mb-0 text-sm font-weight-semibold d-flex align-items-center">
                                             <a href="#" class="text-dark openChatModal username me-1"
-                                                data-bs-toggle="modal" data-bs-target="#chatModal"
-                                                data-user="{{ $team->employeeUser->user->id }}"
-                                                data-name="{{ $team->getDisplayName() }}"
-                                                data-avatar="data:image/png;base64,{{ $team->employeeUser->user->image }}"
-                                                data-user-id="{{ $team->employeeUser->user->id }}">
+                                               data-bs-toggle="modal" data-bs-target="#chatModal"
+                                               data-user="{{ $team->employeeUser->user->id }}"
+                                               data-name="{{ $team->getDisplayName() }}"
+                                               data-avatar="data:image/png;base64,{{ $team->employeeUser->user->image }}"
+                                               data-user-id="{{ $team->employeeUser->user->id }}">
                                                 {{ $team->getDisplayName() }}
                                             </a>
 
                                             @if ($unreadCount > 0)
                                                 <span class="badge rounded-pill bg-danger notification-badge ms-2"
-                                                    data-user-id="{{ $team->employeeUser->user->id }}"
-                                                    style="
+                                                      data-user-id="{{ $team->employeeUser->user->id }}"
+                                                      style="
                                                         font-size: 0.75rem !important;
                                                         min-width: 24px !important;
                                                         height: 24px !important;
@@ -198,7 +196,6 @@
                                                     {{ $unreadCount }}
                                                 </span>
                                             @endif
-
 
 
                                         </h6>
@@ -223,23 +220,23 @@
                         </ul>
                         <div class="position-absolute bottom-0 end-0 p-3">
                             <a href="{{ route('contacts.index') }}" class="btn btn-sm btn-primary"
-                                style="background-color: #0A0F1F;">
+                               style="background-color: #0A0F1F;">
                                 Ver todos os contatos
                             </a>
                         </div>
 
                         <!-- Modal único para o chat -->
                         <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel"
-                            aria-hidden="true">
+                             aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <img id="chatModalAvatar" src="/img/profile/image_profile.webp" alt="Avatar"
-                                            style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#eee;">
+                                             style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#eee;">
                                         <h5 class="modal-title" style="font-size: 16px; margin-left: 10px;"
                                             id="chatModalLabel"></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Fechar"><b>X</b></button>
+                                                aria-label="Fechar"><b>X</b></button>
                                     </div>
                                     <div class="modal-body p-0" id="chatMessages" style="background:#ece5dd;">
                                     </div>
@@ -247,7 +244,7 @@
                                         <form id="chatForm" class="w-100 d-flex align-items-center gap-2">
                                             <input type="hidden" id="chatUserId" name="receiver_id">
                                             <input type="text" id="chatInput" name="message" class="form-control"
-                                                placeholder="Digite sua mensagem..." required>
+                                                   placeholder="Digite sua mensagem..." required>
                                             <button type="submit" class="btn btn-primary">Enviar</button>
                                         </form>
                                     </div>
@@ -257,7 +254,7 @@
 
                         <!-- JavaScript para abrir modal e preencher dados -->
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
+                            document.addEventListener('DOMContentLoaded', function () {
                                 const chatForm = document.getElementById('chatForm');
                                 const chatInput = document.getElementById('chatInput');
                                 const chatMessages = document.getElementById('chatMessages');
@@ -377,7 +374,7 @@
 
                                 // Ao clicar para abrir o chat
                                 document.querySelectorAll('.openChatModal').forEach(link => {
-                                    link.addEventListener('click', function() {
+                                    link.addEventListener('click', function () {
                                         const userId = this.getAttribute('data-user');
                                         const userName = this.getAttribute('data-name');
 
@@ -407,7 +404,7 @@
                                 });
 
                                 // Para atualização quando modal for fechado
-                                modal.addEventListener('hidden.bs.modal', function() {
+                                modal.addEventListener('hidden.bs.modal', function () {
                                     if (refreshInterval) {
                                         clearInterval(refreshInterval);
                                         refreshInterval = null;
@@ -416,7 +413,7 @@
                                 });
 
                                 // Envio do formulário de mensagem
-                                chatForm.addEventListener('submit', function(e) {
+                                chatForm.addEventListener('submit', function (e) {
                                     e.preventDefault();
 
                                     const receiverId = chatUserIdInput.value;
@@ -424,16 +421,16 @@
                                     if (!message) return;
 
                                     fetch('/chat/send', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                            },
-                                            body: JSON.stringify({
-                                                receiver_id: receiverId,
-                                                message: message
-                                            })
-                                        }).then(res => res.json())
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                        body: JSON.stringify({
+                                            receiver_id: receiverId,
+                                            message: message
+                                        })
+                                    }).then(res => res.json())
                                         .then(data => {
                                             if (data.success) {
                                                 chatInput.value = '';
@@ -442,11 +439,10 @@
                                                 alert('Erro ao enviar a mensagem.');
                                             }
                                         }).catch(err => {
-                                            console.error(err);
-                                            alert('Erro ao enviar a mensagem.');
-                                        });
+                                        console.error(err);
+                                        alert('Erro ao enviar a mensagem.');
+                                    });
                                 });
-
 
 
                                 // Atualiza notificações a cada 3 segundos, uma única vez aqui
@@ -514,7 +510,7 @@
                                         class="list-group-item py-1 px-2 d-flex justify-content-between align-items-center">
                                         {{ $ticket->ticketCategory->name . ' / ' . $ticket->title }}
                                         <span class="badge rounded-pill {{ $classes }}"
-                                            style="opacity: 1 !important; filter: none !important;">
+                                              style="opacity: 1 !important; filter: none !important;">
                                             <i class="fas {{ $icon }} me-1"></i> {{ $label }}
                                         </span>
                                     </li>
@@ -526,7 +522,7 @@
 
                         <div class="position-absolute bottom-0 end-0 p-3">
                             <a href="{{ route('ticket.collaborator.index') }}" class="btn btn-sm btn-primary"
-                                style="background-color: #0A0F1F;">
+                               style="background-color: #0A0F1F;">
                                 Ver todos
                             </a>
                         </div>
@@ -564,7 +560,7 @@
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
                                     <span class="text-secondary">Link Reunião:</span>
                                     <a href="{{ optional(optional(optional(auth()->user()->employeeUser)->employee)->extension)->meet ?? 'Não Informado' }}"
-                                        target="_blank">
+                                       target="_blank">
                                         {{ optional(optional(optional(auth()->user()->employeeUser)->employee)->extension)->meet ?? 'Não Informado' }}
                                     </a>
                                 </li>
@@ -612,27 +608,28 @@
                             </div>
                         </div>
 
-                <div class="card-body p-3">
-                    <ul class="list-group">
-                        <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                            <span class="text-secondary">Arquive e verifique os documentos do seu departamento</span>
+                        <div class="card-body p-3">
+                            <ul class="list-group">
+                                <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
+                                    <span
+                                        class="text-secondary">Arquive e verifique os documentos do seu departamento</span>
 
-                        </li>
-                    </ul>
-                </div>
+                                </li>
+                            </ul>
+                        </div>
 
-                <div class="position-absolute bottom-0 end-0 p-3">
-                    <a href="{{ route('record_controls.index') }}" class="btn btn-sm btn-primary"
-                       style="background-color: #0A0F1F;">
-                        Ver todos
-                    </a>
+                        <div class="position-absolute bottom-0 end-0 p-3">
+                            <a href="{{ route('record_controls.index') }}" class="btn btn-sm btn-primary"
+                               style="background-color: #0A0F1F;">
+                                Ver todos
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
                 <!-- Include:Footer -->
                 @include('layouts.common.footer')
             </div>
 
-        @endsection
+    @endsection
 </x-user-profile-layout>
