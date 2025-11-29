@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Task\SubTaskController;
 use App\Http\Controllers\Api\Task\TaskDocumentController;
 use App\Http\Controllers\Auth\PermissionController;
 use App\Http\Controllers\Auth\RoleController;
+use App\Http\Controllers\Business\Production\ProductionOrderController;
 use App\Http\Controllers\Business\RecordControl\RecordControlController;
 use App\Http\Controllers\Business\Room\RoomController;
 use App\Http\Controllers\Business\Task\Kanban\KanbanController;
@@ -141,6 +142,59 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit')->middleware('can:edit companies');
         Route::put('/{company}/update', [CompanyController::class, 'update'])->name('company.update')->middleware('can:edit companies');
         Route::delete('/{company}/destroy', [CompanyController::class, 'destroy'])->name('company.destroy')->middleware('can:delete companies');
+    });
+    Route::get('/producao/ping', [ProductionOrderController::class, 'ping'])
+        ->name('production.ping');
+
+    Route::middleware(['auth'])->group(function () {
+
+        // GERENTE – CRUD das OFs (por enquanto só index/create/store)
+        Route::resource('manager', ProductionOrderController::class);
+
+        // ESTOQUE – fila de separação (apenas index por enquanto)
+        Route::prefix('stock')
+            ->name('stock.')
+            ->group(function () {
+                // INDEX do estoque: fila de separação
+                Route::get('/', [ProductionOrderController::class, 'stockIndex'])
+                    ->name('index');
+
+                // Marcar material como separado
+                Route::post('/{order}/separate', [ProductionOrderController::class, 'markSeparated'])
+                    ->name('separate');
+            });
+
+        // OPERADOR – produção (apenas index por enquanto)
+        Route::resource('operator', ProductionOrderController::class)
+            ->only(['index']);
+
+        // PAINEL / TV – visualização (apenas index)
+        Route::get('/tv', [ProductionOrderController::class, 'tvIndex'])
+            ->name('tv.index');
+
+// TV – dados em JSON (usado pelo JS para atualizar sem recarregar)
+        Route::get('/tv/data', [ProductionOrderController::class, 'tvData'])
+            ->name('tv.data');
+
+        // AÇÕES DE FLUXO (mantidas como rotas extras, usando o mesmo controller)
+
+        // ESTOQUE marca material separado
+        Route::prefix('producao')
+            ->name('operator.')
+            ->group(function () {
+                // INDEX do operador
+                Route::get('/operador', [ProductionOrderController::class, 'operatorIndex'])
+                    ->name('index');
+
+                // Iniciar/atualizar produção
+                Route::post('/operador/{id}/iniciar', [ProductionOrderController::class, 'startProduction'])
+                    ->name('start');
+
+                // Finalizar produção
+                Route::post('/operador/{id}/finalizar', [ProductionOrderController::class, 'finishProduction'])
+                    ->name('finish');
+            });
+
     });
 
     Route::resource('domain', DomainController::class);
@@ -336,4 +390,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         /* --->| Employee per Department |<--- */
         Route::get('/employee', [ChartController::class, 'employeePerDepartment']);
     });
-});
+
+
+   });
