@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             HierarchicalLevelSeeder::class,
             TierLevelSeeder::class,
             SalaryBandSeeder::class,
+            ProductionPermissionSeeder::class,
         ]);
     }
 }
