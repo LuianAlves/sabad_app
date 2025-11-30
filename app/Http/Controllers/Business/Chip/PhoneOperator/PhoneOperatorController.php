@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 class PhoneOperatorController extends Controller
 {
-    
+
     public function index()
     {
         $operators = PhoneOperator::get();
@@ -17,7 +17,7 @@ class PhoneOperatorController extends Controller
         return view('app.business.chip.phone_operator.phone_operator_index', compact('operators'));
     }
 
-    
+
     public function create()
     {
         $operator = PhoneOperator::get();
@@ -25,7 +25,7 @@ class PhoneOperatorController extends Controller
         return view('app.business.chip.phone_operator.phone_operator_create', compact('operator'));
     }
 
-    
+
     public function store(StorePhoneOperatorRequest $request)
     {
         $request->validated();
@@ -34,18 +34,18 @@ class PhoneOperatorController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route('operator.index');
+        return redirect()->route('phone-operator.index');
     }
 
-    
+
     public function show($id)
     {
         $operator = PhoneOperator::find($id);
 
-        return view('app.businesschip.phoneoperator.phone_operator_show', compact('operator')); 
+        return view('app.businesschip.phoneoperator.phone_operator_show', compact('operator'));
     }
 
-    
+
     public function edit($id)
     {
         $operator = PhoneOperator::where('id', $id)->first();
@@ -53,7 +53,7 @@ class PhoneOperatorController extends Controller
         return view('app.business.phoneoperator.phoneoperator_edit', compact('operator'));
     }
 
-    
+
     public function update(UpdatePhoneOperatorRequest $request, $id)
     {
         $request->validated();
@@ -64,15 +64,15 @@ class PhoneOperatorController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route('operator.index');
+        return redirect()->route('phone-operator.index');
     }
 
-    
+
     public function destroy($id)
     {
         $operator = PhoneOperator::find($id);
         $operator->delete();
 
-        return redirect()->route('operator.index');
+        return redirect()->route('phone-operator.index');
     }
 }

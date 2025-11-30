@@ -1,5 +1,5 @@
 @php
-    $currentRoute = Route::currentRouteName();
+    use Illuminate\Support\Facades\Route;$currentRoute = Route::currentRouteName();
 
     $current = explode('.', $currentRoute)[0];
 @endphp

@@ -1,6 +1,7 @@
 <x-user-profile-layout>
     @section('content-user-layout')
-        <div class="pt-7 pb-6 bg-cover" style="background-image: url('../img/header-orange-purple.jpg'); background-position: bottom;"></div>
+        <div class="pt-7 pb-6 bg-cover"
+             style="background-image: url('../img/header-orange-purple.jpg'); background-position: bottom;"></div>
 
         <div class="container">
             <div class="card card-body py-2 bg-transparent shadow-none">
@@ -97,6 +98,7 @@
                     </div>
                 </div> --}}
 
+                {{-- Informações do Perfil --}}
                 <div class="col-12 col-xl-4 mb-4">
                     <div class="card border shadow-xs h-100">
                         <div class="card-header pb-0 p-3">
@@ -108,23 +110,25 @@
                                 <div class="col-md-4 col-3 text-end">
                                     <button type="button" class="btn btn-white btn-icon px-2 py-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="currentColor">
+                                             viewBox="0 0 24 24" fill="currentColor">
                                             <path
-                                                d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                                                d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"/>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body p-3">
-                            
+
                             <ul class="list-group">
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pt-0 pb-1 text-sm">
-                                    <span class="text-secondary">Nome:</span> {{ explode(' ', auth()->user()->name)[0] }}
+                                    <span
+                                        class="text-secondary">Nome:</span> {{ explode(' ', auth()->user()->name)[0] }}
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Sobrenome:</span> {{ explode(' ', auth()->user()->name)[1] }}
+                                    <span
+                                        class="text-secondary">Sobrenome:</span> {{ explode(' ', auth()->user()->name)[1] }}
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
@@ -138,7 +142,8 @@
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
-                                    <span class="text-secondary">Cargo:</span> {{ auth()->user()->employeeUser->employee->hierarchical_level }}
+                                    <span
+                                        class="text-secondary">Cargo:</span> {{ auth()->user()->employeeUser->employee->hierarchical_level }}
 
                                 </li>
                                 <li class="list-group-item border-0 ps-0 text-dark font-weight-semibold pb-1 text-sm">
@@ -162,6 +167,7 @@
                     </div>
                 </div>
 
+                {{-- Colegas de Equipe --}}
                 <div class="col-12 col-xl-4 mb-4">
                     <div class="card border shadow-xs h-100">
                         <div class="card-header pb-0 p-3">
@@ -172,10 +178,10 @@
                                 <div class="col-md-4 col-3 text-end">
                                     <button type="button" class="btn btn-white btn-icon px-2 py-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="currentColor">
+                                             viewBox="0 0 24 24" fill="currentColor">
                                             <path fill-rule="evenodd"
-                                                d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
-                                                clip-rule="evenodd" />
+                                                  d="M10.5 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 6a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+                                                  clip-rule="evenodd"/>
                                         </svg>
                                     </button>
                                 </div>
@@ -190,20 +196,21 @@
                         @endphp
 
 
-                                @foreach ($teams as $team)
-                                    <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
-                                        <div class="avatar avatar-sm rounded-circle me-2">
-                                            <img src="{{ asset('img/default-avatar.jpg') }}" alt="{{ $team->getDisplayName() }}" class="w-100">
-                                        </div>
-                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm font-weight-semibold">{{ $team->getDisplayName() }}</h6>
-                                            <p class="mb-0 text-sm text-secondary">{{ $team->employeeUser?->user?->email ?? '' }}</p>
-                                        </div>
-                                        <span class="p-1 bg-success rounded-circle ms-auto me-3">
+                        @foreach ($teams as $team)
+                            <li class="list-group-item border-0 d-flex align-items-center px-0 mb-1">
+                                <div class="avatar avatar-sm rounded-circle me-2">
+                                    <img src="{{ asset('img/default-avatar.jpg') }}" alt="{{ $team->getDisplayName() }}"
+                                         class="w-100">
+                                </div>
+                                <div class="d-flex align-items-start flex-column justify-content-center">
+                                    <h6 class="mb-0 text-sm font-weight-semibold">{{ $team->getDisplayName() }}</h6>
+                                    <p class="mb-0 text-sm text-secondary">{{ $team->employeeUser?->user?->email ?? '' }}</p>
+                                </div>
+                                <span class="p-1 bg-success rounded-circle ms-auto me-3">
                                             <span class="visually-hidden">Online</span>
                                         </span>
-                                    </li>
-                                @endforeach
+                            </li>
+                        @endforeach
 
                     </div>
                 </div>
@@ -220,7 +227,7 @@
                                     <div
                                         class="card card-background border-radius-xl card-background-after-none align-items-start mb-4">
                                         <div class="full-background bg-cover"
-                                            style="background-image: url('../img/img-8.jpg')"></div>
+                                             style="background-image: url('../img/img-8.jpg')"></div>
                                         <span class="mask bg-dark opacity-1 border-radius-sm"></span>
                                         <div class="card-body text-start p-3 w-100">
                                             <div class="row">
@@ -248,7 +255,7 @@
                                         As Uber works through a huge amount of internal management turmoil.
                                     </p>
                                     <a href="javascript:;"
-                                        class="text-dark font-weight-semibold icon-move-right mt-auto w-100 mb-5">
+                                       class="text-dark font-weight-semibold icon-move-right mt-auto w-100 mb-5">
                                         Read post
                                         <i class="fas fa-arrow-right-long text-sm ms-1" aria-hidden="true"></i>
                                     </a>
@@ -257,7 +264,7 @@
                                     <div
                                         class="card card-background border-radius-xl card-background-after-none align-items-start mb-4">
                                         <div class="full-background bg-cover"
-                                            style="background-image: url('../img/img-9.jpg')"></div>
+                                             style="background-image: url('../img/img-9.jpg')"></div>
                                         <span class="mask bg-dark opacity-1 border-radius-sm"></span>
                                         <div class="card-body text-start p-3 w-100">
                                             <div class="row">
@@ -285,7 +292,7 @@
                                         As Uber works through a huge amount of internal management turmoil.
                                     </p>
                                     <a href="javascript:;"
-                                        class="text-dark font-weight-semibold icon-move-right mt-auto w-100 mb-5">
+                                       class="text-dark font-weight-semibold icon-move-right mt-auto w-100 mb-5">
                                         Read post
                                         <i class="fas fa-arrow-right-long text-sm ms-1" aria-hidden="true"></i>
                                     </a>
@@ -297,10 +304,10 @@
                                                 <div
                                                     class="icon icon-shape bg-dark text-center text-white rounded-circle mx-auto d-flex align-items-center justify-content-center mb-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" height="19" width="19"
-                                                        viewBox="0 0 24 24" fill="currentColor">
+                                                         viewBox="0 0 24 24" fill="currentColor">
                                                         <path fill-rule="evenodd"
-                                                            d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                                                            clip-rule="evenodd" />
+                                                              d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+                                                              clip-rule="evenodd"/>
                                                     </svg>
                                                 </div>
                                                 <h5 class="text-dark text-lg"> Create new post </h5>
