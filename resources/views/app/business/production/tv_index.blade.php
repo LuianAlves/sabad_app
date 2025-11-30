@@ -26,20 +26,14 @@
         <div id="tv-root" class="container-fluid p-0">
             <div class="row d-flex align-items-center justify-content-between mb-4">
                 <div class="col-8">
-                    <h2 class="mb-1 fw-bold">Painel de Produção</h2>
-                    <p class="text-sm text-muted mb-0">
-                        À esquerda, OFs com <strong>material separado</strong>. <br>
-                        À direita, OFs <strong>em produção</strong>. <br>
-                        Quando iniciar a produção, a OF sai da lista de separados.
-                        Ao finalizar, some da coluna de produção.
-                    </p>
+                    <h2 class="mb-1 fw-bold">Painel de Produção Bongas Brasil</h2>
                 </div>
 
                 <div class="col-4 align-items-center text-end">
-                <span class="text-success text-sm me-3">
-                    <i class="fa fa-check-circle me-1"></i>
-                    Atualização automática
-                </span>
+                    <span class="text-success text-sm me-3">
+                        <i class="fa fa-check-circle me-1"></i>
+                        Atualização automática
+                    </span>
 
                     <button id="btnToggleFullscreen" class="btn btn-outline-secondary btn-sm m-0">
                         <i class="fa-solid fa-up-right-and-down-left-from-center fs-5"></i>
@@ -48,9 +42,10 @@
             </div>
 
             <div class="row">
+                {{-- COLUNA ESQUERDA – MATERIAIS SEPARADOS --}}
                 <div class="col-lg-6">
                     <div class="card border-0 shadow-lg">
-                        <div class="card-header border-0 pb-3">
+                        <div class="card-header border-0 pb-3 d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <div
                                     class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3"
@@ -64,7 +59,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="ms-auto text-end">
+                            <div class="text-end">
                                 <small class="text-muted-50 d-block">TOTAL</small>
                                 <span class="fw-bold" id="tv-total-separated">{{ $separated->count() }} OF(s)</span>
                             </div>
@@ -78,32 +73,45 @@
                                     <th class="text-secondary text-xs font-weight-semibold opacity-7">Expedição</th>
                                 </tr>
                             </x-slot>
+
                             <x-slot name="tbody">
+                                {{-- tbody com ID para o JS conseguir atualizar --}}
+                                <tbody id="tv-separated-body">
                                 @forelse ($separated as $order)
                                     <tr class="text-center">
-                                        <td><p class="text-dark fw-bold text-sm mb-0">{{ $order->order_number }}</p>
-                                        </td>
-                                        <td><p class="text-dark text-sm mb-0">{{ $order->client_name }}</p></td>
                                         <td>
-                                            <p class="text-dark text-sm mb-0">{{ optional($order->expedition_date)->format('d/m/Y') }}</p>
+                                            <p class="text-dark fw-bold text-sm mb-0">
+                                                {{ $order->order_number }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ $order->client_name }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ optional($order->expedition_date)->format('d/m/Y') }}
+                                            </p>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-sm text-center mb-0">Nenhuma OF com <b>material
-                                                separado</b> no momento.
+                                        <td colspan="3" class="text-sm text-center mb-0">
+                                            Nenhuma OF com <b>material separado</b> no momento.
                                         </td>
                                     </tr>
                                 @endforelse
-
+                                </tbody>
                             </x-slot>
                         </x-table>
                     </div>
                 </div>
 
+                {{-- COLUNA DIREITA – EM PRODUÇÃO --}}
                 <div class="col-lg-6">
                     <div class="card border-0 shadow-lg">
-                        <div class="card-header border-0 pb-3">
+                        <div class="card-header border-0 pb-3 d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <div
                                     class="rounded-circle bg-warning d-flex align-items-center justify-content-center me-3"
@@ -117,7 +125,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="ms-auto text-end">
+                            <div class="text-end">
                                 <small class="text-muted-50 d-block">TOTAL</small>
                                 <span class="fw-bold" id="tv-total-inprod">{{ $inProduction->count() }} OF(s)</span>
                             </div>
@@ -133,42 +141,61 @@
                                     <th class="text-secondary text-xs font-weight-semibold opacity-7">Expedição</th>
                                 </tr>
                             </x-slot>
+
                             <x-slot name="tbody">
+                                {{-- tbody com ID para o JS conseguir atualizar --}}
+                                <tbody id="tv-inprod-body">
                                 @forelse ($inProduction as $order)
                                     <tr class="text-center">
-                                        <td><p class="text-dark fw-bold text-sm mb-0">{{ $order->order_number }}</p>
-                                        </td>
-                                        <td><p class="text-dark text-sm mb-0">{{ $order->client_name }}</p></td>
                                         <td>
-                                            <p class="text-dark text-sm mb-0">{{ $order->production_operator_name ?? '-' }}</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-dark text-sm mb-0">{{ optional($order->production_started_at)->format('H:i') ?? '-' }}</p>
+                                            <p class="text-dark fw-bold text-sm mb-0">
+                                                {{ $order->order_number }}
+                                            </p>
                                         </td>
                                         <td>
-                                            <p class="text-dark text-sm mb-0">{{ optional($order->expedition_date)->format('d/m/Y') }}</p>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ $order->client_name }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ $order->production_operator_name ?? '-' }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ optional($order->production_started_at)->format('H:i') ?? '-' }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ optional($order->expedition_date)->format('d/m/Y') }}
+                                            </p>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-sm text-center mb-0">Nenhuma OF em <b>produção</b>
-                                            no momento.
+                                        <td colspan="5" class="text-sm text-center mb-0">
+                                            Nenhuma OF em <b>produção</b> no momento.
                                         </td>
                                     </tr>
                                 @endforelse
+                                </tbody>
                             </x-slot>
                         </x-table>
                     </div>
                 </div>
-
             </div>
         </div>
 
         @push('scripts')
             <script>
                 (function () {
+                    /* ============================
+                     *  FULLSCREEN + HIDE LAYOUT
+                     * ============================ */
                     const btnFull = document.getElementById('btnToggleFullscreen');
-                    const tvRoot = document.getElementById('tv-root');
+                    const tvRoot  = document.getElementById('tv-root');
 
                     function enterFullscreen() {
                         const elem = tvRoot || document.documentElement;
@@ -203,12 +230,15 @@
                         }
                     });
 
+                    /* ============================
+                     *  AUTO ATUALIZAÇÃO VIA AJAX
+                     * ============================ */
                     const DATA_URL = @json(route('tv.data'));
 
                     async function refreshTv() {
                         try {
                             const res = await fetch(DATA_URL, {
-                                headers: {'Accept': 'application/json'}
+                                headers: { 'Accept': 'application/json' }
                             });
 
                             if (!res.ok) {
@@ -220,9 +250,9 @@
                             renderList('tv-separated-body', json.separated, 'separated');
                             renderList('tv-inprod-body', json.in_production, 'in_production');
 
-                            const totalSep = document.getElementById('tv-total-separated');
+                            const totalSep  = document.getElementById('tv-total-separated');
                             const totalProd = document.getElementById('tv-total-inprod');
-                            if (totalSep) totalSep.textContent = (json.separated?.length || 0) + ' OF(s)';
+                            if (totalSep)  totalSep.textContent  = (json.separated?.length || 0)      + ' OF(s)';
                             if (totalProd) totalProd.textContent = (json.in_production?.length || 0) + ' OF(s)';
                         } catch (e) {
                             console.error(e);
@@ -243,33 +273,37 @@
 
                             tbody.innerHTML =
                                 `<tr>
-                                <td colspan="${colspan}" class="text-center text-white-50 py-4">${msg}</td>
-                             </tr>`;
+                                    <td colspan="${colspan}" class="text-sm text-center mb-0">${msg}</td>
+                                 </tr>`;
                             return;
                         }
 
                         if (type === 'separated') {
+                            // 3 colunas: Nº OF, Cliente, Expedição
                             tbody.innerHTML = items.map(order => `
-                            <tr class="text-sm text-white align-middle text-center">
-                                <td class="fw-semibold text-center">${order.order_number}</td>
-                                <td class="text-center">${order.client_name}</td>
-                                <td class="fw-semibold text-center">${order.expedition_date}</td>
-                            </tr>
-                        `).join('');
+                                <tr class="text-center">
+                                    <td><p class="text-dark fw-bold text-sm mb-0">${order.order_number}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.client_name}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.expedition_date}</p></td>
+                                </tr>
+                            `).join('');
                         } else {
+                            // in_production: Nº OF, Cliente, Operador, Início, Expedição
                             tbody.innerHTML = items.map(order => `
-                            <tr class="text-sm text-white align-middle text-center">
-                                <td class="fw-semibold text-center">${order.order_number}</td>
-                                <td class="text-center">${order.client_name}</td>
-                                <td class="text-center">${order.operator ?? '-'}</td>
-                                <td class="text-center">${order.started_at ?? '-'}</td>
-                                <td class="fw-semibold text-center">${order.expedition_date}</td>
-                            </tr>
-                        `).join('');
+                                <tr class="text-center">
+                                    <td><p class="text-dark fw-bold text-sm mb-0">${order.order_number}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.client_name}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.operator ?? '-'}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.started_at ?? '-'}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.expedition_date}</p></td>
+                                </tr>
+                            `).join('');
                         }
                     }
 
+                    // primeira carga
                     refreshTv();
+                    // atualiza a cada 5s
                     setInterval(refreshTv, 5000);
                 })();
             </script>
