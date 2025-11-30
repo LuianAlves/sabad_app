@@ -65,7 +65,15 @@
                 </li>
             @endcan
 
-            @can('view tv_index')
+            @can('view operator order_production')
+                <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
+                    <a href="{{ route('operator.index') }}" class="nav-link text-white p-0">
+                        Iniciar / Finalizar OFs
+                    </a>
+                </li>
+            @endcan
+
+        @can('view tv_index')
                 <li class="nav-item border-radius-sm px-3 py-3 me-2 bg-slate-800 d-flex align-items-center">
                     <a href="{{ route('tv.index') }}" class="nav-link text-white p-0" target="_blank">
                         Visualizar OFs
