@@ -40,7 +40,7 @@
                                 <div class="col-3 mb-3">
                                     <div class="card h-100" style="border: 1px solid rgba(206,206,206,0.36);">
                                         <div class="card-header">
-                                            <div class="form-check form-switch d-flex justify-content-between p-0">
+                                            <div class="form-check form-switch p-0" style="display: flex !important; justify-content: space-between !important; width: 100% !important;">
                                                 <label class="form-check-label" for="checkAll-{{ $entity }}">
                                                     <b>{{ ucfirst($entity) }}</b>
                                                 </label>

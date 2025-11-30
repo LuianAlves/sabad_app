@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 // Dependences
 use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -31,11 +32,28 @@ class UserController extends Controller
 
     public function create()
     {
-        $permissions = Permission::all()->groupBy(function ($permission) {
-            // return explode(' ', $permission->name)[1];
+        $roles = Role::with(['permissions'])->where('guard_name', 'web')->get();
+
+        $permissions = Permission::all();
+
+        $knownActions = ['view', 'create', 'edit', 'delete', 'show'];
+
+        $groupedPermissions = $permissions->groupBy(function ($permission) use ($knownActions) {
+            $parts = explode(' ', $permission->name);
+            $first = strtolower($parts[0]);
+
+            if (in_array($first, $knownActions)) {
+                return implode(' ', array_slice($parts, 1));
+            }
+
+            return $permission->name;
         });
 
-        return view('app.business.user.user_create', compact('permissions'));
+        return view('app.business.user.user_create', [
+            'roles' => $roles,
+            'permissions' => $permissions,
+            'groupedPermissions' => $groupedPermissions,
+        ]);
     }
 
     public function store(StoreUserRequest $request)
@@ -110,7 +128,7 @@ class UserController extends Controller
         //
     }
 
-    
+
 
     public function destroy($id)
     {
@@ -186,7 +204,7 @@ class UserController extends Controller
 
     public function checkMessages() {
         $users = User::where('id', '!=', Auth::user()->id)->get();
-        
+
         foreach ($users as $contact) {
             $contact->unread_count = Message::where('sender_id', $contact->id)
                 ->where('receiver_id', Auth::user()->id)

@@ -111,8 +111,7 @@
                      style="background: radial-gradient(circle at top right, #1f2937 0, #020617 40%, #020617 100%); color: #fff;">
                     <div class="card-header border-0 pb-0 d-flex align-items-center">
                         <div class="d-flex align-items-center">
-                            <div
-                                class="rounded-circle bg-warning d-flex align-items-center justify-content-center me-3"
+                            <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center me-3"
                                 style="width: 40px; height: 40px;">
                                 <i class="fa fa-industry text-dark"></i>
                             </div>
