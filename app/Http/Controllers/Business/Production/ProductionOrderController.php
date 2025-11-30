@@ -247,12 +247,6 @@ class ProductionOrderController extends Controller
     }
 
 
-
-
-    /* =========================================================================
-     *  AÇÕES DE FLUXO
-     * ========================================================================= */
-
     /**
      * ESTOQUE marca material separado
      * Rota: stock.separate (POST /stock/{order}/separate)

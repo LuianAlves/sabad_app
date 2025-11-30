@@ -109,10 +109,18 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
-    public function show($id)
+    public function show($userId)
     {
-        $user = User::findOrFail($id);
+        $authId = auth()->id();
+
+        if ((int)$userId !== (int)$authId && !Auth::user()->hasRole('admin')) {
+            abort(403);
+        }
+        
+        $user = User::findOrFail($userId);
+
         $tickets = Ticket::get();
+
         return view('app.business.user.user_show', compact('user', 'tickets'));
     }
 

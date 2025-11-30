@@ -142,12 +142,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::delete('/{company}/destroy', [CompanyController::class, 'destroy'])->name('company.destroy')->middleware('can:delete companies');
     });
 
+    // Order Production
     Route::get('/producao/ping', [ProductionOrderController::class, 'ping'])->name('production.ping');
 
-    // GERENTE – CRUD das OFs (por enquanto só index/create/store)
     Route::resource('manager', ProductionOrderController::class);
 
-    // ESTOQUE – fila de separação (apenas index por enquanto)
     Route::prefix('stock')->name('stock.')->group(function () {
         // INDEX do estoque: fila de separação
         Route::get('/', [ProductionOrderController::class, 'stockIndex'])->name('index');
@@ -155,16 +154,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::post('/{order}/separate', [ProductionOrderController::class, 'markSeparated'])->name('separate');
     });
 
-    // OPERADOR – produção (apenas index por enquanto)
     Route::resource('operator', ProductionOrderController::class)->only(['index']);
 
-    // PAINEL / TV – visualização (apenas index)
     Route::get('/tv', [ProductionOrderController::class, 'tvIndex'])->name('tv.index');
 
-// TV – dados em JSON (usado pelo JS para atualizar sem recarregar)
     Route::get('/tv/data', [ProductionOrderController::class, 'tvData'])->name('tv.data');
 
-    // ESTOQUE marca material separado
     Route::prefix('producao')->name('operator.')->group(function () {
         // INDEX do operador
         Route::get('/operador', [ProductionOrderController::class, 'operatorIndex'])->name('index');
@@ -190,7 +185,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('certificate', CertificateController::class);
 
-    Route::resource('operator', PhoneOperatorController::class);
+    Route::resource('phone-operator', PhoneOperatorController::class);
 
     Route::resource('chip_controls', ChipControlController::class);
 
@@ -271,6 +266,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('search', [HeritageModelController::class, 'search'])->name('heritage_model.search');
         });
     });
+
     Route::resource('heritage_control', HeritageControlController::class)->names('heritage_control');
 
     Route::resource('license', LicenseController::class);
