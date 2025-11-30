@@ -132,8 +132,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('user', UserController::class);
 
-//    Route::resource('company', CompanyController::class);
-
     Route::prefix('company')->group(function () {
         Route::get('/', [CompanyController::class, 'index'])->name('company.index')->middleware('can:view companies');
         Route::get('/create', [CompanyController::class, 'create'])->name('company.create')->middleware('can:create companies');
@@ -143,58 +141,34 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::put('/{company}/update', [CompanyController::class, 'update'])->name('company.update')->middleware('can:edit companies');
         Route::delete('/{company}/destroy', [CompanyController::class, 'destroy'])->name('company.destroy')->middleware('can:delete companies');
     });
-    Route::get('/producao/ping', [ProductionOrderController::class, 'ping'])
-        ->name('production.ping');
 
-    Route::middleware(['auth'])->group(function () {
+    // Order Production
+    Route::get('/producao/ping', [ProductionOrderController::class, 'ping'])->name('production.ping');
 
-        // GERENTE – CRUD das OFs (por enquanto só index/create/store)
-        Route::resource('manager', ProductionOrderController::class);
+    Route::resource('manager', ProductionOrderController::class);
 
-        // ESTOQUE – fila de separação (apenas index por enquanto)
-        Route::prefix('stock')
-            ->name('stock.')
-            ->group(function () {
-                // INDEX do estoque: fila de separação
-                Route::get('/', [ProductionOrderController::class, 'stockIndex'])
-                    ->name('index');
+    Route::prefix('stock')->name('stock.')->group(function () {
+        // INDEX do estoque: fila de separação
+        Route::get('/', [ProductionOrderController::class, 'stockIndex'])->name('index');
+        // Marcar material como separado
+        Route::post('/{order}/separate', [ProductionOrderController::class, 'markSeparated'])->name('separate');
+    });
 
-                // Marcar material como separado
-                Route::post('/{order}/separate', [ProductionOrderController::class, 'markSeparated'])
-                    ->name('separate');
-            });
+    Route::resource('operator', ProductionOrderController::class)->only(['index']);
 
-        // OPERADOR – produção (apenas index por enquanto)
-        Route::resource('operator', ProductionOrderController::class)
-            ->only(['index']);
+    Route::get('/tv', [ProductionOrderController::class, 'tvIndex'])->name('tv.index');
 
-        // PAINEL / TV – visualização (apenas index)
-        Route::get('/tv', [ProductionOrderController::class, 'tvIndex'])
-            ->name('tv.index');
+    Route::get('/tv/data', [ProductionOrderController::class, 'tvData'])->name('tv.data');
 
-// TV – dados em JSON (usado pelo JS para atualizar sem recarregar)
-        Route::get('/tv/data', [ProductionOrderController::class, 'tvData'])
-            ->name('tv.data');
+    Route::prefix('producao')->name('operator.')->group(function () {
+        // INDEX do operador
+        Route::get('/operador', [ProductionOrderController::class, 'operatorIndex'])->name('index');
 
-        // AÇÕES DE FLUXO (mantidas como rotas extras, usando o mesmo controller)
+        // Iniciar/atualizar produção
+        Route::post('/operador/{id}/iniciar', [ProductionOrderController::class, 'startProduction'])->name('start');
 
-        // ESTOQUE marca material separado
-        Route::prefix('producao')
-            ->name('operator.')
-            ->group(function () {
-                // INDEX do operador
-                Route::get('/operador', [ProductionOrderController::class, 'operatorIndex'])
-                    ->name('index');
-
-                // Iniciar/atualizar produção
-                Route::post('/operador/{id}/iniciar', [ProductionOrderController::class, 'startProduction'])
-                    ->name('start');
-
-                // Finalizar produção
-                Route::post('/operador/{id}/finalizar', [ProductionOrderController::class, 'finishProduction'])
-                    ->name('finish');
-            });
-
+        // Finalizar produção
+        Route::post('/operador/{id}/finalizar', [ProductionOrderController::class, 'finishProduction'])->name('finish');
     });
 
     Route::resource('domain', DomainController::class);
@@ -211,7 +185,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::resource('certificate', CertificateController::class);
 
-    Route::resource('operator', PhoneOperatorController::class);
+    Route::resource('phone-operator', PhoneOperatorController::class);
 
     Route::resource('chip_controls', ChipControlController::class);
 
@@ -292,6 +266,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::get('search', [HeritageModelController::class, 'search'])->name('heritage_model.search');
         });
     });
+
     Route::resource('heritage_control', HeritageControlController::class)->names('heritage_control');
 
     Route::resource('license', LicenseController::class);
@@ -333,7 +308,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/levels/{level}/tiers', [HierarchicalLevelController::class, 'getTiers'])->name('getTiers');
     Route::get('/tiers/{tier}/salary-bands', [HierarchicalLevelController::class, 'getSalaryBands'])->name('getSalaryBands');
 
-
     // mostra a estrutura salarial
     Route::get('company/{company}/company_structure', [CompanyController::class, 'structure'])->name('companies.company_structure');
 
@@ -373,9 +347,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     });
     Route::delete('documents/{id}', [TaskDocumentController::class, 'destroy']);
 
-
     // Task Share
-    Route::post('/tasks/{task}/share', [TaskShareController::class,'share'])->middleware('can:update,task')->name('tasks.share');
+    Route::post('/tasks/{task}/share', [TaskShareController::class, 'share'])->middleware('can:update,task')->name('tasks.share');
 
     // Kanban
     Route::get('/kanban', [KanbanController::class, 'index'])->name('kanban.index');
@@ -390,6 +363,4 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         /* --->| Employee per Department |<--- */
         Route::get('/employee', [ChartController::class, 'employeePerDepartment']);
     });
-
-
-   });
+});

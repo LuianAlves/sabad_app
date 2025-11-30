@@ -1,5 +1,5 @@
  <div class="card-header border-bottom pb-0">
-     <div class="d-sm-flex align-items-center mb-3">
+     <div class="mb-3 w-100 d-flex justify-content-between align-items-center">
          <div class="d-flex align-items-center">
              @if (currentRoute()[1] != 'index')
                  <a href="{{ route(currentRoute()[0] . '.index') }}"><i class="fa fa-arrow-left"

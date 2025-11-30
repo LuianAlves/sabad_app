@@ -55,19 +55,19 @@ class ProductionOrderController extends Controller
         // Ícones e cores dos cards
         $icons = [
             'not_started' => [
-                'bg'   => 'secondary',
+                'bg' => 'secondary',
                 'icon' => 'fa-circle',
             ],
             'separated' => [
-                'bg'   => 'info',
+                'bg' => 'info',
                 'icon' => 'fa-box-open',
             ],
             'in_production' => [
-                'bg'   => 'warning',
+                'bg' => 'warning',
                 'icon' => 'fa-industry',
             ],
             'finished' => [
-                'bg'   => 'success',
+                'bg' => 'success',
                 'icon' => 'fa-check-circle',
             ],
         ];
@@ -78,15 +78,15 @@ class ProductionOrderController extends Controller
             $query = ProductionOrder::where('status', $status);
 
             $statusData[$status] = [
-                'count'  => $query->count(),
+                'count' => $query->count(),
                 'latest' => $query->latest('order_date')->first(),
             ];
         }
 
         return view('app.business.production.manager_index', [
-            'orders'     => $orders,
+            'orders' => $orders,
             'statusData' => $statusData,
-            'icons'      => $icons,
+            'icons' => $icons,
         ]);
     }
 
@@ -106,13 +106,13 @@ class ProductionOrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'order_date'      => ['required', 'date'],
-            'order_number'    => ['required', 'string', 'max:50'],
-            'client_name'     => ['required', 'string', 'max:255'],
+            'order_date' => ['required', 'date'],
+            'order_number' => ['required', 'string', 'max:50'],
+            'client_name' => ['required', 'string', 'max:255'],
             'expedition_date' => ['required', 'date'],
         ]);
 
-        $data['status']        = 'not_started';
+        $data['status'] = 'not_started';
         $data['created_by_id'] = Auth::id();
 
         ProductionOrder::create($data);
@@ -128,10 +128,10 @@ class ProductionOrderController extends Controller
         if ($request->input('action') === 'cycle_status') {
 
             $flow = [
-                'not_started'   => 'separated',
-                'separated'     => 'in_production',
+                'not_started' => 'separated',
+                'separated' => 'in_production',
                 'in_production' => 'finished',
-                'finished'      => 'not_started', // se quiser que pare em finished, pode repetir 'finished'
+                'finished' => 'not_started', // se quiser que pare em finished, pode repetir 'finished'
             ];
 
             $oldStatus = $manager->status;
@@ -207,6 +207,7 @@ class ProductionOrderController extends Controller
 
         return view('app.business.production.tv_index', compact('separated', 'inProduction'));
     }
+
     public function tvData()
     {
         // 10 próximas OFs separadas
@@ -216,9 +217,9 @@ class ProductionOrderController extends Controller
             ->get()
             ->map(function ($order) {
                 return [
-                    'id'              => $order->id,
-                    'order_number'    => $order->order_number,
-                    'client_name'     => $order->client_name,
+                    'id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'client_name' => $order->client_name,
                     'expedition_date' => optional($order->expedition_date)->format('d/m/Y'),
                 ];
             });
@@ -230,27 +231,21 @@ class ProductionOrderController extends Controller
             ->get()
             ->map(function ($order) {
                 return [
-                    'id'              => $order->id,
-                    'order_number'    => $order->order_number,
-                    'client_name'     => $order->client_name,
-                    'operator'        => $order->production_operator_name,
-                    'started_at'      => optional($order->production_started_at)->format('H:i'),
+                    'id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'client_name' => $order->client_name,
+                    'operator' => $order->production_operator_name,
+                    'started_at' => optional($order->production_started_at)->format('H:i'),
                     'expedition_date' => optional($order->expedition_date)->format('d/m/Y'),
                 ];
             });
 
         return response()->json([
-            'separated'     => $separated,
+            'separated' => $separated,
             'in_production' => $inProduction,
         ]);
     }
 
-
-
-
-    /* =========================================================================
-     *  AÇÕES DE FLUXO
-     * ========================================================================= */
 
     /**
      * ESTOQUE marca material separado
@@ -261,7 +256,7 @@ class ProductionOrderController extends Controller
         if ($order->status !== 'not_started') {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'ok'    => false,
+                    'ok' => false,
                     'error' => 'Essa OF não está na fila de separação.',
                 ], 422);
             }
@@ -270,14 +265,14 @@ class ProductionOrderController extends Controller
         }
 
         $order->update([
-            'status'             => 'separated',
-            'stock_user_id'      => Auth::id(),
+            'status' => 'separated',
+            'stock_user_id' => Auth::id(),
             'stock_separated_at' => now(),
         ]);
 
         if ($request->expectsJson()) {
             return response()->json([
-                'ok'    => true,
+                'ok' => true,
                 'order' => $order,
             ]);
         }
@@ -290,10 +285,10 @@ class ProductionOrderController extends Controller
     {
         $order = ProductionOrder::findOrFail($id);
 
-        if (! in_array($order->status, ['separated', 'in_production'])) {
+        if (!in_array($order->status, ['separated', 'in_production'])) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'ok'    => false,
+                    'ok' => false,
                     'error' => 'Essa OF não está disponível para início de produção.',
                 ], 422);
             }
@@ -307,11 +302,11 @@ class ProductionOrderController extends Controller
 
         $update = [
             'production_operator_name' => $data['operator_name'],
-            'production_user_id'       => Auth::id(),
+            'production_user_id' => Auth::id(),
         ];
 
         if ($order->status === 'separated') {
-            $update['status']                = 'in_production';
+            $update['status'] = 'in_production';
             $update['production_started_at'] = now();
         }
 
@@ -320,7 +315,7 @@ class ProductionOrderController extends Controller
 
         if ($request->expectsJson()) {
             return response()->json([
-                'ok'    => true,
+                'ok' => true,
                 'order' => $order,
             ]);
         }
@@ -336,7 +331,7 @@ class ProductionOrderController extends Controller
         if ($order->status !== 'in_production') {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'ok'    => false,
+                    'ok' => false,
                     'error' => 'Apenas OFs em produção podem ser finalizadas.',
                 ], 422);
             }
@@ -345,13 +340,13 @@ class ProductionOrderController extends Controller
         }
 
         $order->update([
-            'status'                 => 'finished',
+            'status' => 'finished',
             'production_finished_at' => now(),
         ]);
 
         if ($request->expectsJson()) {
             return response()->json([
-                'ok'    => true,
+                'ok' => true,
                 'order' => $order,
             ]);
         }

@@ -1,15 +1,22 @@
 <?php
 
-    function currentRoute(): array
-    {
-        $currentRoute = \Illuminate\Support\Facades\Route::currentRouteName();
+use Illuminate\Support\Facades\Route;
 
-        if ($currentRoute) {
-            $route = explode('.', $currentRoute);
-            
-            return $route;
-        }
+function currentRoute(): array
+{
+    $currentRoute = Route::currentRouteName();
 
-        return [];
+    if ($currentRoute) {
+        $route = explode('.', $currentRoute);
+
+        return $route;
     }
+
+    return [];
+}
+
+function currentRouteName(): array
+{
+    return ['route' => Route::currentRouteName()];
+}
 

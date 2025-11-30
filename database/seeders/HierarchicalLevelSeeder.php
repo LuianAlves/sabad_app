@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Business\Company\Company;
 use App\Models\HierarchicalLevel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class HierarchicalLevelSeeder extends Seeder
 {
@@ -34,6 +34,13 @@ class HierarchicalLevelSeeder extends Seeder
                     ]
                 );
             }
+        }
+
+        foreach ($levels as $i => $name) {
+            Role::firstOrCreate([
+                'name' => strtolower($name),
+                'guard_name' => 'web'
+            ]);
         }
     }
 }
