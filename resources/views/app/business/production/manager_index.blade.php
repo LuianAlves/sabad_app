@@ -158,7 +158,8 @@
                                     @method('PATCH')
                                     <input type="hidden" name="action" value="cycle_status">
 
-                                    <button type="submit" class="btn btn-link m-0 p-0 border-0 bg-transparent text-decoration-none">
+                                    <button type="submit"
+                                            class="btn btn-link m-0 p-0 border-0 bg-transparent text-decoration-none">
                                     <span
                                         class="badge badge-sm {{ $statusClass[$status] ?? 'border-secondary text-secondary bg-light' }}">
                                         <i class="fa {{ $statusIcon[$status] ?? 'fa-info-circle' }}"
@@ -171,38 +172,49 @@
 
                             <td>
                                 <div class="dropdown">
-                                    <button class="dropdown-toggle text-dark" type="button" id="dropdown-table" data-bs-toggle="dropdown"
+                                    <button class="dropdown-toggle text-dark" type="button" id="dropdown-table"
+                                            data-bs-toggle="dropdown"
                                             aria-expanded="false" style="border: none; background: none;">
                                         <small style="font-weight: 500; letter-spacing: 0.25px;">Ações</small>
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdown-table" style="font-size: 12px !important;">
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('manager.show', $order->id) }}">
-                                                <i class="fa-solid fa-expand text-primary"></i>
-                                                <span class="ms-2">Visualizar registro</span>
-                                            </a>
-                                        </li>
-                                        <li class="my-1">
-                                            <a class="dropdown-item" href="{{ route('manager.edit', $order->id) }}">
-                                                <i class="fa-solid fa-pen-to-square text-success"></i>
-                                                <span class="ms-2">Editar registro</span>
-                                            </a>
-                                        </li>
-                                        <hr class="text-muted py-1 m-0">
-                                        <li>
-                                            <form id="delete-form-{{ $order->id }}" action="{{ route('manager.destroy', $order->id) }}" method="POST"
-                                                  style="display: none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdown-table"
+                                        style="font-size: 12px !important;">
+                                        @can('view production_order')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('manager.show', $order->id) }}">
+                                                    <i class="fa-solid fa-expand text-primary"></i>
+                                                    <span class="ms-2">Visualizar registro</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('edit production_order')
 
-                                            <a href="#" class="dropdown-item"
-                                               onclick="event.preventDefault(); if(confirm('Tem certeza que deseja remover esse registro?')) { document.getElementById('delete-form-{{ $order->id }}').submit(); }">
-                                                <i class="fa-solid fa-trash-can text-danger"></i>
-                                                <span class="ms-2">Excluir registro</span>
-                                            </a>
+                                            <li class="my-1">
+                                                <a class="dropdown-item" href="{{ route('manager.edit', $order->id) }}">
+                                                    <i class="fa-solid fa-pen-to-square text-success"></i>
+                                                    <span class="ms-2">Editar registro</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('delete production_order')
 
-                                        </li>
+                                            <hr class="text-muted py-1 m-0">
+                                            <li>
+                                                <form id="delete-form-{{ $order->id }}"
+                                                      action="{{ route('manager.destroy', $order->id) }}" method="POST"
+                                                      style="display: none;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+
+                                                <a href="#" class="dropdown-item"
+                                                   onclick="event.preventDefault(); if(confirm('Tem certeza que deseja remover esse registro?')) { document.getElementById('delete-form-{{ $order->id }}').submit(); }">
+                                                    <i class="fa-solid fa-trash-can text-danger"></i>
+                                                    <span class="ms-2">Excluir registro</span>
+                                                </a>
+
+                                            </li>
+                                        @endcan
                                     </ul>
                                 </div>
                             </td>
