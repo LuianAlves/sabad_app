@@ -197,54 +197,71 @@ class ProductionOrderController extends Controller
      */
     public function tvIndex()
     {
-        $separated = ProductionOrder::separated()
+        $waiting = ProductionOrder::where('status', 'not_started')
             ->orderBy('created_at', 'asc')
+            ->limit(10)
             ->get();
 
-        $inProduction = ProductionOrder::inProduction()
+        $separated = ProductionOrder::where('status', 'separated')
             ->orderBy('created_at', 'asc')
+            ->limit(10)
             ->get();
 
-        return view('app.business.production.tv_index', compact('separated', 'inProduction'));
+        $inProduction = ProductionOrder::where('status', 'in_production')
+            ->orderBy('created_at', 'asc')
+            ->limit(10)
+            ->get();
+
+        return view('app.business.production.tv_index', compact(
+            'waiting', 'separated', 'inProduction'
+        ));
     }
+
 
     public function tvData()
     {
-        // 10 próximas OFs separadas
-        $separated = ProductionOrder::separated()
-            ->orderBy('expedition_date')
+        $waiting = ProductionOrder::where('status', 'not_started')
+            ->orderBy('created_at', 'asc')
             ->limit(10)
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'id' => $order->id,
-                    'order_number' => $order->order_number,
-                    'client_name' => $order->client_name,
-                    'expedition_date' => optional($order->expedition_date)->format('d/m/Y'),
-                ];
-            });
+            ->get();
 
-        // 10 OFs em produção (AGORA COM OPERADOR + HORA DE INÍCIO)
-        $inProduction = ProductionOrder::inProduction()
-            ->orderBy('expedition_date')
+        $separated = ProductionOrder::where('status', 'separated')
+            ->orderBy('created_at', 'asc')
             ->limit(10)
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'id' => $order->id,
-                    'order_number' => $order->order_number,
-                    'client_name' => $order->client_name,
-                    'operator' => $order->production_operator_name,
-                    'started_at' => optional($order->production_started_at)->format('H:i'),
-                    'expedition_date' => optional($order->expedition_date)->format('d/m/Y'),
-                ];
-            });
+            ->get();
+
+        $inProduction = ProductionOrder::where('status', 'in_production')
+            ->orderBy('created_at', 'asc')
+            ->limit(10)
+            ->get();
 
         return response()->json([
-            'separated' => $separated,
-            'in_production' => $inProduction,
+            'waiting' => $waiting->map(function ($o) {
+                return [
+                    'order_number'    => $o->order_number,
+                    'client_name'     => $o->client_name,
+                    'expedition_date' => optional($o->expedition_date)->format('d/m/Y'),
+                ];
+            }),
+            'separated' => $separated->map(function ($o) {
+                return [
+                    'order_number'    => $o->order_number,
+                    'client_name'     => $o->client_name,
+                    'expedition_date' => optional($o->expedition_date)->format('d/m/Y'),
+                ];
+            }),
+            'in_production' => $inProduction->map(function ($o) {
+                return [
+                    'order_number'    => $o->order_number,
+                    'client_name'     => $o->client_name,
+                    'operator'        => $o->production_operator_name,
+                    'started_at'      => optional($o->production_started_at)->format('H:i'),
+                    'expedition_date' => optional($o->expedition_date)->format('d/m/Y'),
+                ];
+            }),
         ]);
     }
+
 
 
     /**

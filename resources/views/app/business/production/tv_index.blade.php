@@ -24,6 +24,7 @@
 
     @can('view tv_index')
         <div id="tv-root" class="container-fluid p-0">
+            {{-- Cabeçalho --}}
             <div class="row d-flex align-items-center justify-content-between mb-4">
                 <div class="col-8">
                     <h2 class="mb-1 fw-bold">Painel de Produção Bongas Brasil</h2>
@@ -41,9 +42,78 @@
                 </div>
             </div>
 
+            {{-- 3 COLUNAS NA MESMA TELA --}}
             <div class="row">
-                {{-- COLUNA ESQUERDA – MATERIAIS SEPARADOS --}}
-                <div class="col-lg-6">
+
+                {{-- COLUNA 1 – AGUARDANDO SEPARAÇÃO --}}
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header border-0 pb-3 d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div
+                                    class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3"
+                                    style="width: 40px; height: 40px;">
+                                    <i class="fa fa-clock text-white"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 fw-semibold">Aguardando separação</h5>
+                                    <small class="text-muted-50">
+                                        OFs ainda não separadas no estoque
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-muted-50 d-block">TOTAL</small>
+                                <span class="fw-bold" id="tv-total-waiting">
+                                    {{ min(($waiting ?? collect())->count(), 10) }} OF(s)
+                                </span>
+                            </div>
+                        </div>
+
+                        <x-table>
+                            <x-slot name="thead">
+                                <tr class="text-center">
+                                    <th class="text-secondary text-xs font-weight-semibold opacity-7">N° OF</th>
+                                    <th class="text-secondary text-xs font-weight-semibold opacity-7">Cliente</th>
+                                    <th class="text-secondary text-xs font-weight-semibold opacity-7">Expedição</th>
+                                </tr>
+                            </x-slot>
+
+                            <x-slot name="tbody">
+                                <tbody id="tv-waiting-body">
+                                @forelse (($waiting ?? collect())->take(10) as $order)
+                                    <tr class="text-center">
+                                        <td>
+                                            <p class="text-dark fw-bold text-sm mb-0">
+                                                {{ $order->order_number }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ $order->client_name }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark text-sm mb-0">
+                                                {{ optional($order->expedition_date)->format('d/m/Y') }}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="text-sm text-center mb-0">
+                                            Nenhuma OF <b>aguardando separação</b> no momento.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </x-slot>
+                        </x-table>
+                    </div>
+                </div>
+
+                {{-- COLUNA 2 – MATERIAIS SEPARADOS --}}
+                <div class="col-lg-4">
                     <div class="card border-0 shadow-lg">
                         <div class="card-header border-0 pb-3 d-flex justify-content-between">
                             <div class="d-flex align-items-center">
@@ -61,7 +131,9 @@
                             </div>
                             <div class="text-end">
                                 <small class="text-muted-50 d-block">TOTAL</small>
-                                <span class="fw-bold" id="tv-total-separated">{{ $separated->count() }} OF(s)</span>
+                                <span class="fw-bold" id="tv-total-separated">
+                                    {{ min($separated->count(), 10) }} OF(s)
+                                </span>
                             </div>
                         </div>
 
@@ -75,9 +147,8 @@
                             </x-slot>
 
                             <x-slot name="tbody">
-                                {{-- tbody com ID para o JS conseguir atualizar --}}
                                 <tbody id="tv-separated-body">
-                                @forelse ($separated as $order)
+                                @forelse ($separated->take(10) as $order)
                                     <tr class="text-center">
                                         <td>
                                             <p class="text-dark fw-bold text-sm mb-0">
@@ -108,8 +179,8 @@
                     </div>
                 </div>
 
-                {{-- COLUNA DIREITA – EM PRODUÇÃO --}}
-                <div class="col-lg-6">
+                {{-- COLUNA 3 – EM PRODUÇÃO --}}
+                <div class="col-lg-4">
                     <div class="card border-0 shadow-lg">
                         <div class="card-header border-0 pb-3 d-flex justify-content-between">
                             <div class="d-flex align-items-center">
@@ -127,7 +198,9 @@
                             </div>
                             <div class="text-end">
                                 <small class="text-muted-50 d-block">TOTAL</small>
-                                <span class="fw-bold" id="tv-total-inprod">{{ $inProduction->count() }} OF(s)</span>
+                                <span class="fw-bold" id="tv-total-inprod">
+                                    {{ min($inProduction->count(), 10) }} OF(s)
+                                </span>
                             </div>
                         </div>
 
@@ -143,9 +216,8 @@
                             </x-slot>
 
                             <x-slot name="tbody">
-                                {{-- tbody com ID para o JS conseguir atualizar --}}
                                 <tbody id="tv-inprod-body">
-                                @forelse ($inProduction as $order)
+                                @forelse ($inProduction->take(10) as $order)
                                     <tr class="text-center">
                                         <td>
                                             <p class="text-dark fw-bold text-sm mb-0">
@@ -247,13 +319,23 @@
                             }
 
                             const json = await res.json();
-                            renderList('tv-separated-body', json.separated, 'separated');
-                            renderList('tv-inprod-body', json.in_production, 'in_production');
 
+                            // sempre limita a 10 itens antes de renderizar
+                            const waiting       = (json.waiting       || []).slice(0, 10);
+                            const separated     = (json.separated     || []).slice(0, 10);
+                            const in_production = (json.in_production || []).slice(0, 10);
+
+                            renderList('tv-waiting-body',   waiting,       'waiting');
+                            renderList('tv-separated-body', separated,     'separated');
+                            renderList('tv-inprod-body',    in_production, 'in_production');
+
+                            const totalWait = document.getElementById('tv-total-waiting');
                             const totalSep  = document.getElementById('tv-total-separated');
                             const totalProd = document.getElementById('tv-total-inprod');
-                            if (totalSep)  totalSep.textContent  = (json.separated?.length || 0)      + ' OF(s)';
-                            if (totalProd) totalProd.textContent = (json.in_production?.length || 0) + ' OF(s)';
+
+                            if (totalWait) totalWait.textContent = waiting.length       + ' OF(s)';
+                            if (totalSep)  totalSep.textContent  = separated.length     + ' OF(s)';
+                            if (totalProd) totalProd.textContent = in_production.length + ' OF(s)';
                         } catch (e) {
                             console.error(e);
                         }
@@ -265,36 +347,43 @@
 
                         const hasItems = items && items.length;
 
-                        if (!hasItems) {
-                            const colspan = type === 'separated' ? 3 : 5;
-                            const msg = type === 'separated'
-                                ? 'Nenhuma OF com material separado no momento.'
-                                : 'Nenhuma OF em produção no momento.';
+                        let colspan, emptyMsg;
 
+                        if (type === 'in_production') {
+                            colspan = 5;
+                            emptyMsg = 'Nenhuma OF em produção no momento.';
+                        } else if (type === 'waiting') {
+                            colspan = 3;
+                            emptyMsg = 'Nenhuma OF aguardando separação no momento.';
+                        } else {
+                            colspan = 3;
+                            emptyMsg = 'Nenhuma OF com material separado no momento.';
+                        }
+
+                        if (!hasItems) {
                             tbody.innerHTML =
                                 `<tr>
-                                    <td colspan="${colspan}" class="text-sm text-center mb-0">${msg}</td>
+                                    <td colspan="${colspan}" class="text-sm text-center mb-0">${emptyMsg}</td>
                                  </tr>`;
                             return;
                         }
 
-                        if (type === 'separated') {
-                            // 3 colunas: Nº OF, Cliente, Expedição
-                            tbody.innerHTML = items.map(order => `
-                                <tr class="text-center">
-                                    <td><p class="text-dark fw-bold text-sm mb-0">${order.order_number}</p></td>
-                                    <td><p class="text-dark text-sm mb-0">${order.client_name}</p></td>
-                                    <td><p class="text-dark text-sm mb-0">${order.expedition_date}</p></td>
-                                </tr>
-                            `).join('');
-                        } else {
-                            // in_production: Nº OF, Cliente, Operador, Início, Expedição
+                        if (type === 'in_production') {
                             tbody.innerHTML = items.map(order => `
                                 <tr class="text-center">
                                     <td><p class="text-dark fw-bold text-sm mb-0">${order.order_number}</p></td>
                                     <td><p class="text-dark text-sm mb-0">${order.client_name}</p></td>
                                     <td><p class="text-dark text-sm mb-0">${order.operator ?? '-'}</p></td>
                                     <td><p class="text-dark text-sm mb-0">${order.started_at ?? '-'}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.expedition_date}</p></td>
+                                </tr>
+                            `).join('');
+                        } else {
+                            // waiting e separated
+                            tbody.innerHTML = items.map(order => `
+                                <tr class="text-center">
+                                    <td><p class="text-dark fw-bold text-sm mb-0">${order.order_number}</p></td>
+                                    <td><p class="text-dark text-sm mb-0">${order.client_name}</p></td>
                                     <td><p class="text-dark text-sm mb-0">${order.expedition_date}</p></td>
                                 </tr>
                             `).join('');
