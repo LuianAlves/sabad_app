@@ -19,6 +19,30 @@
                 margin-top: 0 !important;
                 min-height: 100vh;
             }
+
+            /* ======== FUNDO DA TV COM A IMAGEM (sempre nessa tela) ======== */
+            body.tv-bg {
+                background-color: #ffffff !important;
+                background-image: url("{{ asset('img/tv-bg-bongas.png') }}") !important;
+                background-position: center center !important;
+                background-repeat: no-repeat !important;
+                background-attachment: fixed !important;
+                background-size: cover !important;
+            }
+
+            /* ======== ZEBRA NAS LINHAS DAS TABELAS DA TV ======== */
+            #tv-root tbody tr:nth-child(odd) {
+                background-color: #ffffff; /* linha mais clara */
+            }
+
+            #tv-root tbody tr:nth-child(even) {
+                background-color: #f3f4f6; /* linha um pouco mais escura */
+            }
+
+            #tv-root tbody tr > td {
+                padding-top: 0.4rem;
+                padding-bottom: 0.4rem;
+            }
         </style>
     @endpush
 
@@ -27,15 +51,10 @@
             {{-- Cabeçalho --}}
             <div class="row d-flex align-items-center justify-content-between mb-4">
                 <div class="col-8">
-                    <h2 class="mb-1 fw-bold">Painel de Produção Bongas Brasil</h2>
+                    <h2 class="mb-1 fw-bold"></h2>
                 </div>
 
-                <div class="col-4 align-items-center text-end">
-                    <span class="text-success text-sm me-3">
-                        <i class="fa fa-check-circle me-1"></i>
-                        Atualização automática
-                    </span>
-
+                <div class="col-4 d-flex justify-content-end">
                     <button id="btnToggleFullscreen" class="btn btn-outline-secondary btn-sm m-0">
                         <i class="fa-solid fa-up-right-and-down-left-from-center fs-5"></i>
                     </button>
@@ -263,14 +282,17 @@
         @push('scripts')
             <script>
                 (function () {
+                    // aplica o fundo desta tela mesmo sem fullscreen
+                    document.body.classList.add('tv-bg');
+
                     /* ============================
                      *  FULLSCREEN + HIDE LAYOUT
                      * ============================ */
                     const btnFull = document.getElementById('btnToggleFullscreen');
-                    const tvRoot  = document.getElementById('tv-root');
 
+                    // agora a página toda entra em fullscreen
                     function enterFullscreen() {
-                        const elem = tvRoot || document.documentElement;
+                        const elem = document.documentElement;
                         if (elem.requestFullscreen) {
                             elem.requestFullscreen().catch(console.error);
                         }
