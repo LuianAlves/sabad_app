@@ -1,7 +1,26 @@
 @extends('layouts.templates.production-order-layout')
 
 @section('content')
-{{--    Testei permissão de iniciar, resolvi bug do botão finaliza aparecer sem permissões. Próximo é testar permissão de finish --}}
+    @push('styles')
+        <style>
+            /* ZEBRA PARA A TABELA DE PRODUÇÃO */
+            .card tbody tr:nth-child(odd) {
+                background-color: #ffffff; /* linha mais clara */
+            }
+
+            .card tbody tr:nth-child(even) {
+                background-color: #f3f4f6; /* linha um pouco mais escura */
+            }
+
+            /* opcional: deixar as linhas mais “compactas” */
+            .card tbody tr > td {
+                padding-top: 0.4rem;
+                padding-bottom: 0.4rem;
+            }
+        </style>
+    @endpush
+
+    {{--    Testei permissão de iniciar, resolvi bug do botão finaliza aparecer sem permissões. Próximo é testar permissão de finish --}}
     @can('view operator order_production')
         <div class="card border shadow-xs mb-4">
             <x-card-header title="Produção" count="{{ $orders->count() }}" action=""/>

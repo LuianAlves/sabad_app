@@ -1,6 +1,25 @@
 @extends('layouts.templates.production-order-layout')
 
 @section('content')
+    @push('styles')
+        <style>
+            /* ZEBRA PARA A FILA DE SEPARAÇÃO */
+            .card tbody tr:nth-child(odd) {
+                background-color: #ffffff; /* linha mais clara */
+            }
+
+            .card tbody tr:nth-child(even) {
+                background-color: #f3f4f6; /* linha um pouco mais escura */
+            }
+
+            /* opcional: deixar as linhas mais “compactas” */
+            .card tbody tr > td {
+                padding-top: 0.4rem;
+                padding-bottom: 0.4rem;
+            }
+        </style>
+    @endpush
+
     @can('view stock_order')
         <div class="card border shadow-xs mb-4">
             <x-card-header title="Fila de Separação" count="{{ $orders->count() }}" action=""/>
@@ -33,7 +52,6 @@
                                     </button>
                                 </td>
                             @endcan
-
                         </tr>
                     @empty
                         <tr>
@@ -46,6 +64,7 @@
             </x-table>
         </div>
 
+        {{-- script mantém igual --}}
         <script>
             (function () {
                 const CSRF = '{{ csrf_token() }}';
@@ -75,7 +94,6 @@
                                 return;
                             }
 
-                            // Remove a linha da tabela sem recarregar (mantém fullscreen)
                             const row = btn.closest('tr');
                             if (row) row.remove();
 
