@@ -44,51 +44,46 @@ class BookingController extends Controller
 
 
 
-    public function create(Room $room)
+    public function create(Request $request, Room $room)
     {
-        return view('app.business.booking.bookings_create', compact('room'));
+        $defaultDate = $request->query('date'); // YYYY-MM-DD
+
+        return view('app.business.booking.bookings_create', compact('room', 'defaultDate'));
     }
-
-
 
     public function store(Request $request, Room $room)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_time' => 'required|date_format:Y-m-d\TH:i',
-            'end_time' => 'required|date_format:Y-m-d\TH:i|after:start_time',
+        $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'date' => ['required', 'date'],
+            'start_hour' => ['required', 'date_format:H:i'],
+            'end_hour' => ['required', 'date_format:H:i'],
+            'description' => ['nullable', 'string'],
         ]);
 
-        $start = Carbon::parse($validated['start_time']);
-        $end = Carbon::parse($validated['end_time']);
+        $start = Carbon::parse($request->date . ' ' . $request->start_hour);
+        $end   = Carbon::parse($request->date . ' ' . $request->end_hour);
 
-        // Verifica conflito de horários para a mesma sala e mesmo dia
-        $conflictingBooking = Booking::where('room_id', $room->id)
-            ->whereDate('start_time', $start->toDateString())
-            ->where(function($query) use ($start, $end) {
-                $query->where('start_time', '<', $end)
-                    ->where('end_time', '>', $start);
-            })
-            ->first();
-
-        if ($conflictingBooking) {
-            return redirect()->back()
-                ->withErrors(['start_time' => 'Conflito: Já existe um agendamento para esta sala neste horário.'])
+        if ($end->lte($start)) {
+            return back()
+                ->withErrors(['end_hour' => 'A hora fim deve ser maior que a hora início.'])
                 ->withInput();
         }
 
         Booking::create([
-            'user_id' => auth()->id(),
             'room_id' => $room->id,
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
+            'user_id' => auth()->id(),
+            'title' => $request->title,
             'start_time' => $start,
             'end_time' => $end,
+            'description' => $request->description,
         ]);
 
-        return redirect()->route('bookings.show', $room)->with('success', 'Agendamento criado com sucesso!');
+        return redirect()
+            ->route('bookings.show', $room)
+            ->with('success', 'Agendamento criado com sucesso!');
     }
+
 
 
 
@@ -103,6 +98,80 @@ class BookingController extends Controller
             ->get(['id', 'title', 'start_time', 'end_time']);
 
         return response()->json($bookings);
+    }
+
+    public function events(Room $room)
+    {
+        $start = request('start'); // ex: 2026-01-01
+        $end   = request('end');   // ex: 2026-02-01
+
+        $bookings = Booking::where('room_id', $room->id)
+            ->when($start && $end, function ($q) use ($start, $end) {
+                $q->whereBetween('start_time', [$start, $end]);
+            })
+            ->get();
+
+        return $bookings->map(function ($b) {
+            return [
+                'id' => $b->id,
+                'title' => $b->title,
+                'start' => $b->start_time,
+                'end' => $b->end_time,
+                'description' => $b->description,
+            ];
+        });
+    }
+
+    public function day(Request $request, Room $room)
+    {
+        try {
+            $date = $request->query('date'); // YYYY-MM-DD
+
+            if (!$date) {
+                return response()->json(['date' => null, 'bookings' => []], 200);
+            }
+
+            // valida data
+            $day = Carbon::createFromFormat('Y-m-d', $date);
+            $start = $day->copy()->startOfDay();
+            $end   = $day->copy()->endOfDay();
+
+            $bookings = Booking::where('room_id', $room->id)
+                ->with('user') // se isso quebrar, veja item 2 abaixo
+                ->whereBetween('start_time', [$start, $end])
+                ->orderBy('start_time')
+                ->get()
+                ->map(function ($b) {
+                    return [
+                        'id' => $b->id,
+                        'title' => (string) $b->title,
+                        'start' => Carbon::parse($b->start_time)->format('H:i'),
+                        'end' => Carbon::parse($b->end_time)->format('H:i'),
+                        'description' => (string) ($b->description ?? ''),
+                        'user' => optional($b->user)->name ?? 'Desconhecido',
+                    ];
+                });
+
+            return response()->json([
+                'date' => $day->format('d/m/Y'),
+                'bookings' => $bookings,
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error('Erro em bookings.day', [
+                'room_id' => $room->id ?? null,
+                'date' => $request->query('date'),
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // devolve JSON (pra não quebrar o fetch)
+            return response()->json([
+                'date' => null,
+                'bookings' => [],
+                'error' => 'Erro interno ao buscar agendamentos do dia.',
+            ], 500);
+        }
     }
 
 }

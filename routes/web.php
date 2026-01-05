@@ -321,6 +321,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // Tasks
     Route::get('/tasks', [WebTaskController::class, 'index'])->name('tasks.index');
+    Route::get('/tasks/create',  [WebTaskController::class, 'create'])->name('tasks.create');
     Route::prefix('tasks-api')->group(function () {
         Route::get('/', [ApiTaskController::class, 'index']);
         Route::post('/', [ApiTaskController::class, 'store']);
@@ -358,6 +359,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     | CHART ROUTES
     |--------------------------------------------------------------------------
     */
+    Route::get('/bookings/{room}/events', [BookingController::class, 'events'])
+        ->name('bookings.events');
+    Route::get('/bookings/{room}/day', [BookingController::class, 'day'])
+        ->name('bookings.day');
+
 
     Route::group(['prefix' => 'charts'], function () {
         /* --->| Employee per Department |<--- */
