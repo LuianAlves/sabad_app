@@ -116,7 +116,7 @@ class UserController extends Controller
         if ((int)$userId !== (int)$authId && !Auth::user()->hasRole('admin')) {
             abort(403);
         }
-        
+
         $user = User::findOrFail($userId);
 
         $tickets = Ticket::get();
@@ -135,8 +135,6 @@ class UserController extends Controller
     {
         //
     }
-
-
 
     public function destroy($id)
     {
